@@ -27,7 +27,7 @@ namespace dynaarm_utility
             gpio_state_interface = gpio_dynaarm_interface_name + "/" + gpio_state_interface;
         }
         std::vector<std::string> gpio_command_interfaces = gpio_state_interfaces;
-        
+
         initialize_interfaces(std::vector<std::string>(), std::vector<std::string>(), std::vector<std::string>(), std::vector<std::string>(), gpio_state_interfaces, gpio_command_interfaces);
 
         auto custom_qos = rclcpp::SystemDefaultsQoS();
@@ -39,6 +39,9 @@ namespace dynaarm_utility
                                                                                  { rt_joy_subscriber_.writeFromNonRT(msg); });
         twist_subscriber_ = get_node()->create_subscription<geometry_msgs::msg::TwistStamped>("/twist", custom_qos, [this](const geometry_msgs::msg::TwistStamped::SharedPtr msg)
                                                                                               { rt_twist_subscriber_.writeFromNonRT(msg); });
+
+        joystick_axes_.resize(6);
+        joystick_buttons_.resize(21);
 
         return true;
     }
@@ -74,47 +77,78 @@ namespace dynaarm_utility
         if (!(!joy_commands || !(*joy_commands)))
         {
             RCLCPP_INFO_STREAM(get_node()->get_logger(), "got joy_commands!!!!!");
-            set_command_interface((*joy_commands)->axes[0], "gpio", "joystick_axis_0");
-            set_command_interface((*joy_commands)->axes[1], "gpio", "joystick_axis_1");
-            set_command_interface((*joy_commands)->axes[2], "gpio", "joystick_axis_2");
-            set_command_interface((*joy_commands)->axes[3], "gpio", "joystick_axis_3");
-            set_command_interface((*joy_commands)->axes[4], "gpio", "joystick_axis_4");
-            set_command_interface((*joy_commands)->axes[5], "gpio", "joystick_axis_5");
+            joystick_axes_[0] = (*joy_commands)->axes[0];
+            joystick_axes_[1] = (*joy_commands)->axes[1];
+            joystick_axes_[2] = (*joy_commands)->axes[2];
+            joystick_axes_[3] = (*joy_commands)->axes[3];
+            joystick_axes_[4] = (*joy_commands)->axes[4];
+            joystick_axes_[5] = (*joy_commands)->axes[5];
 
-            set_command_interface((*joy_commands)->buttons[0], "gpio", "joystick_button_0");
-            set_command_interface((*joy_commands)->buttons[1], "gpio", "joystick_button_1");
-            set_command_interface((*joy_commands)->buttons[2], "gpio", "joystick_button_2");
-            set_command_interface((*joy_commands)->buttons[3], "gpio", "joystick_button_3");
-            set_command_interface((*joy_commands)->buttons[4], "gpio", "joystick_button_4");
-            set_command_interface((*joy_commands)->buttons[5], "gpio", "joystick_button_5");
-            set_command_interface((*joy_commands)->buttons[6], "gpio", "joystick_button_6");
-            set_command_interface((*joy_commands)->buttons[7], "gpio", "joystick_button_7");
-            set_command_interface((*joy_commands)->buttons[8], "gpio", "joystick_button_8");
-            set_command_interface((*joy_commands)->buttons[9], "gpio", "joystick_button_9");
-            set_command_interface((*joy_commands)->buttons[10], "gpio", "joystick_button_10");
-            set_command_interface((*joy_commands)->buttons[11], "gpio", "joystick_button_11");
-            set_command_interface((*joy_commands)->buttons[12], "gpio", "joystick_button_12");
-            set_command_interface((*joy_commands)->buttons[13], "gpio", "joystick_button_13");
-            set_command_interface((*joy_commands)->buttons[14], "gpio", "joystick_button_14");
-            set_command_interface((*joy_commands)->buttons[15], "gpio", "joystick_button_15");
-            set_command_interface((*joy_commands)->buttons[16], "gpio", "joystick_button_16");
-            set_command_interface((*joy_commands)->buttons[17], "gpio", "joystick_button_17");
-            set_command_interface((*joy_commands)->buttons[18], "gpio", "joystick_button_18");
-            set_command_interface((*joy_commands)->buttons[19], "gpio", "joystick_button_19");
-            set_command_interface((*joy_commands)->buttons[20], "gpio", "joystick_button_20");
+            joystick_buttons_[0] = (*joy_commands)->buttons[0];
+            joystick_buttons_[1] = (*joy_commands)->buttons[1];
+            joystick_buttons_[2] = (*joy_commands)->buttons[2];
+            joystick_buttons_[3] = (*joy_commands)->buttons[3];
+            joystick_buttons_[4] = (*joy_commands)->buttons[4];
+            joystick_buttons_[5] = (*joy_commands)->buttons[5];
+            joystick_buttons_[6] = (*joy_commands)->buttons[6];
+            joystick_buttons_[7] = (*joy_commands)->buttons[7];
+            joystick_buttons_[8] = (*joy_commands)->buttons[8];
+            joystick_buttons_[9] = (*joy_commands)->buttons[9];
+            joystick_buttons_[10] = (*joy_commands)->buttons[10];
+            joystick_buttons_[11] = (*joy_commands)->buttons[11];
+            joystick_buttons_[12] = (*joy_commands)->buttons[12];
+            joystick_buttons_[13] = (*joy_commands)->buttons[13];
+            joystick_buttons_[14] = (*joy_commands)->buttons[14];
+            joystick_buttons_[15] = (*joy_commands)->buttons[15];
+            joystick_buttons_[16] = (*joy_commands)->buttons[16];
+            joystick_buttons_[17] = (*joy_commands)->buttons[17];
+            joystick_buttons_[18] = (*joy_commands)->buttons[18];
+            joystick_buttons_[19] = (*joy_commands)->buttons[19];
+            joystick_buttons_[20] = (*joy_commands)->buttons[20];
         }
 
         auto twist_commands = rt_twist_subscriber_.readFromRT();
 
         if (!(!twist_commands || !(*twist_commands)))
         {
-            set_command_interface((*twist_commands)->twist.linear.x, "gpio", "twist_linear_x");
-            set_command_interface((*twist_commands)->twist.linear.y, "gpio", "twist_linear_y");
-            set_command_interface((*twist_commands)->twist.linear.z, "gpio", "twist_linear_z");
-            set_command_interface((*twist_commands)->twist.angular.x, "gpio", "twist_angular_x");
-            set_command_interface((*twist_commands)->twist.angular.y, "gpio", "twist_angular_y");
-            set_command_interface((*twist_commands)->twist.angular.z, "gpio", "twist_angular_z");
+            twist_ = (*twist_commands)->twist;
         }
+
+        set_command_interface(joystick_axes_[0], "gpio", "gpio_dynaarm_interfaces/joystick_axis_0");
+        set_command_interface(joystick_axes_[1], "gpio", "gpio_dynaarm_interfaces/joystick_axis_1");
+        set_command_interface(joystick_axes_[2], "gpio", "gpio_dynaarm_interfaces/joystick_axis_2");
+        set_command_interface(joystick_axes_[3], "gpio", "gpio_dynaarm_interfaces/joystick_axis_3");
+        set_command_interface(joystick_axes_[4], "gpio", "gpio_dynaarm_interfaces/joystick_axis_4");
+        set_command_interface(joystick_axes_[5], "gpio", "gpio_dynaarm_interfaces/joystick_axis_5");
+
+        set_command_interface(joystick_buttons_[0], "gpio", "gpio_dynaarm_interfaces/joystick_button_0");
+        set_command_interface(joystick_buttons_[1], "gpio", "gpio_dynaarm_interfaces/joystick_button_1");
+        set_command_interface(joystick_buttons_[2], "gpio", "gpio_dynaarm_interfaces/joystick_button_2");
+        set_command_interface(joystick_buttons_[3], "gpio", "gpio_dynaarm_interfaces/joystick_button_3");
+        set_command_interface(joystick_buttons_[4], "gpio", "gpio_dynaarm_interfaces/joystick_button_4");
+        set_command_interface(joystick_buttons_[5], "gpio", "gpio_dynaarm_interfaces/joystick_button_5");
+        set_command_interface(joystick_buttons_[6], "gpio", "gpio_dynaarm_interfaces/joystick_button_6");
+        set_command_interface(joystick_buttons_[7], "gpio", "gpio_dynaarm_interfaces/joystick_button_7");
+        set_command_interface(joystick_buttons_[8], "gpio", "gpio_dynaarm_interfaces/joystick_button_8");
+        set_command_interface(joystick_buttons_[9], "gpio", "gpio_dynaarm_interfaces/joystick_button_9");
+        set_command_interface(joystick_buttons_[10], "gpio", "gpio_dynaarm_interfaces/joystick_button_10");
+        set_command_interface(joystick_buttons_[11], "gpio", "gpio_dynaarm_interfaces/joystick_button_11");
+        set_command_interface(joystick_buttons_[12], "gpio", "gpio_dynaarm_interfaces/joystick_button_12");
+        set_command_interface(joystick_buttons_[13], "gpio", "gpio_dynaarm_interfaces/joystick_button_13");
+        set_command_interface(joystick_buttons_[14], "gpio", "gpio_dynaarm_interfaces/joystick_button_14");
+        set_command_interface(joystick_buttons_[15], "gpio", "gpio_dynaarm_interfaces/joystick_button_15");
+        set_command_interface(joystick_buttons_[16], "gpio", "gpio_dynaarm_interfaces/joystick_button_16");
+        set_command_interface(joystick_buttons_[17], "gpio", "gpio_dynaarm_interfaces/joystick_button_17");
+        set_command_interface(joystick_buttons_[18], "gpio", "gpio_dynaarm_interfaces/joystick_button_18");
+        set_command_interface(joystick_buttons_[19], "gpio", "gpio_dynaarm_interfaces/joystick_button_19");
+        set_command_interface(joystick_buttons_[20], "gpio", "gpio_dynaarm_interfaces/joystick_button_20");
+
+        set_command_interface(twist_.linear.x, "gpio", "gpio_dynaarm_interfaces/twist_linear_x");
+        set_command_interface(twist_.linear.y, "gpio", "gpio_dynaarm_interfaces/twist_linear_y");
+        set_command_interface(twist_.linear.z, "gpio", "gpio_dynaarm_interfaces/twist_linear_z");
+        set_command_interface(twist_.angular.x, "gpio", "gpio_dynaarm_interfaces/twist_angular_x");
+        set_command_interface(twist_.angular.y, "gpio", "gpio_dynaarm_interfaces/twist_angular_y");
+        set_command_interface(twist_.angular.z, "gpio", "gpio_dynaarm_interfaces/twist_angular_z");
 
         return true;
     }

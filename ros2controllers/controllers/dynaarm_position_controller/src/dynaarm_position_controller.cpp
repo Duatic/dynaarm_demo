@@ -22,6 +22,11 @@ namespace dynaarm_position_controller
 
     bool DynaarmPositionController::update_controller()
     {
+        for (int i = 0; i < static_cast<int>(dynaarm_command_.joint_names.size()); i++)
+        {
+            double desired_velocity = dynaarm_state_.joystick_axes[params_.joystick_axis_mapping[i]] * params_.joystick_max_velocity;
+            dynaarm_command_.joint_position[i] += desired_velocity * dt_;
+        }
         return true;
     }
 

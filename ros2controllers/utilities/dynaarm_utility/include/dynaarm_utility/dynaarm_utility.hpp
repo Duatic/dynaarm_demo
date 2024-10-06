@@ -35,5 +35,9 @@ namespace dynaarm_utility
 
         realtime_tools::RealtimeBuffer<std::shared_ptr<geometry_msgs::msg::TwistStamped>> rt_twist_subscriber_;
         rclcpp::Subscription<geometry_msgs::msg::TwistStamped>::SharedPtr twist_subscriber_;
+
+        std::vector<double> joystick_axes_;
+        std::vector<double> joystick_buttons_;
+        geometry_msgs::msg::Twist twist_;
     };
 }

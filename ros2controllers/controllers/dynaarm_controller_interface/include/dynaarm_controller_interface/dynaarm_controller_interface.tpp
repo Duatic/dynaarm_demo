@@ -173,6 +173,10 @@ bool DynaarmControllerInterface<ParamListener, Param>::update_interface_state()
         dynaarm_state_.joint_effort(i) = get_state_interface_value("effort", dynaarm_state_.joint_names[i]);
     }
 
+    dynaarm_command_.joint_position = dynaarm_state_.joint_position;
+    dynaarm_command_.joint_velocity.setZero();
+    dynaarm_command_.joint_effort.setZero();
+
     for (int i = 0; i < dynaarm_state_.joystick_axes.size(); i++)
     {
         dynaarm_state_.joystick_axes(i) = get_state_interface_value("gpio", "gpio_dynaarm_interfaces/joystick_axis_" + std::to_string(i));
@@ -200,6 +204,7 @@ bool DynaarmControllerInterface<ParamListener, Param>::update_interface()
     {
         forwardKinematics(pinocchio_model_, pinocchio_data_, dynaarm_state_.joint_position, dynaarm_state_.joint_velocity);
         dynaarm_command_.joint_effort_grav_comp = pinocchio::rnea(pinocchio_model_, pinocchio_data_, dynaarm_state_.joint_position, dynaarm_state_.joint_velocity, Eigen::VectorXd::Zero(pinocchio_model_.nv));
+        // RCLCPP_INFO_STREAM_THROTTLE(get_node()->get_logger(), *(get_node()->get_clock()), 1000, "dynaarm_state_.joint_position:  " << dynaarm_state_.joint_position.transpose() << " dynaarm_state_.joint_velocity: " << dynaarm_state_.joint_velocity.transpose() << " grav comp: " << dynaarm_command_.joint_effort_grav_comp.transpose());
     }
 
     if (!update_controller())

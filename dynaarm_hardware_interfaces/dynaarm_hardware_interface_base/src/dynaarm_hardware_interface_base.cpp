@@ -172,6 +172,7 @@ namespace dynaarm_hardware_interface_base
             joint_velocity[i] = joint_command_vector_[i].velocity;
             joint_effort[i] = joint_command_vector_[i].effort;
         }
+
         // Transform the joint positions using the matrix transformation
         Eigen::VectorXd motor_position = dynaarm_hardware_interface_common::CommandTranslator::mapFromSerialToDynaarmCoordinates(joint_position);
         Eigen::VectorXd motor_velocity = dynaarm_hardware_interface_common::CommandTranslator::mapFromSerialToDynaarmCoordinates(joint_velocity);

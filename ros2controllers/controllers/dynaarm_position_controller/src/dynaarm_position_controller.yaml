@@ -23,3 +23,15 @@ dynaarm_position_controller:
       default_value: [],
       description: "whether the joint should be frozen or actuated",
     }
+  joystick_axis_mapping:
+    {
+      type: int_array,
+      default_value: [],
+      description: "maps each joint to a specific joystick axis",
+    }
+  joystick_max_velocity:
+    {
+      type: double,
+      default_value: 0.0,
+      description: "max velocity for the joysticks",
+    }

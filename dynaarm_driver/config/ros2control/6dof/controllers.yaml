@@ -39,3 +39,12 @@ dynaarm_position_controller:
       - 0.0 # FA_ROT
       - 0.0 # WRIST_1
       - 0.0 # WRIST_2
+    joystick_axis_mapping:
+      - 0 # SH_ROT
+      - 1 # SH_FLE
+      - 2 # EL_FLE
+      - 3 # FA_ROT
+      - 4 # WRIST_1
+      - 5 # WRIST_2
+    joystick_max_velocity: 0.5
+    

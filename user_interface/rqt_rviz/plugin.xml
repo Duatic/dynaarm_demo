@@ -1,0 +1,19 @@
+<library path="rqt_rviz">
+  <class name="rqt_rviz.EmbedRviz"
+    type="rqt_rviz.embed_rviz.EmbedRviz"
+    base_class_type="rqt_gui_py::Plugin">
+    <description>
+      Widget to embed the rviz window into a rqt plugin
+    </description>
+    <qtgui>
+      <group>
+        <label>Dynaarm Tools</label>
+        <icon type="theme">folder</icon>
+        <statustip>Plugins related to the control suite.</statustip>
+      </group>
+      <label>Embed Rviz</label>
+      <icon type="theme">view-restore</icon>
+      <statustip>A GUI plugin to embed RViz into an rqt plugin</statustip>
+    </qtgui>
+  </class>
+</library>

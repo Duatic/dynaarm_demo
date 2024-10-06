@@ -1,0 +1,19 @@
+<library path="rqt_plotjuggler">
+  <class name="EmbedPlotjuggler"
+    type="rqt_plotjuggler.embed_plotjuggler.EmbedPlotjuggler"
+    base_class_type="rqt_gui_py::Plugin">
+    <description>
+      Plugin to grab the plotjuggler window
+    </description>
+    <qtgui>
+      <group>
+        <label>Dynaarm Tools</label>
+        <icon type="theme">folder</icon>
+        <statustip>Plugins related to the control suite.</statustip>
+      </group>
+      <label>Embed plotjuggler</label>
+      <icon type="theme">view-restore</icon>
+      <statustip>A GUI plugin to embed plotjuggler into an rqt plugin</statustip>
+    </qtgui>
+  </class>
+</library>

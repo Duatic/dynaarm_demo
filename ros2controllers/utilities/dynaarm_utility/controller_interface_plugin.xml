@@ -1,0 +1,10 @@
+<library path="dynaarm_utility">
+
+  <class name="dynaarm_utility/DynaarmUtility"
+    type="dynaarm_utility::DynaarmUtility"
+    base_class_type="controller_interface::ControllerInterface">
+    <description>
+      Dynaarm gravitiy compensation controller.
+    </description>
+  </class>
+</library>

@@ -1,0 +1,7 @@
+dynaarm_utility:
+  placeholder:
+    {
+      type: string,
+      default_value: "",
+      description: "placeholder",
+    }

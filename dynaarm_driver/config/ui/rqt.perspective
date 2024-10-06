@@ -1,0 +1,124 @@
+{
+  "keys": {},
+  "groups": {
+    "mainwindow": {
+      "keys": {
+        "geometry": {
+          "repr(QByteArray.hex)": "QtCore.QByteArray(b'01d9d0cb000300000000004200000020000009ff0000063f0000004200000045000009ff0000063f00000000000000000a000000004200000045000009ff0000063f')",
+          "type": "repr(QByteArray.hex)",
+          "pretty-print": "     B     ? B E   ?      B E   ?"
+        },
+        "state": {
+          "repr(QByteArray.hex)": "QtCore.QByteArray(b'000000ff00000000fd0000000100000003000009be000005cbfc0100000002fc00000000000004fd0000011200fffffffc0200000002fb00000082007200710074005f0063006f006e00740072006f006c006c00650072005f006d0061006e0061006700650072005f005f0043006f006e00740072006f006c006c00650072004d0061006e0061006700650072005f005f0031005f005f0043006f006e00740072006f006c006c00650072004d0061006e006100670065007200550069010000001800000143000000f500fffffffb00000058007200710074005f007200760069007a005f005f007200710074005f007200760069007a002e0045006d006200650064005200760069007a005f005f0031005f005f0045006d006200650064005200760069007a005500690100000161000004820000001700fffffffb00000070007200710074005f0070006c006f0074006a007500670067006c00650072005f005f0045006d0062006500640050006c006f0074006a007500670067006c00650072005f005f0031005f005f0045006d0062006500640050006c006f0074006a007500670067006c00650072005500690100000503000004bb000001c400ffffff000009be0000000000000004000000040000000800000008fc00000001000000030000000100000036004d0069006e0069006d0069007a006500640044006f0063006b00570069006400670065007400730054006f006f006c0062006100720000000000ffffffff0000000000000000')",
+          "type": "repr(QByteArray.hex)",
+          "pretty-print": "                                                                                                  C                                                    a                                                                                                                                 "
+        }
+      },
+      "groups": {
+        "toolbar_areas": {
+          "keys": {
+            "MinimizedDockWidgetsToolbar": {
+              "repr": "8",
+              "type": "repr"
+            }
+          },
+          "groups": {}
+        }
+      }
+    },
+    "pluginmanager": {
+      "keys": {
+        "running-plugins": {
+          "repr": "{'rqt_controller_manager/ControllerManager': [1], 'rqt_plotjuggler/EmbedPlotjuggler': [1], 'rqt_rviz/rqt_rviz.EmbedRviz': [1]}",
+          "type": "repr"
+        }
+      },
+      "groups": {
+        "plugin__rqt_controller_manager__ControllerManager__1": {
+          "keys": {},
+          "groups": {
+            "dock_widget__ControllerManagerUi": {
+              "keys": {
+                "dock_widget_title": {
+                  "repr": "'Controller manager'",
+                  "type": "repr"
+                },
+                "dockable": {
+                  "repr": "True",
+                  "type": "repr"
+                },
+                "parent": {
+                  "repr": "None",
+                  "type": "repr"
+                }
+              },
+              "groups": {}
+            },
+            "plugin": {
+              "keys": {
+                "cm_name": {
+                  "repr": "'/controller_manager'",
+                  "type": "repr"
+                }
+              },
+              "groups": {}
+            }
+          }
+        },
+        "plugin__rqt_plotjuggler__EmbedPlotjuggler__1": {
+          "keys": {},
+          "groups": {
+            "dock_widget__EmbedPlotjugglerUi": {
+              "keys": {
+                "dock_widget_title": {
+                  "repr": "'rqt_plotjuggler'",
+                  "type": "repr"
+                },
+                "dockable": {
+                  "repr": "True",
+                  "type": "repr"
+                },
+                "parent": {
+                  "repr": "None",
+                  "type": "repr"
+                }
+              },
+              "groups": {}
+            },
+            "plugin": {
+              "keys": {
+                "package_name": {
+                  "repr": "'dynaarm_driver'",
+                  "type": "repr"
+                }
+              },
+              "groups": {}
+            }
+          }
+        },
+        "plugin__rqt_rviz__rqt_rviz.EmbedRviz__1": {
+          "keys": {},
+          "groups": {
+            "dock_widget__EmbedRvizUi": {
+              "keys": {
+                "dock_widget_title": {
+                  "repr": "'rqt_rviz'",
+                  "type": "repr"
+                },
+                "dockable": {
+                  "repr": "True",
+                  "type": "repr"
+                },
+                "parent": {
+                  "repr": "None",
+                  "type": "repr"
+                }
+              },
+              "groups": {}
+            }
+          }
+        }
+      }
+    }
+  }
+}

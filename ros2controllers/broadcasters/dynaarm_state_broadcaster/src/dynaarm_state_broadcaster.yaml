@@ -1,0 +1,8 @@
+dynaarm_state_broadcaster:
+  joints:
+    {
+      type: string_array,
+      default_value: [],
+      description: "Joint to be published",
+      validation: {not_empty<>: null},
+    }

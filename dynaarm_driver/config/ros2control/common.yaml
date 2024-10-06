@@ -1,0 +1,23 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 1000
+    dynaarm_state_broadcaster:
+      type: dynaarm_state_broadcaster/DynaarmStateBroadcaster
+    dynaarm_utility:
+      type: dynaarm_utility/DynaarmUtility
+
+stack_launcher:
+  ros__parameters:
+    ros2controllers: # set controller to 'active', 'inactive' or fully comment to not load
+      dynaarm_utility: active
+      dynaarm_state_broadcaster: active
+
+dynaarm_state_broadcaster:
+  ros__parameters:
+    joints:
+      - SH_ROT
+      - SH_FLE
+      - EL_FLE
+      - FA_ROT
+      - WRIST_1
+      - WRIST_2

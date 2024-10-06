@@ -1,0 +1,15 @@
+float64 position
+float64 velocity
+float64 effort
+float64 position_commanded
+float64 velocity_commanded
+float64 effort_commanded
+float64 p_gain_commanded
+float64 i_gain_commanded
+float64 d_gain_commanded
+float64 temperature_system
+float64 temperature_coil_a
+float64 temperature_coil_b
+float64 temperature_coil_c
+float64 motor_bus_voltage
+float64 command_freeze_mode

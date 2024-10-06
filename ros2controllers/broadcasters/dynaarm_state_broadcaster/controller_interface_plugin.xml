@@ -1,0 +1,10 @@
+<library path="dynaarm_state_broadcaster">
+
+  <class name="dynaarm_state_broadcaster/DynaarmStateBroadcaster"
+    type="dynaarm_state_broadcaster::DynaarmStateBroadcaster"
+    base_class_type="controller_interface::ControllerInterface">
+    <description>
+      Dynaarm state broadcaster.
+    </description>
+  </class>
+</library>

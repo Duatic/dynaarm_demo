@@ -23,7 +23,7 @@ def generate_launch_description():
 def load_nodes_and_processes(context):
     urdf_cmd = Command(
         [f'xacro {URDF_DESCRIPTION_FILE} hardware_interface_type_arg:={HW_INTERFACE_TYPE} dynaarm_dof_configuration_arg:={DYNAARM_CONFIGURATION}'])
-    files = common._configuration_files(DRIVER_PACKAGE_CONFIG)
+    files = common._configuration_files(DRIVER_PACKAGE_CONFIG, DYNAARM_CONFIGURATION)
     nodes_and_processes = [
         common._robot_state_publisher_for_joint_states(urdf_cmd),
         common._controller_manager(files, urdf_cmd)

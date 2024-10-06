@@ -1,0 +1,25 @@
+dynaarm_position_controller:
+  p_gain:
+    {
+      type: double_array,
+      default_value: [],
+      description: "p_gains for all joints",
+    }
+  i_gain:
+    {
+      type: double_array,
+      default_value: [],
+      description: "i_gains for all joints",
+    }
+  d_gain:
+    {
+      type: double_array,
+      default_value: [],
+      description: "d_gains for all joints",
+    }
+  command_freeze_mode:
+    {
+      type: double_array,
+      default_value: [],
+      description: "whether the joint should be frozen or actuated",
+    }

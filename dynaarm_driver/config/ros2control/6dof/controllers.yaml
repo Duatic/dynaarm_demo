@@ -1,0 +1,41 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 1000
+    dynaarm_position_controller:
+      type: dynaarm_position_controller/DynaarmPositionController
+
+stack_launcher:
+  ros__parameters:
+    ros2controllers: # set controller to 'active', 'inactive' or fully comment to not load
+      dynaarm_position_controller: inactive
+
+dynaarm_position_controller:
+  ros__parameters:
+    p_gain:
+      - 100.0 # SH_ROT
+      - 100.0 # SH_FLE
+      - 100.0 # EL_FLE
+      - 50.0 # FA_ROT
+      - 50.0 # WRIST_1
+      - 50.0 # WRIST_2
+    i_gain:
+      - 0.0 # SH_ROT
+      - 0.0 # SH_FLE
+      - 0.0 # EL_FLE
+      - 0.0 # FA_ROT
+      - 0.0 # WRIST_1
+      - 0.0 # WRIST_2
+    d_gain:
+      - 15.0 # SH_ROT
+      - 15.0 # SH_FLE
+      - 15.0 # EL_FLE
+      - 15.0 # FA_ROT
+      - 15.0 # WRIST_1
+      - 15.0 # WRIST_2
+    command_freeze_mode: # 0 -> active, 1 -> frozen
+      - 0.0 # SH_ROT
+      - 0.0 # SH_FLE
+      - 0.0 # EL_FLE
+      - 0.0 # FA_ROT
+      - 0.0 # WRIST_1
+      - 0.0 # WRIST_2

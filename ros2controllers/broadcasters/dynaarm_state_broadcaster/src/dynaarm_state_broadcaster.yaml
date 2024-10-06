@@ -1,8 +1,7 @@
 dynaarm_state_broadcaster:
-  joints:
+  placeholder:
     {
-      type: string_array,
-      default_value: [],
-      description: "Joint to be published",
-      validation: {not_empty<>: null},
+      type: string,
+      default_value: "",
+      description: "placeholder",
     }

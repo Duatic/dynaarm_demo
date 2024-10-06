@@ -62,8 +62,8 @@ def _controller_manager(controller_files: list[str], urdf_cmd: Command) -> Node:
     )
 
 
-def _configuration_files(driver_config: str) -> list[str]:
+def _configuration_files(driver_config: str, dynaarm_config: str) -> list[str]:
     return [
-        os.path.join(driver_config, 'ros2control', 'controllers.yaml'),
+        os.path.join(driver_config, 'ros2control', dynaarm_config, 'controllers.yaml'),
         os.path.join(driver_config, 'ros2control', 'common.yaml'),
     ]

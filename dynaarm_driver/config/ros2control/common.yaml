@@ -11,13 +11,3 @@ stack_launcher:
     ros2controllers: # set controller to 'active', 'inactive' or fully comment to not load
       dynaarm_utility: active
       dynaarm_state_broadcaster: active
-
-dynaarm_state_broadcaster:
-  ros__parameters:
-    joints:
-      - SH_ROT
-      - SH_FLE
-      - EL_FLE
-      - FA_ROT
-      - WRIST_1
-      - WRIST_2

@@ -27,6 +27,7 @@ namespace dynaarm_utility
             gpio_state_interface = gpio_dynaarm_interface_name + "/" + gpio_state_interface;
         }
         std::vector<std::string> gpio_command_interfaces = gpio_state_interfaces;
+        
         initialize_interfaces(std::vector<std::string>(), std::vector<std::string>(), std::vector<std::string>(), std::vector<std::string>(), gpio_state_interfaces, gpio_command_interfaces);
 
         auto custom_qos = rclcpp::SystemDefaultsQoS();

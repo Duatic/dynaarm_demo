@@ -22,7 +22,23 @@ namespace dynaarm_state_broadcaster
                                                        "motor_position", "motor_velocity", "motor_effort", "motor_position_commanded", "motor_velocity_commanded", "motor_effort_commanded",
                                                        "motor_temperature_system", "motor_temperature_coil_A", "motor_temperature_coil_B", "motor_temperature_coil_C", "motor_bus_voltage",
                                                        "command_freeze_mode"};
-        initialize_interfaces(params_.joints, joint_interface_types, std::vector<std::string>(), std::vector<std::string>(), std::vector<std::string>(), std::vector<std::string>());
+
+        if (!get_joint_names_from_urdf())
+        {
+            RCLCPP_ERROR(get_node()->get_logger(), "Did not get the joint names from the urdf");
+            return false;
+        }
+        else
+        {
+            RCLCPP_INFO_STREAM(get_node()->get_logger(), "<<<<<<<>>>>>>>: ");
+            RCLCPP_INFO_STREAM(get_node()->get_logger(), "DynaarmStateBroadcaster joint names: ");
+            for (const std::string &joint_name : joint_names_)
+            {
+                RCLCPP_INFO_STREAM(get_node()->get_logger(), "joint name: " << joint_name);
+            }
+        }
+
+        initialize_interfaces(joint_names_, joint_interface_types, std::vector<std::string>(), std::vector<std::string>(), std::vector<std::string>(), std::vector<std::string>());
 
         auto custom_qos = rclcpp::SystemDefaultsQoS();
         custom_qos.best_effort();
@@ -43,18 +59,18 @@ namespace dynaarm_state_broadcaster
 
         rt_joint_state_publisher_->lock();
         rt_joint_state_publisher_->msg_.header.stamp = update_time_;
-        rt_joint_state_publisher_->msg_.name = params_.joints;
-        rt_joint_state_publisher_->msg_.position.resize(params_.joints.size());
-        rt_joint_state_publisher_->msg_.velocity.resize(params_.joints.size());
-        rt_joint_state_publisher_->msg_.effort.resize(params_.joints.size());
+        rt_joint_state_publisher_->msg_.name = joint_names_;
+        rt_joint_state_publisher_->msg_.position.resize(joint_names_.size());
+        rt_joint_state_publisher_->msg_.velocity.resize(joint_names_.size());
+        rt_joint_state_publisher_->msg_.effort.resize(joint_names_.size());
         rt_joint_state_publisher_->unlockAndPublish();
 
         rt_joint_command_publisher_->lock();
         rt_joint_command_publisher_->msg_.header.stamp = update_time_;
-        rt_joint_command_publisher_->msg_.name = params_.joints;
-        rt_joint_command_publisher_->msg_.position.resize(params_.joints.size());
-        rt_joint_command_publisher_->msg_.velocity.resize(params_.joints.size());
-        rt_joint_command_publisher_->msg_.effort.resize(params_.joints.size());
+        rt_joint_command_publisher_->msg_.name = joint_names_;
+        rt_joint_command_publisher_->msg_.position.resize(joint_names_.size());
+        rt_joint_command_publisher_->msg_.velocity.resize(joint_names_.size());
+        rt_joint_command_publisher_->msg_.effort.resize(joint_names_.size());
         rt_joint_command_publisher_->unlockAndPublish();
 
         return true;
@@ -82,21 +98,45 @@ namespace dynaarm_state_broadcaster
 
     bool DynaarmStateBroadcaster::publish_ros()
     {
-        for (int i = 0; i < static_cast<int>(params_.joints.size()); i++)
+        for (int i = 0; i < static_cast<int>(joint_names_.size()); i++)
         {
             rt_joint_state_publisher_->lock();
             rt_joint_state_publisher_->msg_.header.stamp = update_time_;
-            rt_joint_state_publisher_->msg_.position[i] = get_state_interface_value("position", params_.joints[i]);
-            rt_joint_state_publisher_->msg_.velocity[i] = get_state_interface_value("velocity", params_.joints[i]);
-            rt_joint_state_publisher_->msg_.effort[i] = get_state_interface_value("effort", params_.joints[i]);
+            rt_joint_state_publisher_->msg_.position[i] = get_state_interface_value("position", joint_names_[i]);
+            rt_joint_state_publisher_->msg_.velocity[i] = get_state_interface_value("velocity", joint_names_[i]);
+            rt_joint_state_publisher_->msg_.effort[i] = get_state_interface_value("effort", joint_names_[i]);
             rt_joint_state_publisher_->unlockAndPublish();
 
             rt_joint_command_publisher_->lock();
             rt_joint_command_publisher_->msg_.header.stamp = update_time_;
-            rt_joint_command_publisher_->msg_.position[i] = get_state_interface_value("position_commanded", params_.joints[i]);
-            rt_joint_command_publisher_->msg_.velocity[i] = get_state_interface_value("velocity_commanded", params_.joints[i]);
-            rt_joint_command_publisher_->msg_.effort[i] = get_state_interface_value("effort_commanded", params_.joints[i]);
+            rt_joint_command_publisher_->msg_.position[i] = get_state_interface_value("position_commanded", joint_names_[i]);
+            rt_joint_command_publisher_->msg_.velocity[i] = get_state_interface_value("velocity_commanded", joint_names_[i]);
+            rt_joint_command_publisher_->msg_.effort[i] = get_state_interface_value("effort_commanded", joint_names_[i]);
             rt_joint_command_publisher_->unlockAndPublish();
+        }
+
+        return true;
+    }
+
+    bool DynaarmStateBroadcaster::get_joint_names_from_urdf()
+    {
+        // Create a URDF model from the URDF string
+        urdf::Model model;
+        if (!model.initString(get_robot_description()))
+        {
+            return false;
+        }
+
+        // Iterate through all joints in the model
+        for (const auto &joint_pair : model.joints_)
+        {
+            urdf::JointConstSharedPtr joint = joint_pair.second;
+
+            // Ensure the joint has limits
+            if (joint->limits && joint->type == urdf::Joint::REVOLUTE)
+            {
+                joint_names_.push_back(joint->name);
+            }
         }
 
         return true;

@@ -9,8 +9,6 @@ from python_qt_binding import loadUi
 from python_qt_binding.QtWidgets import QWidget
 from python_qt_binding.QtGui import QWindow
 from python_qt_binding.QtCore import Qt
-from qt_gui.settings import Settings
-from shell_cmd import sh
 import subprocess
 
 import rclpy

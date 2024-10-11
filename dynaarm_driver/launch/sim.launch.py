@@ -14,12 +14,10 @@ from dynaarm_driver.common import (
 
 HW_INTERFACE_TYPE = 'sim'
 
-
 def generate_launch_description():
     return LaunchDescription([
         OpaqueFunction(function=load_nodes_and_processes),
     ])
-
 
 def load_nodes_and_processes(context):
     urdf_cmd = Command(

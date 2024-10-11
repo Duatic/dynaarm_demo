@@ -7,9 +7,11 @@
   <maintainer email="timo@software-byts.de">root</maintainer>
   <license>TODO: License declaration</license>
 
+  <depend>rqt_controller_manager</depend>
+
   <exec_depend>rclpy</exec_depend>
   <exec_depend>rqt_gui</exec_depend>
-  <exec_depend>rqt_gui_py</exec_depend>
+  <exec_depend>rqt_gui_py</exec_depend>  
 
   <export>
     <build_type>ament_python</build_type>

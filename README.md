@@ -1,2 +1,3 @@
-# dynaarm_ros2
-ROS 2 driver for the dynaarm
+# dynaarm_demo
+
+Demo application for a standalone dynaarm.

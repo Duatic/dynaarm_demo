@@ -2,19 +2,16 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>dynaarm_moveit_config</name>
-  <version>0.3.0</version>
-  <description>
-     An automatically generated package with all the configuration and launch files for using the dynaarm with the MoveIt Motion Planning Framework
-  </description>
-  <maintainer email="tschwarzer@duatic.com">Timo Schwarzer</maintainer>
+  <version>0.0.1</version>  
+  <description>the moveit config for a standalone dynaarm</description>
 
-  <license>BSD-3-Clause</license>
+  <license>BSD 3-Clause</license>
 
-  <url type="website">http://moveit.ros.org/</url>
-  <url type="bugtracker">https://github.com/moveit/moveit2/issues</url>
-  <url type="repository">https://github.com/moveit/moveit2</url>
-
+  <author email="jpreisig@duatic.com">Jan Preisig</author>
+  <author email="lnachtigall@duatic.com">Lennart Nachtigall</author>
   <author email="tschwarzer@duatic.com">Timo Schwarzer</author>
+  
+  <maintainer email="tschwarzer@duatic.com">Timo Schwarzer</maintainer>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   

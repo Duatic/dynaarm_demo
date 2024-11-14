@@ -2,12 +2,27 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>dynaarm_examples</name>
-  <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="root@todo.todo">root</maintainer>
-  <license>TODO: License declaration</license>
+  <version>0.0.1</version>
+
+  <description>Example launch files for a single dynaarm</description>
+
+  <license>BSD 3-Clause</license>
+
+  <author email="jpreisig@duatic.com">Jan Preisig</author>
+  <author email="lnachtigall@duatic.com">Lennart Nachtigall</author>
+  <author email="tschwarzer@duatic.com">Timo Schwarzer</author>
+  
+  <maintainer email="tschwarzer@duatic.com">Timo Schwarzer</maintainer>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>ros_gz</exec_depend>
+  <exec_depend>ros_gz_sim</exec_depend>  
+  <exec_depend>gz_ros2_control</exec_depend>    
+
+  <exec_depend>dynaarm_description</exec_depend>
+  <exec_depend>dynaarm_driver</exec_depend>
+  <exec_depend>dynaarm_moveit_config</exec_depend>  
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

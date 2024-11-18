@@ -74,15 +74,12 @@ gravity_compensation_controller:
       - EL_FLE
       - FA_ROT
       - WR_FLE
-      - WR_ROT
-    command_interfaces:
-      - position
-      - velocity
+      - WR_ROT            
+    command_interfaces:      
       - effort
     state_interfaces:
       - position
-      - velocity
-      - effort
+      - velocity      
     gains:
       SH_ROT: {p: 100.0, i: 0.0, d: 15.0}
       SH_FLE: {p: 100.0, i: 0.0, d: 15.0}

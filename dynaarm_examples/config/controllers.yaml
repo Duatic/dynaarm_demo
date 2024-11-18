@@ -27,8 +27,8 @@ dynaarm_status_controller:
       - SH_FLE
       - EL_FLE
       - FA_ROT
-      - WRIST_1
-      - WRIST_2    
+      - WR_FLE
+      - WR_ROT    
 
 joint_trajectory_controller:
   ros__parameters:
@@ -37,8 +37,8 @@ joint_trajectory_controller:
       - SH_FLE
       - EL_FLE
       - FA_ROT
-      - WRIST_1
-      - WRIST_2
+      - WR_FLE
+      - WR_ROT
     command_interfaces:
       - position
     state_interfaces:
@@ -52,8 +52,8 @@ position_controller:
       - SH_FLE
       - EL_FLE
       - FA_ROT
-      - WRIST_1
-      - WRIST_2
+      - WR_FLE
+      - WR_ROT
     interface_name: position
 
 effort_controller:
@@ -63,8 +63,8 @@ effort_controller:
       - SH_FLE
       - EL_FLE
       - FA_ROT
-      - WRIST_1
-      - WRIST_2
+      - WR_FLE
+      - WR_ROT
 
 gravity_compensation_controller:
   ros__parameters:
@@ -73,8 +73,8 @@ gravity_compensation_controller:
       - SH_FLE
       - EL_FLE
       - FA_ROT
-      - WRIST_1
-      - WRIST_2
+      - WR_FLE
+      - WR_ROT
     command_interfaces:
       - position
       - velocity
@@ -88,5 +88,5 @@ gravity_compensation_controller:
       SH_FLE: {p: 100.0, i: 0.0, d: 15.0}
       EL_FLE: {p: 100.0, i: 0.0, d: 15.0}
       FA_ROT: {p: 50.0, i: 0.0, d: 15.0}
-      WRIST_1: {p: 50.0, i: 0.0, d: 15.0}
-      WRIST_2: {p: 50.0, i: 0.0, d: 15.0}
+      WR_FLE: {p: 50.0, i: 0.0, d: 15.0}
+      WR_ROT: {p: 50.0, i: 0.0, d: 15.0}

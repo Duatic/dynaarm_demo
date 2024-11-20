@@ -28,12 +28,12 @@ joint_limits:
     max_veloity: 4.0
     has_acceleration_limits: true
     max_acceleration: 40.0
-  WRIST_1:
+  WR_FLE:
     has_velocity_limits: true
     max_veloity: 4.0
     has_acceleration_limits: true
     max_acceleration: 40.0
-  WRIST_2:
+  WR_ROT:
     has_velocity_limits: true
     max_veloity: 4.0
     has_acceleration_limits: true

@@ -23,8 +23,8 @@
     </group_state>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
     <disable_collisions link1="ELBOW" link2="UPPERARM" reason="Adjacent"/>
-    <disable_collisions link1="ELBOW" link2="WR_FLE" reason="Adjacent"/>
+    <disable_collisions link1="ELBOW" link2="WRIST_1" reason="Adjacent"/>
     <disable_collisions link1="SHOULDER" link2="UPPERARM" reason="Adjacent"/>
     <disable_collisions link1="SHOULDER" link2="base" reason="Adjacent"/>
-    <disable_collisions link1="UPPERARM" link2="WR_FLE" reason="Never"/>
+    <disable_collisions link1="UPPERARM" link2="WRIST_1" reason="Never"/>
 </robot>

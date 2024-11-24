@@ -118,13 +118,25 @@ def launch_setup(context, *args, **kwargs):
     gravity_compensation_controller_node = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["gravity_compensation_controller"],
+        arguments=["gravity_compensation_controller", "--inactive"],
     )
 
     joint_trajectory_controller_node = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["joint_trajectory_controller", "--inactive"],
+    )
+
+    cartesian_motion_controller_node = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["cartesian_motion_controller"],
+    )
+
+    motion_control_handle_node = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["motion_control_handle", "--inactive"],
     )
 
     status_controller_node = Node(
@@ -142,6 +154,8 @@ def launch_setup(context, *args, **kwargs):
                     gravity_compensation_controller_node,
                     status_controller_node,
                     joint_trajectory_controller_node,
+                    cartesian_motion_controller_node,
+                    motion_control_handle_node,
                 ],
             )
         )
@@ -188,7 +202,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             name="version",
-            default_value="v1",
+            default_value="v2",
             choices=["v1", "v2"],
             description="Select the desired version of robot ",
         )

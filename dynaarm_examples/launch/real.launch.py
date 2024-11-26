@@ -24,7 +24,11 @@
 import os
 import xacro
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, RegisterEventHandler, OpaqueFunction
+from launch.actions import (
+    DeclareLaunchArgument,
+    RegisterEventHandler,
+    OpaqueFunction,
+)
 from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
@@ -35,11 +39,13 @@ from launch_ros.actions import Node
 
 def launch_setup(context, *args, **kwargs):
 
+    ethercat_bus = LaunchConfiguration("ethercat_bus")
     dof = LaunchConfiguration("dof")
-    gui = LaunchConfiguration("gui")
     covers = LaunchConfiguration("covers")
     version = LaunchConfiguration("version")
+    start_rviz = LaunchConfiguration("start_rviz")
 
+    ethercat_bus_value = ethercat_bus.perform(context)
     dof_value = dof.perform(context)
     covers_value = covers.perform(context)
     version_value = version.perform(context)
@@ -54,10 +60,11 @@ def launch_setup(context, *args, **kwargs):
     xacro.process_doc(
         doc,
         mappings={
+            "ethercat_bus": ethercat_bus_value,
             "dof": dof_value,
             "covers": covers_value,
             "version": version_value,
-            "mode": "mock",
+            "mode": "real",
         },
     )
     robot_description = {"robot_description": doc.toxml()}
@@ -71,14 +78,14 @@ def launch_setup(context, *args, **kwargs):
     )
 
     # Launch RViz
-    rviz_config_file = PathJoinSubstitution([pkg_share_description, "config/config.rviz"])
+    rviz_config_file = PathJoinSubstitution([pkg_share_description, "rviz", "config.rviz"])
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",
         name="rviz2",
         output="screen",
         arguments=["-d", rviz_config_file],
-        condition=IfCondition(gui),
+        condition=IfCondition(start_rviz),
     )
 
     joint_state_broadcaster_spawner_node = Node(
@@ -161,14 +168,12 @@ def launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
 
-    # Declare the launch arguments
     declared_arguments = []
     declared_arguments.append(
         DeclareLaunchArgument(
-            name="gui",
-            default_value="True",
-            choices=["True", "False"],
-            description="Flag to enable joint_state_publisher_gui",
+            name="ethercat_bus",
+            default_value="enp86s0",
+            description="The ethercat bus id or name.",
         )
     )
     declared_arguments.append(
@@ -192,6 +197,13 @@ def generate_launch_description():
             default_value="v2",
             choices=["v1", "v2"],
             description="Select the desired version of robot ",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "start_rviz",
+            default_value="True",
+            description="Start RViz2 automatically with this launch file.",
         )
     )
 

@@ -78,7 +78,7 @@ def launch_setup(context, *args, **kwargs):
     )
 
     # Launch RViz
-    rviz_config_file = PathJoinSubstitution([pkg_share_description, "rviz", "config.rviz"])
+    rviz_config_file = PathJoinSubstitution([pkg_share_description, "config", "config.rviz"])
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",
@@ -128,13 +128,13 @@ def launch_setup(context, *args, **kwargs):
     joint_trajectory_controller_node = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_trajectory_controller", "--inactive"],
+        arguments=["joint_trajectory_controller"],
     )
 
     cartesian_motion_controller_node = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["cartesian_motion_controller"],
+        arguments=["cartesian_motion_controller", "--inactive"],
     )
 
     status_controller_node = Node(
@@ -172,7 +172,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             name="ethercat_bus",
-            default_value="enp86s0",
+            default_value="enp0s31f6",
             description="The ethercat bus id or name.",
         )
     )

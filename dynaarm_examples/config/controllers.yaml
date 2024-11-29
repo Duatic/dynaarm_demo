@@ -7,6 +7,9 @@ controller_manager:
 
     gravity_compensation_controller:
       type: dynaarm_controllers/GravityCompensationController
+      
+    freedrive_controller:
+      type: dynaarm_controllers/FreeDriveController
 
     position_controller:
       type: forward_command_controller/ForwardCommandController
@@ -118,15 +121,14 @@ gravity_compensation_controller:
       - FA_ROT
       - WR_FLE
       - WR_ROT            
-    command_interfaces:      
-      - effort
-    state_interfaces:
-      - position
-      - velocity      
-    gains:
-      SH_ROT: {p: 100.0, i: 0.0, d: 15.0}
-      SH_FLE: {p: 100.0, i: 0.0, d: 15.0}
-      EL_FLE: {p: 100.0, i: 0.0, d: 15.0}
-      FA_ROT: {p: 50.0, i: 0.0, d: 15.0}
-      WR_FLE: {p: 50.0, i: 0.0, d: 15.0}
-      WR_ROT: {p: 50.0, i: 0.0, d: 15.0}
+
+
+freedrive_controller:
+  ros__parameters:
+    joints:
+      - SH_ROT
+      - SH_FLE
+      - EL_FLE
+      - FA_ROT
+      - WR_FLE
+      - WR_ROT        

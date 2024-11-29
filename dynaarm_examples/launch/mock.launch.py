@@ -112,6 +112,12 @@ def launch_setup(context, *args, **kwargs):
         },
     )
 
+    freedrive_controller_node = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["freedrive_controller", "--inactive"],
+    )
+
     gravity_compensation_controller_node = Node(
         package="controller_manager",
         executable="spawner",
@@ -127,7 +133,7 @@ def launch_setup(context, *args, **kwargs):
     cartesian_motion_controller_node = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["cartesian_motion_controller"],
+        arguments=["cartesian_motion_controller", "--inactive"],
     )
 
     status_controller_node = Node(
@@ -144,6 +150,7 @@ def launch_setup(context, *args, **kwargs):
                 status_controller_node,
                 joint_trajectory_controller_node,
                 cartesian_motion_controller_node,
+                freedrive_controller_node
             ],
         )
     )

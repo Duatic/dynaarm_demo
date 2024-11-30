@@ -21,25 +21,20 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import os
 
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
     RegisterEventHandler,
     OpaqueFunction,
-    IncludeLaunchDescription,
-    TimerAction,
 )
 from launch.conditions import IfCondition
 from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
 from launch.event_handlers import OnProcessExit
-from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
-from ament_index_python.packages import get_package_share_directory
 
 from moveit_configs_utils import MoveItConfigsBuilder
 
@@ -67,8 +62,8 @@ def launch_setup(context, *args, **kwargs):
         "version": version_value,
     }
 
-    dynaarm_moveit_pkg = f"dynaarm_moveit_config"
-    dynaarm_examples_pkg = f"dynaarm_examples"
+    dynaarm_moveit_pkg = "dynaarm_moveit_config"
+    dynaarm_examples_pkg = "dynaarm_examples"
 
     moveit_config = (
         MoveItConfigsBuilder("dynaarm", package_name=dynaarm_moveit_pkg)
@@ -84,7 +79,7 @@ def launch_setup(context, *args, **kwargs):
         [
             FindPackageShare(dynaarm_examples_pkg),
             "config",
-            f"controllers.yaml",
+            "controllers.yaml",
         ]
     )
 
@@ -224,6 +219,4 @@ def generate_launch_description():
         )
     )
 
-    return LaunchDescription(
-        declared_arguments + [OpaqueFunction(function=launch_setup)]
-    )
+    return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])

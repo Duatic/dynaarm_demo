@@ -12,7 +12,7 @@ joint_limits:
     has_velocity_limits: true
     max_veloity: 4.0
     has_acceleration_limits: true
-    max_acceleration: 40.0 
+    max_acceleration: 40.0
   SH_FLE:
     has_velocity_limits: true
     max_veloity: 4.0

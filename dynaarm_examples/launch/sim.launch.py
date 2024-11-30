@@ -83,9 +83,7 @@ def launch_setup(context, *args, **kwargs):
     )
 
     # Launch RViz
-    rviz_config_file = PathJoinSubstitution(
-        [pkg_share_description, "rviz", "config.rviz"]
-    )
+    rviz_config_file = PathJoinSubstitution([pkg_share_description, "rviz", "config.rviz"])
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",
@@ -102,9 +100,7 @@ def launch_setup(context, *args, **kwargs):
     )
 
     start_gazebo_cmd = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(pkg_ros_gz_sim, "launch", "gz_sim.launch.py")
-        ),
+        PythonLaunchDescriptionSource(os.path.join(pkg_ros_gz_sim, "launch", "gz_sim.launch.py")),
         launch_arguments=[
             ("gz_args", [" -r -v 4 empty.sdf"]),
         ],
@@ -197,6 +193,4 @@ def generate_launch_description():
         )
     )
 
-    return LaunchDescription(
-        declared_arguments + [OpaqueFunction(function=launch_setup)]
-    )
+    return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])

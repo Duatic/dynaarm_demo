@@ -198,7 +198,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             name="version",
-            default_value="v1",
+            default_value="v2",
             choices=["v1", "v2"],
             description="Select the desired version of robot ",
         )
@@ -206,7 +206,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "ethercat_bus",
-            default_value="enp86s0",
+            default_value="enp0s31f6",
             description="The ethercat bus id or name.",
         )
     )

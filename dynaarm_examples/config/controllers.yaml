@@ -87,6 +87,7 @@ joint_trajectory_controller:
       - WR_ROT
     command_interfaces:
       - position
+      - velocity
     state_interfaces:
       - position
       - velocity

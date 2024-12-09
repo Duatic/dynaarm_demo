@@ -38,6 +38,7 @@ dynaarm_status_controller:
       - FA_ROT
       - WR_FLE
       - WR_ROT
+    extended_control: true
 
 motion_control_handle:
   ros__parameters:

@@ -121,13 +121,13 @@ def launch_setup(context, *args, **kwargs):
     gravity_compensation_controller_node = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["gravity_compensation_controller", "--inactive"],
+        arguments=["gravity_compensation_controller"],
     )
 
     joint_trajectory_controller_node = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_trajectory_controller", "--inactive"],
+        arguments=["joint_trajectory_controller"],
     )
 
     cartesian_motion_controller_node = Node(

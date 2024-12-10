@@ -128,13 +128,13 @@ def launch_setup(context, *args, **kwargs):
     freedrive_controller_node = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["freedrive_controller", "--inactive"],
+        arguments=["freedrive_controller"],
     )
 
     joint_trajectory_controller_node = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_trajectory_controller"],
+        arguments=["joint_trajectory_controller", "--inactive"],
     )
 
     cartesian_motion_controller_node = Node(
@@ -179,7 +179,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             name="ethercat_bus",
-            default_value="enp0s31f6",
+            default_value="enp86s0",
             description="The ethercat bus id or name.",
         )
     )

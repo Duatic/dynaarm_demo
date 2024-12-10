@@ -28,6 +28,20 @@ controller_manager:
 
     motion_control_handle:
       type: cartesian_controller_handles/MotionControlHandle
+    
+    pid_tuner:
+      type: dynaarm_controllers/PIDController
+
+pid_tuner:
+  ros__parameters:
+    joints:
+      - SH_ROT
+      - SH_FLE
+      - EL_FLE
+      - FA_ROT
+      - WR_FLE
+      - WR_ROT
+
 
 dynaarm_status_controller:
   ros__parameters:
@@ -38,7 +52,7 @@ dynaarm_status_controller:
       - FA_ROT
       - WR_FLE
       - WR_ROT
-    extended_control: true
+
 
 motion_control_handle:
   ros__parameters:

@@ -11,9 +11,9 @@ moveit_simple_controller_manager:
     action_ns: follow_joint_trajectory
     default: true
     joints:
-      - SH_ROT
-      - SH_FLE
-      - EL_FLE
-      - FA_ROT
-      - WR_FLE
-      - WR_ROT
+      - shoulder_rotation
+      - shoulder_flexion
+      - elbow_flexion
+      - forearm_rotation
+      - wrist_flexion
+      - wrist_rotation

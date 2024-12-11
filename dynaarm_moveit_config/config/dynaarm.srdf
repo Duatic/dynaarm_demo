@@ -10,28 +10,28 @@
     <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
     <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
     <group name="dynaarm">
-        <chain base_link="base" tip_link="END_EFFECTOR"/>
+        <chain base_link="base" tip_link="flange"/>
     </group>
     <!--GROUP STATES: Purpose: Define a named state for a particular group, in terms of joint values. This is useful to define states like 'folded arms'-->
     <group_state name="home" group="dynaarm">
-        <joint name="EL_FLE" value="0"/>
-        <joint name="FA_ROT" value="0"/>
-        <joint name="SH_FLE" value="0"/>
-        <joint name="SH_ROT" value="0"/>
-        <joint name="WR_FLE" value="0"/>
-        <joint name="WR_ROT" value="0"/>
+        <joint name="elbow_flexion" value="0"/>
+        <joint name="forearm_rotation" value="0"/>
+        <joint name="shoulder_flexion" value="0"/>
+        <joint name="shoulder_rotation" value="0"/>
+        <joint name="wrist_flexion" value="0"/>
+        <joint name="wrist_rotation" value="0"/>
     </group_state>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
-    <disable_collisions link1="ELBOW" link2="FOREARM" reason="Adjacent"/>
-    <disable_collisions link1="base" link2="UPPERARM" reason="Never"/>
-    <disable_collisions link1="ELBOW" link2="SHOULDER" reason="Never"/>
-    <disable_collisions link1="ELBOW" link2="UPPERARM" reason="Adjacent"/>
-    <disable_collisions link1="ELBOW" link2="WRIST_1" reason="Never"/>
-    <disable_collisions link1="ELBOW" link2="WRIST_2" reason="Never"/>
-    <disable_collisions link1="ELBOW" link2="base" reason="Never"/>
-    <disable_collisions link1="FOREARM" link2="WRIST_1" reason="Adjacent"/>
-    <disable_collisions link1="FOREARM" link2="WRIST_2" reason="Never"/>
-    <disable_collisions link1="SHOULDER" link2="UPPERARM" reason="Adjacent"/>
-    <disable_collisions link1="SHOULDER" link2="base" reason="Adjacent"/>
-    <disable_collisions link1="WRIST_1" link2="WRIST_2" reason="Adjacent"/>
+    <disable_collisions link1="elbow" link2="forearm" reason="Adjacent"/>
+    <disable_collisions link1="base" link2="upperarm" reason="Never"/>
+    <disable_collisions link1="elbow" link2="shoulder" reason="Never"/>
+    <disable_collisions link1="elbow" link2="upperarm" reason="Adjacent"/>
+    <disable_collisions link1="elbow" link2="wrist_1" reason="Never"/>
+    <disable_collisions link1="elbow" link2="wrist_2" reason="Never"/>
+    <disable_collisions link1="elbow" link2="base" reason="Never"/>
+    <disable_collisions link1="forearm" link2="wrist_1" reason="Adjacent"/>
+    <disable_collisions link1="forearm" link2="wrist_2" reason="Never"/>
+    <disable_collisions link1="shoulder" link2="upperarm" reason="Adjacent"/>
+    <disable_collisions link1="shoulder" link2="base" reason="Adjacent"/>
+    <disable_collisions link1="wrist_1" link2="wrist_2" reason="Adjacent"/>
 </robot>

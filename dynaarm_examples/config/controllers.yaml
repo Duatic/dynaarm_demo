@@ -35,23 +35,23 @@ controller_manager:
 pid_tuner:
   ros__parameters:
     joints:
-      - SH_ROT
-      - SH_FLE
-      - EL_FLE
-      - FA_ROT
-      - WR_FLE
-      - WR_ROT
+      - shoulder_rotation
+      - shoulder_flexion
+      - elbow_flexion
+      - forearm_rotation
+      - wrist_flexion
+      - wrist_rotation
 
 
 dynaarm_status_controller:
   ros__parameters:
     joints:
-      - SH_ROT
-      - SH_FLE
-      - EL_FLE
-      - FA_ROT
-      - WR_FLE
-      - WR_ROT
+      - shoulder_rotation
+      - shoulder_flexion
+      - elbow_flexion
+      - forearm_rotation
+      - wrist_flexion
+      - wrist_rotation
 
 
 motion_control_handle:
@@ -59,24 +59,24 @@ motion_control_handle:
     end_effector_link: "END_EFFECTOR"
     robot_base_link: "base"
     joints:
-      - SH_ROT
-      - SH_FLE
-      - EL_FLE
-      - FA_ROT
-      - WR_FLE
-      - WR_ROT
+      - shoulder_rotation
+      - shoulder_flexion
+      - elbow_flexion
+      - forearm_rotation
+      - wrist_flexion
+      - wrist_rotation
 
 cartesian_motion_controller:
   ros__parameters:
     end_effector_link: "END_EFFECTOR"
     robot_base_link: "base"
     joints:
-      - SH_ROT
-      - SH_FLE
-      - EL_FLE
-      - FA_ROT
-      - WR_FLE
-      - WR_ROT
+      - shoulder_rotation
+      - shoulder_flexion
+      - elbow_flexion
+      - forearm_rotation
+      - wrist_flexion
+      - wrist_rotation
     command_interfaces:
       - position
       #- velocity
@@ -94,12 +94,12 @@ cartesian_motion_controller:
 joint_trajectory_controller:
   ros__parameters:
     joints:
-      - SH_ROT
-      - SH_FLE
-      - EL_FLE
-      - FA_ROT
-      - WR_FLE
-      - WR_ROT
+      - shoulder_rotation
+      - shoulder_flexion
+      - elbow_flexion
+      - forearm_rotation
+      - wrist_flexion
+      - wrist_rotation
     command_interfaces:
       - position
       - velocity
@@ -110,41 +110,41 @@ joint_trajectory_controller:
 position_controller:
   ros__parameters:
     joints:
-      - SH_ROT
-      - SH_FLE
-      - EL_FLE
-      - FA_ROT
-      - WR_FLE
-      - WR_ROT
+      - shoulder_rotation
+      - shoulder_flexion
+      - elbow_flexion
+      - forearm_rotation
+      - wrist_flexion
+      - wrist_rotation
     interface_name: position
 
 effort_controller:
   ros__parameters:
     joints:
-      - SH_ROT
-      - SH_FLE
-      - EL_FLE
-      - FA_ROT
-      - WR_FLE
-      - WR_ROT
+      - shoulder_rotation
+      - shoulder_flexion
+      - elbow_flexion
+      - forearm_rotation
+      - wrist_flexion
+      - wrist_rotation
 
 gravity_compensation_controller:
   ros__parameters:
     joints:
-      - SH_ROT
-      - SH_FLE
-      - EL_FLE
-      - FA_ROT
-      - WR_FLE
-      - WR_ROT
+      - shoulder_rotation
+      - shoulder_flexion
+      - elbow_flexion
+      - forearm_rotation
+      - wrist_flexion
+      - wrist_rotation
 
 
 freedrive_controller:
   ros__parameters:
     joints:
-      - SH_ROT
-      - SH_FLE
-      - EL_FLE
-      - FA_ROT
-      - WR_FLE
-      - WR_ROT
+      - shoulder_rotation
+      - shoulder_flexion
+      - elbow_flexion
+      - forearm_rotation
+      - wrist_flexion
+      - wrist_rotation

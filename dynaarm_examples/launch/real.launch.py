@@ -131,6 +131,12 @@ def launch_setup(context, *args, **kwargs):
         arguments=["freedrive_controller"],
     )
 
+    pid_tuner_node = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["pid_tuner", "--inactive"],
+    )
+
     joint_trajectory_controller_node = Node(
         package="controller_manager",
         executable="spawner",
@@ -158,6 +164,7 @@ def launch_setup(context, *args, **kwargs):
                 joint_trajectory_controller_node,
                 cartesian_motion_controller_node,
                 freedrive_controller_node,
+                pid_tuner_node
             ],
         )
     )

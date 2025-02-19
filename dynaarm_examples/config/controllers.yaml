@@ -112,15 +112,15 @@ joint_trajectory_controller:
     # See https://control.ros.org/jazzy/doc/ros2_controllers/joint_trajectory_controller/doc/parameters.html for a full list of all parameters
     allow_partial_joints_goal: false # trajectory needs to contains goals from all joints handled by the controller
     constraints:
-      stopped_velocity_tolerance: 0.1
+      stopped_velocity_tolerance: 0.5
       goal_time: 0.05
       # Tolerances for each joint
-      shoulder_rotation: { trajectory: 0.2, goal: 0.0015 }
-      shoulder_flexion: { trajectory: 0.2, goal: 0.0015 }
-      elbow_flexion: { trajectory: 0.2, goal: 0.0015 }
-      forearm_rotation: { trajectory: 0.2, goal: 0.0015 }
-      wrist_flexion: { trajectory: 0.2, goal: 0.0015 }
-      wrist_rotation: { trajectory: 0.2, goal: 0.0015 }
+      shoulder_rotation: { trajectory: 0.5, goal: 0.05 }
+      shoulder_flexion: { trajectory: 0.5, goal: 0.05 }
+      elbow_flexion: { trajectory: 0.5, goal: 0.05 }
+      forearm_rotation: { trajectory: 0.5, goal: 0.05 }
+      wrist_flexion: { trajectory: 0.5, goal: 0.05 }
+      wrist_rotation: { trajectory: 0.5, goal: 0.05 }
 
 position_controller:
   ros__parameters:

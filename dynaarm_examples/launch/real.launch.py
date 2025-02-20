@@ -110,7 +110,7 @@ def launch_setup(context, *args, **kwargs):
             "stdout": "screen",
             "stderr": "screen",
         },
-    )    
+    )
 
     status_broadcaster_node = Node(
         package="controller_manager",
@@ -180,7 +180,7 @@ def launch_setup(context, *args, **kwargs):
     nodes_to_start = [
         control_node,
         robot_state_pub_node,
-        joint_state_broadcaster_spawner_node,        
+        joint_state_broadcaster_spawner_node,
         delay_after_joint_state_broadcaster_spawner,
     ]
 

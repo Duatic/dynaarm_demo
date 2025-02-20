@@ -110,7 +110,7 @@ def launch_setup(context, *args, **kwargs):
         executable="spawner",
         arguments=["dynaarm_status_broadcaster"],
     )
-    
+
     safety_controller_node = Node(
         package="controller_manager",
         executable="spawner",

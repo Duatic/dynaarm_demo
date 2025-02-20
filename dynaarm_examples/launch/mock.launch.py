@@ -87,13 +87,6 @@ def launch_setup(context, *args, **kwargs):
         arguments=["joint_state_broadcaster"],
     )
 
-    delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner_node,
-            on_exit=[rviz_node],
-        )
-    )
-
     robot_controllers = PathJoinSubstitution(
         [
             FindPackageShare("dynaarm_examples"),
@@ -154,10 +147,18 @@ def launch_setup(context, *args, **kwargs):
         arguments=["cartesian_motion_controller", "--inactive"],
     )
 
+    safety_controller_node = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["safety_controller"],
+    )
+
     delay_robot_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner_node,
             on_exit=[
+                rviz_node,
+                safety_controller_node,
                 status_broadcaster_node,
                 freeze_controller_node,
                 gravity_compensation_controller_node,
@@ -173,7 +174,6 @@ def launch_setup(context, *args, **kwargs):
         control_node,
         robot_state_pub_node,
         joint_state_broadcaster_spawner_node,
-        delay_rviz_after_joint_state_broadcaster_spawner,
         delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
     ]
 

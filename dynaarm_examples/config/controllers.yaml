@@ -35,6 +35,9 @@ controller_manager:
     pid_tuner:
       type: dynaarm_controllers/PIDTuner
 
+    safety_controller:
+      type: dynaarm_controllers/SafetyController
+
 pid_tuner:
   ros__parameters:
     joints:

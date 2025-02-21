@@ -96,18 +96,18 @@ def launch_setup(context, *args, **kwargs):
     )
 
     joy_node = Node(
-            package="joy",
-            executable="game_controller_node",
-            output="screen",
-            parameters=[{"autorepeat_rate": 100.0}]  # Set autorepeat to 100 Hz
+        package="joy",
+        executable="game_controller_node",
+        output="screen",
+        parameters=[{"autorepeat_rate": 100.0}],  # Set autorepeat to 100 Hz
     )
 
     e_stop_node = Node(
-            package='dynaarm_extensions',
-            executable='e_stop_node',
-            name='e_stop_node',
-            output="screen",
-            parameters=[{'emergency_stop_button': 9}],  # Change button index here
+        package="dynaarm_extensions",
+        executable="e_stop_node",
+        name="e_stop_node",
+        output="screen",
+        parameters=[{"emergency_stop_button": 9}],  # Change button index here
     )
 
     control_node = Node(
@@ -166,7 +166,7 @@ def launch_setup(context, *args, **kwargs):
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner_node,
             on_exit=[
-                rviz_node,         
+                rviz_node,
                 status_broadcaster_node,
                 freeze_controller_node,
                 gravity_compensation_controller_node,
@@ -179,12 +179,12 @@ def launch_setup(context, *args, **kwargs):
     )
 
     nodes_to_start = [
-        control_node,        
+        control_node,
         robot_state_pub_node,
-        joint_state_broadcaster_spawner_node,        
+        joint_state_broadcaster_spawner_node,
         delay_after_joint_state_broadcaster_spawner,
         joy_node,
-        e_stop_node
+        e_stop_node,
     ]
 
     return nodes_to_start

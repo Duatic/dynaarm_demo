@@ -35,9 +35,6 @@ controller_manager:
     pid_tuner:
       type: dynaarm_controllers/PIDTuner
 
-    safety_controller:
-      type: dynaarm_controllers/SafetyController
-
 pid_tuner:
   ros__parameters:
     joints:
@@ -48,7 +45,6 @@ pid_tuner:
       - wrist_flexion
       - wrist_rotation
 
-
 dynaarm_status_broadcaster:
   ros__parameters:
     joints:
@@ -58,7 +54,6 @@ dynaarm_status_broadcaster:
       - forearm_rotation
       - wrist_flexion
       - wrist_rotation
-
 
 motion_control_handle:
   ros__parameters:
@@ -143,7 +138,6 @@ gravity_compensation_controller:
       - forearm_rotation
       - wrist_flexion
       - wrist_rotation
-
 
 freedrive_controller:
   ros__parameters:

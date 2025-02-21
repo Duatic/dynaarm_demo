@@ -106,14 +106,15 @@ def launch_setup(context, *args, **kwargs):
             package="joy",
             executable="game_controller_node",
             output="screen",
-            parameters=[{"autorepeat_rate": 500.0}]  # Set autorepeat to 500 Hz
+            parameters=[{"autorepeat_rate": 100.0}]  # Set autorepeat to 100 Hz
     )
 
     e_stop_node = Node(
             package='dynaarm_extensions',
             executable='e_stop_node',
             name='e_stop_node',
-            parameters=[{'emergency_stop_button': 8}],  # Change button index here
+            output="screen",
+            parameters=[{'emergency_stop_button': 9}],  # Change button index here
     )
 
     control_node = Node(

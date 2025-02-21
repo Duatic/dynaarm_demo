@@ -99,7 +99,7 @@ def launch_setup(context, *args, **kwargs):
             package="joy",
             executable="game_controller_node",
             output="screen",
-            parameters=[{"autorepeat_rate": 500.0}]  # Set autorepeat to 500 Hz
+            parameters=[{"autorepeat_rate": 100.0}]  # Set autorepeat to 100 Hz
     )
 
     e_stop_node = Node(

@@ -114,7 +114,7 @@ def launch_setup(context, *args, **kwargs):
         executable="e_stop_node",
         name="e_stop_node",
         output="screen",
-        parameters=[{"emergency_stop_button": 8}],  # Change button index here
+        parameters=[{"emergency_stop_button": 9}],  # Change button index here
     )
 
     control_node = Node(

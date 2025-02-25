@@ -87,19 +87,27 @@ def launch_setup(context, *args, **kwargs):
         arguments=["joint_state_broadcaster"],
     )
 
-    delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner_node,
-            on_exit=[rviz_node],
-        )
-    )
-
     robot_controllers = PathJoinSubstitution(
         [
             FindPackageShare("dynaarm_examples"),
             "config",
             "controllers.yaml",
         ]
+    )
+
+    joy_node = Node(
+        package="joy",
+        executable="game_controller_node",
+        output="screen",
+        parameters=[{"autorepeat_rate": 100.0}],  # Set autorepeat to 100 Hz
+    )
+
+    e_stop_node = Node(
+        package="dynaarm_extensions",
+        executable="e_stop_node",
+        name="e_stop_node",
+        output="screen",
+        parameters=[{"emergency_stop_button": 8}],  # Change button index here
     )
 
     control_node = Node(
@@ -154,10 +162,11 @@ def launch_setup(context, *args, **kwargs):
         arguments=["cartesian_motion_controller", "--inactive"],
     )
 
-    delay_robot_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
+    delay_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner_node,
             on_exit=[
+                rviz_node,
                 status_broadcaster_node,
                 freeze_controller_node,
                 gravity_compensation_controller_node,
@@ -173,8 +182,9 @@ def launch_setup(context, *args, **kwargs):
         control_node,
         robot_state_pub_node,
         joint_state_broadcaster_spawner_node,
-        delay_rviz_after_joint_state_broadcaster_spawner,
-        delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
+        delay_after_joint_state_broadcaster_spawner,
+        joy_node,
+        e_stop_node,
     ]
 
     return nodes_to_start

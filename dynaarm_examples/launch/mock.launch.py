@@ -107,7 +107,7 @@ def launch_setup(context, *args, **kwargs):
         executable="e_stop_node",
         name="e_stop_node",
         output="screen",
-        parameters=[{"emergency_stop_button": 8}],  # Change button index here
+        parameters=[{"emergency_stop_button": 9}],  # Change button index here
     )
 
     control_node = Node(
@@ -162,6 +162,12 @@ def launch_setup(context, *args, **kwargs):
         arguments=["cartesian_motion_controller", "--inactive"],
     )
 
+    position_controller_node = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["position_controller", "--inactive"],
+    )
+
     delay_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner_node,
@@ -174,6 +180,7 @@ def launch_setup(context, *args, **kwargs):
                 cartesian_motion_controller_node,
                 freedrive_controller_node,
                 pid_tuner_node,
+                position_controller_node
             ],
         )
     )

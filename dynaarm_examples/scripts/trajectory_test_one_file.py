@@ -9,14 +9,23 @@ from ament_index_python.packages import get_package_share_directory
 import time
 import math
 import pandas as pd
+import subprocess
+from datetime import datetime  # For timestamping rosbag files
+
 
 class DynaArm(Node):
     def __init__(self):
         super().__init__("dyna_arm")
 
-        # ROS 2 Paketpfad ermitteln
+        # ROS 2 package path
         package_path = get_package_share_directory("dynaarm_examples")
-        self.csv_path = os.path.join(package_path, "scripts", "trajectory_data_config3_vel0.5.csv")
+        
+        # Trajectory file (for single test)
+        self.csv_path = os.path.join(package_path, "scripts", "trajectory_data", "trajectory_data_config3_vel2.5.csv")
+
+        # Ensure rosbag recordings directory exists
+        self.rosbag_dir = os.path.join(os.getcwd(), "rosbag_recordings")
+        os.makedirs(self.rosbag_dir, exist_ok=True)
 
         # Publishers
         self.pub = self.create_publisher(JointTrajectory, '/joint_trajectory_controller/joint_trajectory', 10)
@@ -41,22 +50,21 @@ class DynaArm(Node):
             "wrist_rotation": (-3 * math.pi / 2, 3 * math.pi / 2)
         }
 
-        # Initial joint position `q0` as defined in the email
-        self.q0 = [0.0, math.radians(20), math.radians(90), math.radians(-90), math.radians(70), 0.0]
+        # Initial start position
+        self.start_position = [0.0, math.radians(20), math.radians(90), math.radians(-90), math.radians(70), 0.0]
 
     def joint_state_callback(self, msg):
-        """Callback function to update current joint positions from /joint_states topic."""
+        """Update current joint positions from /joint_states topic."""
         for i, name in enumerate(msg.name):
             self.current_joint_positions[name] = msg.position[i]
 
     def get_current_joint_positions(self):
         """Returns the latest known joint positions as a list."""
-        joint_names = list(self.joint_limits.keys())  # Order must match expected joint order
-        positions = [self.current_joint_positions.get(joint, 0.0) for joint in joint_names]
-        return positions
+        joint_names = list(self.joint_limits.keys())  # Ensure correct order
+        return [self.current_joint_positions.get(joint, 0.0) for joint in joint_names]
 
     def switch_controller(self, stop_controllers, start_controllers):
-        """ Switches between controllers """
+        """Switches between controllers."""
         req = SwitchController.Request()
         req.deactivate_controllers = stop_controllers
         req.activate_controllers = start_controllers
@@ -71,21 +79,21 @@ class DynaArm(Node):
         else:
             self.get_logger().error("Controller switch failed.")
 
-    def move_to_q0(self):
-        """Move the arm smoothly to the initial position q0 if not already there."""
+    def move_to_start(self):
+        """Move the arm smoothly to the initial start position if not already there."""
         current_positions = self.get_current_joint_positions()
 
-        if all(abs(curr - target) < 0.05 for curr, target in zip(current_positions, self.q0)):
-            self.get_logger().info("Already at q0, skipping movement.")
+        if all(abs(curr - target) < 0.05 for curr, target in zip(current_positions, self.start_position)):
+            self.get_logger().info("Already at start position, skipping movement.")
             return
 
-        self.get_logger().info("Moving to q0 smoothly...")
+        self.get_logger().info("Moving to start position smoothly...")
 
         transition_traj = JointTrajectory()
         transition_traj.joint_names = list(self.joint_limits.keys())
 
         point = JointTrajectoryPoint()
-        point.positions = self.q0
+        point.positions = self.start_position
         point.velocities = [0.0] * 6
         point.accelerations = [0.0] * 6
         point.time_from_start = Duration(seconds=3.0).to_msg()  # Slow transition
@@ -94,29 +102,51 @@ class DynaArm(Node):
         self.pub.publish(transition_traj)
         time.sleep(3.5)  # Ensure completion
 
-    def move_joints(self):
-        """Loads trajectory from CSV and executes it safely."""
+    def record_rosbag(self, csv_filename):
+        """Starts recording a rosbag with a timestamped filename inside rosbag_recordings/."""
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        bag_filename = f"{csv_filename.replace('.csv', '')}_{timestamp}"
+        bag_path = os.path.join(self.rosbag_dir, bag_filename)
+
+        self.get_logger().info(f"Starting rosbag recording: {bag_path}")
+        return subprocess.Popen([
+            "ros2", "bag", "record",
+            "/joint_states",
+            "/joint_trajectory_controller/controller_state",
+            "/dynaarm_status_broadcaster/state",
+            "/tf",
+            "-o", bag_path
+        ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+    def move_joints(self, csv_path=None):
+        """Loads a trajectory from CSV, records a rosbag, and executes it safely."""
+        if csv_path is None:
+            csv_path = self.csv_path  # Default to the predefined CSV file
 
         # Load CSV data
-        df = pd.read_csv(self.csv_path)
+        df = pd.read_csv(csv_path)
         time_stamps = df["time"].values
         positions = df[[f"pos{i+1}" for i in range(6)]].values
         velocities = df[[f"vel{i+1}" for i in range(6)]].values
         accelerations = df[[f"acc{i+1}" for i in range(6)]].values
-        bool_throw = df["bool_throw"].values  # Identify release instant
+        bool_throw = df["bool_throw"].values
 
         # Ensure last velocity and acceleration are zero
         velocities[-1] = [0.0] * 6
         accelerations[-1] = [0.0] * 6
 
-        # Move to q0 before executing
-        self.move_to_q0()
+        # Move to start position before executing
+        self.move_to_start()
+
+        # Start rosbag recording
+        csv_filename = os.path.basename(csv_path)
+        rosbag_process = self.record_rosbag(csv_filename)
 
         # Send trajectory
         traj = JointTrajectory()
         traj.joint_names = list(self.joint_limits.keys())
 
-        release_index = None  # Store the row index of the release instant
+        release_index = None
 
         for i, (pos, vel, acc, t, throw) in enumerate(zip(positions, velocities, accelerations, time_stamps, bool_throw)):
             point = JointTrajectoryPoint()
@@ -124,28 +154,30 @@ class DynaArm(Node):
             point.velocities = vel.tolist()
             point.accelerations = acc.tolist()
             point.time_from_start = Duration(seconds=float(t)).to_msg()
-
             traj.points.append(point)
 
-            # Check if this is the throwing moment
             if throw == 1 and release_index is None:
                 release_index = i
 
         self.pub.publish(traj)
-        self.get_logger().info("Trajectory sent.")
+        self.get_logger().info(f"Trajectory '{csv_filename}' sent.")
 
-        # Wait for execution
         time.sleep(time_stamps[-1])
 
         if release_index is not None:
-            self.get_logger().info(f"Release instant at row {release_index}, time {time_stamps[release_index]}s.")
+            time.sleep(0.05)
+
+        self.get_logger().info("Stopping rosbag recording.")
+        rosbag_process.terminate()
+        rosbag_process.wait()
+        self.get_logger().info(f"Rosbag saved: {csv_filename}")
 
 def main():
     rclpy.init()
     arm = DynaArm()
 
     arm.switch_controller(['freeze_controller'], ['joint_trajectory_controller'])
-    arm.move_joints()
+    arm.move_joints()  # Runs the default trajectory file
     arm.switch_controller(['joint_trajectory_controller'], ['freeze_controller'])
 
     arm.destroy_node()

@@ -121,7 +121,7 @@ class DynaArm(Node):
 
         # Send Home
         home_positions = [0.0] * 6
-        self.send_trajectory(home_positions, 10)
+        self.send_trajectory(home_positions, 2)
         time.sleep(0.5)
 
         # Define start, intermediate, and end positions
@@ -130,9 +130,9 @@ class DynaArm(Node):
         positions_end = [1.5, 1.0, 2.0, 1.5, -1.5, 2.0]
 
         # Durations
-        duration1 = 5
+        duration1 = 1.2
         duration2 = duration1  
-        steps1 = 400  
+        steps1 = 1000  
         steps2 = steps1  
 
         # Generate trajectory points

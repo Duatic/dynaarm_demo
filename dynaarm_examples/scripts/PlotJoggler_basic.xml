@@ -1,53 +1,60 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <root>
- <tabbed_widget name="Main Window" parent="main_window">
-  <Tab tab_name="Position" containers="1">
+ <tabbed_widget parent="main_window" name="Main Window">
+  <Tab containers="1" tab_name="Position">
    <Container>
-    <DockSplitter sizes="1" orientation="-" count="1">
-     <DockSplitter sizes="0.5;0.5" orientation="|" count="2">
-      <DockSplitter sizes="0.333333;0.333333;0.333333" orientation="-" count="3">
+    <DockSplitter count="1" orientation="-" sizes="1">
+     <DockSplitter count="2" orientation="|" sizes="0.500366;0.499634">
+      <DockSplitter count="3" orientation="-" sizes="0.3337;0.332599;0.3337">
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.244905" top="1.473049" right="38.244091" bottom="1.164583"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="0.024344" left="125.158163" top="0.024879" right="145.157931"/>
          <limitY/>
-         <curve name="/joint_states/shoulder_rotation/position" color="#ff7f0e"/>
+         <curve color="#ff7f0e" name="/joint_states/shoulder_rotation/position"/>
+         <curve color="#1f77b4" name="/dynaarm_status_broadcaster/state/states[0]/joint_position_commanded"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.244905" top="0.909700" right="38.244091" bottom="0.583390"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="0.013114" left="125.158163" top="0.016256" right="145.157931"/>
          <limitY/>
-         <curve name="/joint_states/shoulder_flexion/position" color="#1ac938"/>
+         <curve color="#1ac938" name="/joint_states/shoulder_flexion/position"/>
+         <curve color="#d62728" name="/dynaarm_status_broadcaster/state/states[1]/joint_position_commanded"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.244905" top="1.951821" right="38.244091" bottom="1.609707"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="0.031700" left="125.158163" top="0.033751" right="145.157931"/>
          <limitY/>
-         <curve name="/joint_states/elbow_flexion/position" color="#1f77b4"/>
+         <curve color="#1f77b4" name="/joint_states/elbow_flexion/position"/>
+         <curve color="#1ac938" name="/dynaarm_status_broadcaster/state/states[2]/joint_position"/>
+         <curve color="#ff7f0e" name="/dynaarm_status_broadcaster/state/states[2]/joint_position_commanded"/>
         </plot>
        </DockArea>
       </DockSplitter>
-      <DockSplitter sizes="0.333333;0.333333;0.333333" orientation="-" count="3">
+      <DockSplitter count="3" orientation="-" sizes="0.3337;0.332599;0.3337">
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.244905" top="3.030603" right="38.244091" bottom="3.021539"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="0.023872" left="125.158163" top="0.024418" right="145.157931"/>
          <limitY/>
-         <curve name="/joint_states/forearm_rotation/position" color="#d62728"/>
+         <curve color="#d62728" name="/joint_states/forearm_rotation/position"/>
+         <curve color="#f14cc1" name="/dynaarm_status_broadcaster/state/states[3]/joint_position_commanded"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.244905" top="-1.903638" right="38.244091" bottom="-1.909251"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="-0.026556" left="125.158163" top="-0.023875" right="145.157931"/>
          <limitY/>
-         <curve name="/joint_states/wrist_flexion/position" color="#f14cc1"/>
+         <curve color="#f14cc1" name="/joint_states/wrist_flexion/position"/>
+         <curve color="#9467bd" name="/dynaarm_status_broadcaster/state/states[4]/joint_position_commanded"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.244905" top="-4.293372" right="38.244091" bottom="-4.293399"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="0.031902" left="125.158163" top="0.032603" right="145.157931"/>
          <limitY/>
-         <curve name="/joint_states/wrist_rotation/position" color="#9467bd"/>
+         <curve color="#9467bd" name="/joint_states/wrist_rotation/position"/>
+         <curve color="#17becf" name="/dynaarm_status_broadcaster/state/states[5]/joint_position_commanded"/>
         </plot>
        </DockArea>
       </DockSplitter>
@@ -55,56 +62,56 @@
     </DockSplitter>
    </Container>
   </Tab>
-  <Tab tab_name="Velocity" containers="1">
+  <Tab containers="1" tab_name="Velocity">
    <Container>
-    <DockSplitter sizes="1" orientation="-" count="1">
-     <DockSplitter sizes="0.5;0.5" orientation="|" count="2">
-      <DockSplitter sizes="0.333333;0.333333;0.333333" orientation="-" count="3">
+    <DockSplitter count="1" orientation="-" sizes="1">
+     <DockSplitter count="2" orientation="|" sizes="0.5;0.5">
+      <DockSplitter count="3" orientation="-" sizes="0.333813;0.332374;0.333813">
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.244905" top="0.760188" right="38.244109" bottom="-0.602190"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="-0.521099" left="125.158163" top="0.049737" right="145.157931"/>
          <limitY/>
-         <curve name="/joint_states/shoulder_rotation/velocity" color="#d62728"/>
-         <curve name="/dynaarm_status_broadcaster/state/states[0]/joint_velocity_commanded" color="#f14cc1"/>
+         <curve color="#d62728" name="/joint_states/shoulder_rotation/velocity"/>
+         <curve color="#f14cc1" name="/dynaarm_status_broadcaster/state/states[0]/joint_velocity_commanded"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.244905" top="0.702012" right="38.244109" bottom="-0.793434"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="-0.339579" left="125.158163" top="0.052592" right="145.157931"/>
          <limitY/>
-         <curve name="/joint_states/shoulder_flexion/velocity" color="#1f77b4"/>
-         <curve name="/dynaarm_status_broadcaster/state/states[1]/joint_velocity_commanded" color="#9467bd"/>
+         <curve color="#1f77b4" name="/joint_states/shoulder_flexion/velocity"/>
+         <curve color="#9467bd" name="/dynaarm_status_broadcaster/state/states[1]/joint_velocity_commanded"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.244905" top="0.795747" right="38.244109" bottom="-0.622403"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="-1.031906" left="125.158163" top="0.363465" right="145.157931"/>
          <limitY/>
-         <curve name="/joint_states/elbow_flexion/velocity" color="#1729cf"/>
-         <curve name="/dynaarm_status_broadcaster/state/states[2]/joint_velocity_commanded" color="#17becf"/>
+         <curve color="#1729cf" name="/joint_states/elbow_flexion/velocity"/>
+         <curve color="#17becf" name="/dynaarm_status_broadcaster/state/states[2]/joint_velocity_commanded"/>
         </plot>
        </DockArea>
       </DockSplitter>
-      <DockSplitter sizes="0.333333;0.333333;0.333333" orientation="-" count="3">
+      <DockSplitter count="3" orientation="-" sizes="0.333813;0.332374;0.333813">
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.244905" top="0.158499" right="38.244109" bottom="-0.116298"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="-0.055340" left="125.158163" top="0.059776" right="145.157931"/>
          <limitY/>
-         <curve name="/joint_states/forearm_rotation/velocity" color="#bcbd22"/>
+         <curve color="#bcbd22" name="/joint_states/forearm_rotation/velocity"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.244905" top="0.176221" right="38.244109" bottom="-0.429451"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="-0.052005" left="125.158163" top="0.055379" right="145.157931"/>
          <limitY/>
-         <curve name="/joint_states/wrist_flexion/velocity" color="#1ac938"/>
+         <curve color="#1ac938" name="/joint_states/wrist_flexion/velocity"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.244905" top="0.068132" right="38.244109" bottom="-0.064200"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="-0.189468" left="125.158163" top="0.160370" right="145.157931"/>
          <limitY/>
-         <curve name="/joint_states/wrist_rotation/velocity" color="#ff7f0e"/>
+         <curve color="#ff7f0e" name="/joint_states/wrist_rotation/velocity"/>
         </plot>
        </DockArea>
       </DockSplitter>
@@ -112,59 +119,53 @@
     </DockSplitter>
    </Container>
   </Tab>
-  <Tab tab_name="Effort" containers="1">
+  <Tab containers="1" tab_name="Effort">
    <Container>
-    <DockSplitter sizes="1" orientation="-" count="1">
-     <DockSplitter sizes="0.5;0.5" orientation="|" count="2">
-      <DockSplitter sizes="0.333333;0.333333;0.333333" orientation="-" count="3">
+    <DockSplitter count="1" orientation="-" sizes="1">
+     <DockSplitter count="2" orientation="|" sizes="0.500366;0.499634">
+      <DockSplitter count="3" orientation="-" sizes="0.3337;0.332599;0.3337">
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.245272" top="0.431340" right="38.244109" bottom="-0.496822"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="-0.296432" left="125.158279" top="-0.119140" right="145.157931"/>
          <limitY/>
-         <curve name="/dynaarm_status_broadcaster/state/states[0]/joint_effort" color="#f14cc1"/>
-         <curve name="/dynaarm_status_broadcaster/state/states[0]/joint_effort_commanded" color="#9467bd"/>
+         <curve color="#f14cc1" name="/dynaarm_status_broadcaster/state/states[0]/joint_effort"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.245272" top="-14.482471" right="38.244109" bottom="-18.250407"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="1.991999" left="125.158279" top="2.390589" right="145.157931"/>
          <limitY/>
-         <curve name="/dynaarm_status_broadcaster/state/states[1]/joint_effort" color="#1ac938"/>
-         <curve name="/dynaarm_status_broadcaster/state/states[1]/joint_effort_commanded" color="#ff7f0e"/>
+         <curve color="#1ac938" name="/dynaarm_status_broadcaster/state/states[1]/joint_effort"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.245272" top="-4.850030" right="38.244109" bottom="-6.618213"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="1.467431" left="125.158279" top="1.713068" right="145.157931"/>
          <limitY/>
-         <curve name="/dynaarm_status_broadcaster/state/states[2]/joint_effort" color="#17becf"/>
-         <curve name="/dynaarm_status_broadcaster/state/states[2]/joint_effort_commanded" color="#bcbd22"/>
+         <curve color="#17becf" name="/dynaarm_status_broadcaster/state/states[2]/joint_effort"/>
         </plot>
        </DockArea>
       </DockSplitter>
-      <DockSplitter sizes="0.333333;0.333333;0.333333" orientation="-" count="3">
+      <DockSplitter count="3" orientation="-" sizes="0.3337;0.332599;0.3337">
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.245272" top="0.030970" right="38.244109" bottom="-0.078960"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="-0.285060" left="125.158279" top="-0.214618" right="145.157931"/>
          <limitY/>
-         <curve name="/dynaarm_status_broadcaster/state/states[3]/joint_effort" color="#1f77b4"/>
-         <curve name="/dynaarm_status_broadcaster/state/states[3]/joint_effort_commanded" color="#d62728"/>
+         <curve color="#1f77b4" name="/dynaarm_status_broadcaster/state/states[3]/joint_effort"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.245272" top="-0.490771" right="38.244109" bottom="-1.357431"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="-0.014427" left="125.158279" top="0.056924" right="145.157931"/>
          <limitY/>
-         <curve name="/dynaarm_status_broadcaster/state/states[4]/joint_effort" color="#1ac938"/>
-         <curve name="/dynaarm_status_broadcaster/state/states[4]/joint_effort_commanded" color="#ff7f0e"/>
+         <curve color="#1ac938" name="/dynaarm_status_broadcaster/state/states[4]/joint_effort"/>
         </plot>
        </DockArea>
        <DockArea name="...">
-        <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-         <range left="8.245272" top="0.028714" right="38.244109" bottom="-0.052344"/>
+        <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+         <range bottom="-0.098326" left="125.158279" top="-0.010575" right="145.157931"/>
          <limitY/>
-         <curve name="/dynaarm_status_broadcaster/state/states[5]/joint_effort" color="#f14cc1"/>
-         <curve name="/dynaarm_status_broadcaster/state/states[5]/joint_effort_commanded" color="#9467bd"/>
+         <curve color="#f14cc1" name="/dynaarm_status_broadcaster/state/states[5]/joint_effort"/>
         </plot>
        </DockArea>
       </DockSplitter>
@@ -172,42 +173,42 @@
     </DockSplitter>
    </Container>
   </Tab>
-  <Tab tab_name="Error" containers="1">
+  <Tab containers="1" tab_name="Error">
    <Container>
-    <DockSplitter sizes="0.50059;0.49941" orientation="-" count="2">
+    <DockSplitter count="2" orientation="-" sizes="0.50055;0.49945">
      <DockArea name="...">
-      <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-       <range left="0.000000" top="0.100000" right="0.000000" bottom="-0.100000"/>
+      <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+       <range bottom="-0.120834" left="0.000000" top="0.137388" right="4.999413"/>
        <limitY/>
-       <curve name="/joint_trajectory_controller/controller_state/error/positions[0]" color="#1ac938"/>
-       <curve name="/joint_trajectory_controller/controller_state/error/positions[1]" color="#ff7f0e"/>
-       <curve name="/joint_trajectory_controller/controller_state/error/positions[2]" color="#f14cc1"/>
-       <curve name="/joint_trajectory_controller/controller_state/error/positions[3]" color="#9467bd"/>
-       <curve name="/joint_trajectory_controller/controller_state/error/positions[4]" color="#17becf"/>
+       <curve color="#1ac938" name="/joint_trajectory_controller/controller_state/error/positions[0]"/>
+       <curve color="#ff7f0e" name="/joint_trajectory_controller/controller_state/error/positions[1]"/>
+       <curve color="#f14cc1" name="/joint_trajectory_controller/controller_state/error/positions[2]"/>
+       <curve color="#9467bd" name="/joint_trajectory_controller/controller_state/error/positions[3]"/>
+       <curve color="#17becf" name="/joint_trajectory_controller/controller_state/error/positions[4]"/>
       </plot>
      </DockArea>
      <DockArea name="...">
-      <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-       <range left="0.000000" top="0.100000" right="0.000000" bottom="-0.100000"/>
+      <plot flip_y="false" flip_x="false" mode="TimeSeries" style="Lines">
+       <range bottom="-3.538260" left="0.000000" top="3.322950" right="4.999413"/>
        <limitY/>
-       <curve name="/joint_trajectory_controller/controller_state/error/velocities[0]" color="#1f77b4"/>
-       <curve name="/joint_trajectory_controller/controller_state/error/velocities[1]" color="#d62728"/>
-       <curve name="/joint_trajectory_controller/controller_state/error/velocities[2]" color="#1ac938"/>
-       <curve name="/joint_trajectory_controller/controller_state/error/velocities[3]" color="#ff7f0e"/>
-       <curve name="/joint_trajectory_controller/controller_state/error/velocities[4]" color="#f14cc1"/>
+       <curve color="#1f77b4" name="/joint_trajectory_controller/controller_state/error/velocities[0]"/>
+       <curve color="#d62728" name="/joint_trajectory_controller/controller_state/error/velocities[1]"/>
+       <curve color="#1ac938" name="/joint_trajectory_controller/controller_state/error/velocities[2]"/>
+       <curve color="#ff7f0e" name="/joint_trajectory_controller/controller_state/error/velocities[3]"/>
+       <curve color="#f14cc1" name="/joint_trajectory_controller/controller_state/error/velocities[4]"/>
       </plot>
      </DockArea>
     </DockSplitter>
    </Container>
   </Tab>
-  <currentTabIndex index="1"/>
+  <currentTabIndex index="0"/>
  </tabbed_widget>
  <use_relative_time_offset enabled="1"/>
  <!-- - - - - - - - - - - - - - - -->
  <!-- - - - - - - - - - - - - - - -->
  <Plugins>
   <plugin ID="DataLoad CSV">
-   <parameters delimiter="0" time_axis=""/>
+   <parameters time_axis="" delimiter="0"/>
   </plugin>
   <plugin ID="DataLoad MCAP"/>
   <plugin ID="DataLoad ROS2 bags">

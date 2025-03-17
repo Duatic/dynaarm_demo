@@ -83,7 +83,7 @@ class DynaArm(Node):
         """Move the arm smoothly to the initial start position if not already there."""
         current_positions = self.get_current_joint_positions()
 
-        if all(abs(curr - target) < 0.05 for curr, target in zip(current_positions, self.start_position)):
+        if all(abs(curr - target) < 0.8 for curr, target in zip(current_positions, self.start_position)):
             self.get_logger().info("Already at start position, skipping movement.")
             return
 
@@ -100,7 +100,7 @@ class DynaArm(Node):
 
         transition_traj.points.append(point)
         self.pub.publish(transition_traj)
-        time.sleep(3.5)  # Ensure completion
+        time.sleep(3.1)  # Ensure completion
 
     def record_rosbag(self, csv_filename):
         """Starts recording a rosbag with a timestamped filename inside rosbag_recordings/."""

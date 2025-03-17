@@ -35,8 +35,8 @@ def main():
         arm.move_joints(trajectory_file)
 
         # Small delay before next trajectory
-        arm.get_logger().info("Waiting 2 seconds before next trajectory...")
-        time.sleep(2)
+        arm.get_logger().info("Waiting 0.1 seconds before next trajectory...")
+        time.sleep(0.1)
 
     # Disable trajectory controller after execution
     arm.switch_controller(['joint_trajectory_controller'], ['freeze_controller'])

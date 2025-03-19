@@ -1,4 +1,4 @@
-# Copyright 2024 Duatic AG
+# Copyright 2025 Duatic AG
 #
 # Redistribution and use in source and binary forms, with or without modification, are permitted provided that
 # the following conditions are met:
@@ -62,8 +62,8 @@ def launch_setup(context, *args, **kwargs):
         "version": version_value,
     }
 
-    dynaarm_moveit_pkg = "dynaarm_moveit_config"
-    dynaarm_examples_pkg = "dynaarm_examples"
+    dynaarm_moveit_pkg = "dynaarm_single_example_moveit_config"
+    dynaarm_examples_pkg = "dynaarm_single_example"
 
     moveit_config = (
         MoveItConfigsBuilder("dynaarm", package_name=dynaarm_moveit_pkg)

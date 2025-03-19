@@ -1,0 +1,10 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: dynaarm_dual_example_description
+    relative_path: urdf/dynaarm_dual_example.urdf.xacro
+  srdf:
+    relative_path: config/dynaarm.srdf
+  package_settings:
+    author_name: Timo Schwarzer
+    author_email: ""
+    generated_timestamp: 1741961801

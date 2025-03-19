@@ -1,7 +1,7 @@
 moveit_setup_assistant_config:
   urdf:
-    package: dynaarm_description
-    relative_path: urdf/dynaarm_standalone.urdf.xacro
+    package: dynaarm_single_example_description
+    relative_path: urdf/dynaarm_single_example.urdf.xacro
   srdf:
     relative_path: config/dynaarm.srdf
   package_settings:

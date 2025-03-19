@@ -1,0 +1,15 @@
+# Default initial positions for dynaarm's ros2_control fake system
+
+initial_positions:
+  arm1/elbow_flexion: 0
+  arm1/forearm_rotation: 0
+  arm1/shoulder_flexion: 0
+  arm1/shoulder_rotation: 0
+  arm1/wrist_flexion: 0
+  arm1/wrist_rotation: 0
+  arm2/elbow_flexion: 0
+  arm2/forearm_rotation: 0
+  arm2/shoulder_flexion: 0
+  arm2/shoulder_rotation: 0
+  arm2/wrist_flexion: 0
+  arm2/wrist_rotation: 0

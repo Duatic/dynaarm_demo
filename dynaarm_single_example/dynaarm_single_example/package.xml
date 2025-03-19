@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>dynaarm_examples</name>
+  <name>dynaarm_single_example</name>
   <version>1.0.0</version>
 
   <description>Example launch files for a single dynaarm</description>
@@ -26,10 +26,11 @@
   <exec_depend>rqt_controller_manager</exec_depend>
   <exec_depend>effort_controllers</exec_depend>
 
-  <exec_depend>dynaarm_description</exec_depend>
+  <exec_depend>dynaarm_single_example_description</exec_depend>
   <exec_depend>dynaarm_driver</exec_depend>
-  <exec_depend>dynaarm_moveit_config</exec_depend>
+  <exec_depend>dynaarm_single_example_moveit_config</exec_depend>
   <exec_depend>dynaarm_controllers</exec_depend>
+  <exec_depend>dynaarm_extensions</exec_depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

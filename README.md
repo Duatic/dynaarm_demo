@@ -22,7 +22,8 @@ All dependencies with their corresponding version are listed in the [repos.list]
 
 # Usage
 
-Please see the DynaArm documentation for a [getting started guide](https://docs.duatic.com)
+Please see the DynaArm documentation for a [getting started guide](https://docs.duatic.com)\
+For more information about each example take a look at the [overview](./doc/index.md)
 
 # Contributing
 

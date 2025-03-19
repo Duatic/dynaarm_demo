@@ -183,7 +183,7 @@ def launch_setup(context, *args, **kwargs):
                 cartesian_motion_controller_node,
                 freedrive_controller_node,
                 pid_tuner_node,
-                position_controller_node                
+                position_controller_node,
             ],
         )
     )

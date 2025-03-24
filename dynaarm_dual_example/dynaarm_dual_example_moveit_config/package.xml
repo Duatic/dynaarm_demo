@@ -1,14 +1,16 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>dynaarm_moveit_config</name>
+  <name>dynaarm_dual_example_moveit_config</name>
   <version>1.0.0</version>
   <description>
      An automatically generated package with all the configuration and launch files for using the dynaarm with the MoveIt Motion Planning Framework
   </description>
-  <maintainer email="tschwarzer@duatic.com">Timo Schwarzer</maintainer>
+
 
   <license>BSD-3-Clause</license>
+
+  <maintainer email="tschwarzer@duatic.com">Timo Schwarzer</maintainer>
 
   <author email="tschwarzer@duatic.com">Timo Schwarzer</author>
 
@@ -22,8 +24,12 @@
   <exec_depend>joint_state_publisher_gui</exec_depend>
   <exec_depend>tf2_ros</exec_depend>
   <exec_depend>xacro</exec_depend>
+  <!-- The next 2 packages are required for the gazebo simulation.
+       We don't include them by default to prevent installing gazebo and all its dependencies. -->
+  <!-- <exec_depend>joint_trajectory_controller</exec_depend> -->
+  <!-- <exec_depend>gazebo_ros_control</exec_depend> -->
   <exec_depend>controller_manager</exec_depend>
-  <exec_depend>dynaarm_description</exec_depend>
+  <exec_depend>dynaarm_dual_example_description</exec_depend>
   <exec_depend>moveit_configs_utils</exec_depend>
   <exec_depend>moveit_ros_move_group</exec_depend>
   <exec_depend>moveit_ros_visualization</exec_depend>
@@ -35,6 +41,7 @@
   <exec_depend>rviz_default_plugins</exec_depend>
   <exec_depend>tf2_ros</exec_depend>
   <exec_depend>xacro</exec_depend>
+
 
   <export>
       <build_type>ament_cmake</build_type>

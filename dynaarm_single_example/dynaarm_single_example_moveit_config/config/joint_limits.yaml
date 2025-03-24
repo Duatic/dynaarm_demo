@@ -10,12 +10,12 @@ default_acceleration_scaling_factor: 0.1
 joint_limits:
   shoulder_rotation:
     has_velocity_limits: true
-    max_veloity: 4.0
+    max_velocity: 4.0
     has_acceleration_limits: true
     max_acceleration: 40.0
   shoulder_flexion:
     has_velocity_limits: true
-    max_veloity: 4.0
+    max_velocity: 4.0
     has_acceleration_limits: true
     max_acceleration: 40.0
   elbow_flexion:
@@ -25,16 +25,16 @@ joint_limits:
     max_acceleration: 40.0
   forearm_rotation:
     has_velocity_limits: true
-    max_veloity: 4.0
+    max_velocity: 4.0
     has_acceleration_limits: true
     max_acceleration: 40.0
   wrist_flexion:
     has_velocity_limits: true
-    max_veloity: 4.0
+    max_velocity: 4.0
     has_acceleration_limits: true
     max_acceleration: 40.0
   wrist_rotation:
     has_velocity_limits: true
-    max_veloity: 4.0
+    max_velocity: 4.0
     has_acceleration_limits: true
     max_acceleration: 40.0

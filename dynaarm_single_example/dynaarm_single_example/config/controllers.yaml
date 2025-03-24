@@ -5,6 +5,9 @@ controller_manager:
     dynaarm_status_broadcaster:
       type: dynaarm_controllers/StatusBroadcaster
 
+    adaptive_gain_controller:
+      type: dynaarm_controllers/AdaptiveGainController
+
     gravity_compensation_controller:
       type: dynaarm_controllers/GravityCompensationController
 
@@ -34,6 +37,16 @@ controller_manager:
 
     pid_tuner:
       type: dynaarm_controllers/PIDTuner
+
+adaptive_gain_controller:
+  ros__parameters:
+    joints:
+      - shoulder_rotation
+      - shoulder_flexion
+      - elbow_flexion
+      - forearm_rotation
+      - wrist_flexion
+      - wrist_rotation
 
 pid_tuner:
   ros__parameters:
@@ -110,8 +123,8 @@ joint_trajectory_controller:
     # See https://control.ros.org/jazzy/doc/ros2_controllers/joint_trajectory_controller/doc/parameters.html for a full list of all parameters
     allow_partial_joints_goal: false # trajectory needs to contains goals from all joints handled by the controller
     constraints:
-      stopped_velocity_tolerance: 5.0
-      goal_time: 0.5
+      stopped_velocity_tolerance: 0.5
+      goal_time: 0.05
       # Tolerances for each joint
       shoulder_rotation: { trajectory: 0.5, goal: 0.05 }
       shoulder_flexion: { trajectory: 0.5, goal: 0.05 }

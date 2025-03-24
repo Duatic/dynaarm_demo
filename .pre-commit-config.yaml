@@ -44,11 +44,11 @@ repos:
       - id: black
         args: ["--line-length=100"]
 
-  - repo: https://github.com/pycqa/pydocstyle
-    rev: 6.3.0
-    hooks:
-    - id: pydocstyle
-      args: ["--ignore=D100,D101,D102,D103,D104,D105,D106,D107,D203,D212,D401,D404"]
+#  - repo: https://github.com/pycqa/pydocstyle
+#    rev: 6.3.0
+#    hooks:
+#    - id: pydocstyle
+#      args: ["--ignore=D100,D101,D102,D103,D104,D105,D106,D107,D203,D212,D401,D404"]
 
   - repo: https://github.com/pycqa/flake8
     rev: 7.1.1

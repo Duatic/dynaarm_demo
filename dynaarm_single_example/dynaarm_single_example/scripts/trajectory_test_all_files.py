@@ -10,7 +10,7 @@ def main():
     arm = DynaArm()  # Reuse the existing class
 
     # Define the directory containing the trajectory files
-    package_path = get_package_share_directory("dynaarm_examples")
+    package_path = get_package_share_directory("dynaarm_single_example")
     trajectory_dir = os.path.join(package_path, "scripts", "trajectory_data")
 
     # Find all CSV trajectory files

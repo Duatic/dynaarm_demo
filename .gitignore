@@ -49,4 +49,5 @@ qtcreator-*
 
 # Catkin custom files
 CATKIN_IGNORE
+dynaarm_single_example/dynaarm_single_example/scripts/rosbag_recordings/*
 dynaarm_single_example/scripts/rosbag_recordings/*

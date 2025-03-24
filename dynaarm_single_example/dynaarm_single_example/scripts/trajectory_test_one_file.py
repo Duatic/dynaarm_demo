@@ -18,10 +18,10 @@ class DynaArm(Node):
         super().__init__("dyna_arm")
 
         # ROS 2 package path
-        package_path = get_package_share_directory("dynaarm_examples")
+        package_path = get_package_share_directory("dynaarm_single_example")
         
         # Trajectory file (for single test)
-        self.csv_path = os.path.join(package_path, "scripts", "trajectory_data", "trajectory_data_config3_vel2.5.csv")
+        self.csv_path = os.path.join(package_path, "scripts", "trajectory_data", "trajectory_data_config0_vel2.5.csv")
 
         # Ensure rosbag recordings directory exists
         self.rosbag_dir = os.path.join(os.getcwd(), "rosbag_recordings")
@@ -83,7 +83,7 @@ class DynaArm(Node):
         """Move the arm smoothly to the initial start position if not already there."""
         current_positions = self.get_current_joint_positions()
 
-        if all(abs(curr - target) < 0.8 for curr, target in zip(current_positions, self.start_position)):
+        if all(abs(curr - target) < 2.0 for curr, target in zip(current_positions, self.start_position)):
             self.get_logger().info("Already at start position, skipping movement.")
             return
 

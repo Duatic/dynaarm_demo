@@ -5,6 +5,9 @@ controller_manager:
     dynaarm_status_broadcaster:
       type: dynaarm_controllers/StatusBroadcaster
 
+    adaptive_gain_controller:
+      type: dynaarm_controllers/AdaptiveGainController
+
     gravity_compensation_controller:
       type: dynaarm_controllers/GravityCompensationController
 
@@ -34,6 +37,16 @@ controller_manager:
 
     pid_tuner:
       type: dynaarm_controllers/PIDTuner
+
+adaptive_gain_controller:
+  ros__parameters:
+    joints:
+      - shoulder_rotation
+      - shoulder_flexion
+      - elbow_flexion
+      - forearm_rotation
+      - wrist_flexion
+      - wrist_rotation
 
 pid_tuner:
   ros__parameters:

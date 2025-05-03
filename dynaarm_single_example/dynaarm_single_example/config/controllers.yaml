@@ -26,6 +26,9 @@ controller_manager:
     cartesian_motion_controller:
       type: cartesian_motion_controller/CartesianMotionController
 
+    rl_controller:
+      type: dynaarm_rl_controllers/RLController
+
     motion_control_handle:
       type: cartesian_controller_handles/MotionControlHandle
 
@@ -152,6 +155,16 @@ gravity_compensation_controller:
       - wrist_rotation
 
 freedrive_controller:
+  ros__parameters:
+    joints:
+      - shoulder_rotation
+      - shoulder_flexion
+      - elbow_flexion
+      - forearm_rotation
+      - wrist_flexion
+      - wrist_rotation
+
+rl_controller:
   ros__parameters:
     joints:
       - shoulder_rotation

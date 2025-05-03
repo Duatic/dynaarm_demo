@@ -145,7 +145,7 @@ def launch_setup(context, *args, **kwargs):
     gravity_compensation_controller_node = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["gravity_compensation_controller"],
+        arguments=["gravity_compensation_controller", "--inactive"],
     )
 
     freedrive_controller_node = Node(
@@ -178,6 +178,12 @@ def launch_setup(context, *args, **kwargs):
         arguments=["position_controller", "--inactive"],
     )
 
+    rl_controller_node = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["rl_controller", "--inactive"],
+    )
+
     delay_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner_node,
@@ -191,6 +197,7 @@ def launch_setup(context, *args, **kwargs):
                 freedrive_controller_node,
                 pid_tuner_node,
                 position_controller_node,
+                rl_controller_node
             ],
         )
     )

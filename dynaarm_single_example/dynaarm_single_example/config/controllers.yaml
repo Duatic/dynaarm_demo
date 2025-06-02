@@ -35,6 +35,17 @@ controller_manager:
     pid_tuner:
       type: dynaarm_controllers/PIDTuner
 
+joint_state_broadcaster:
+  ros__parameters:    
+    use_urdf_to_filter: false
+    joints:
+      - shoulder_rotation
+      - shoulder_flexion
+      - elbow_flexion
+      - forearm_rotation
+      - wrist_flexion
+      - wrist_rotation
+
 pid_tuner:
   ros__parameters:
     joints:

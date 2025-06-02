@@ -89,7 +89,7 @@ class PIDTunerApp(App):
                 PIDTunerPanel("forearm_rotation"),
                 PIDTunerPanel("wrist_flexion"),
                 PIDTunerPanel("wrist_rotation"),
-            )
+            ),
         )
         yield Label("Press [red]ESC[/red] to leave.", classes="footer")
 
@@ -97,6 +97,7 @@ class PIDTunerApp(App):
         """Close the app when Escape is pressed."""
         if event.key == "escape":
             self.exit()
+
 
 if __name__ == "__main__":
     app = PIDTunerApp()

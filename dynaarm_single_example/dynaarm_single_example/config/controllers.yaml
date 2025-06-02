@@ -36,7 +36,7 @@ controller_manager:
       type: dynaarm_controllers/PIDTuner
 
 joint_state_broadcaster:
-  ros__parameters:    
+  ros__parameters:
     use_urdf_to_filter: false
     joints:
       - shoulder_rotation

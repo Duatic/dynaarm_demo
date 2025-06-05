@@ -63,6 +63,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” 
                 mode="$(arg mode)"
                 ethercat_bus="$(arg ethercat_bus)"
                 covers="$(arg covers)"
+                controller_path="$(find dynaarm_single_example)/config/controllers.yaml"
                 version="$(arg version)">
     <origin xyz="0 0 0.085" rpy="0.0 0.0 0.0" />
   </xacro:dynaarm>

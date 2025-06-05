@@ -11,19 +11,19 @@ moveit_simple_controller_manager:
     type: FollowJointTrajectory
     action_ns: follow_joint_trajectory
     joints:
-      - arm1/shoulder_rotation
-      - arm1/shoulder_flexion
-      - arm1/elbow_flexion
-      - arm1/forearm_rotation
-      - arm1/wrist_flexion
-      - arm1/wrist_rotation
+      - arm_left/shoulder_rotation
+      - arm_left/shoulder_flexion
+      - arm_left/elbow_flexion
+      - arm_left/forearm_rotation
+      - arm_left/wrist_flexion
+      - arm_left/wrist_rotation
   joint_trajectory_controller_arm_2:
     type: FollowJointTrajectory
     action_ns: follow_joint_trajectory
     joints:
-      - arm2/shoulder_rotation
-      - arm2/shoulder_flexion
-      - arm2/elbow_flexion
-      - arm2/forearm_rotation
-      - arm2/wrist_flexion
-      - arm2/wrist_rotation
+      - arm_right/shoulder_rotation
+      - arm_right/shoulder_flexion
+      - arm_right/elbow_flexion
+      - arm_right/forearm_rotation
+      - arm_right/wrist_flexion
+      - arm_right/wrist_rotation

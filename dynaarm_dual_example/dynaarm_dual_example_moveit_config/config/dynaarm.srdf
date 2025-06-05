@@ -10,56 +10,56 @@
     <!--CHAINS: When a chain is specified, all the links along the chain (including endpoints) are included in the group. Additionally, all the joints that are parents to included links are also included. This means that joints along the chain and the parent joint of the base link are included in the group-->
     <!--SUBGROUPS: Groups can also be formed by referencing to already defined group names-->
     <group name="Arm 1">
-        <chain base_link="arm1/base" tip_link="arm1/flange"/>
+        <chain base_link="arm_left/base" tip_link="arm_left/flange"/>
     </group>
     <group name="Arm 2">
-        <chain base_link="arm2/base" tip_link="arm2/flange"/>
+        <chain base_link="arm_right/base" tip_link="arm_right/flange"/>
     </group>
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
-    <end_effector name="Arm 1 Tool 0" parent_link="arm1/flange" group="Arm 1"/>
-    <end_effector name="Arm 2 Tool 0" parent_link="arm2/flange" group="Arm 2"/>
+    <end_effector name="Arm 1 Tool 0" parent_link="arm_left/flange" group="Arm 1"/>
+    <end_effector name="Arm 2 Tool 0" parent_link="arm_right/flange" group="Arm 2"/>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
-    <disable_collisions link1="arm1/base" link2="arm1/elbow" reason="Never"/>
-    <disable_collisions link1="arm1/base" link2="arm1/shoulder" reason="Adjacent"/>
-    <disable_collisions link1="arm1/base" link2="arm2/base" reason="Never"/>
-    <disable_collisions link1="arm1/base" link2="arm2/elbow" reason="Never"/>
-    <disable_collisions link1="arm1/base" link2="arm2/forearm" reason="Never"/>
-    <disable_collisions link1="arm1/base" link2="arm2/shoulder" reason="Never"/>
-    <disable_collisions link1="arm1/base" link2="arm2/upperarm" reason="Never"/>
-    <disable_collisions link1="arm1/base" link2="table" reason="Adjacent"/>
-    <disable_collisions link1="arm1/elbow" link2="arm1/forearm" reason="Adjacent"/>
-    <disable_collisions link1="arm1/elbow" link2="arm1/shoulder" reason="Never"/>
-    <disable_collisions link1="arm1/elbow" link2="arm1/upperarm" reason="Adjacent"/>
-    <disable_collisions link1="arm1/elbow" link2="arm1/wrist_1" reason="Never"/>
-    <disable_collisions link1="arm1/elbow" link2="arm1/wrist_2" reason="Never"/>
-    <disable_collisions link1="arm1/elbow" link2="arm2/base" reason="Never"/>
-    <disable_collisions link1="arm1/elbow" link2="arm2/shoulder" reason="Never"/>
-    <disable_collisions link1="arm1/elbow" link2="arm2/upperarm" reason="Never"/>
-    <disable_collisions link1="arm1/forearm" link2="arm1/wrist_1" reason="Adjacent"/>
-    <disable_collisions link1="arm1/forearm" link2="arm1/wrist_2" reason="Never"/>
-    <disable_collisions link1="arm1/forearm" link2="arm2/base" reason="Never"/>
-    <disable_collisions link1="arm1/shoulder" link2="arm1/upperarm" reason="Adjacent"/>
-    <disable_collisions link1="arm1/shoulder" link2="arm2/base" reason="Never"/>
-    <disable_collisions link1="arm1/shoulder" link2="arm2/elbow" reason="Never"/>
-    <disable_collisions link1="arm1/shoulder" link2="arm2/shoulder" reason="Never"/>
-    <disable_collisions link1="arm1/shoulder" link2="arm2/upperarm" reason="Never"/>
-    <disable_collisions link1="arm1/shoulder" link2="table" reason="Never"/>
-    <disable_collisions link1="arm1/upperarm" link2="arm2/base" reason="Never"/>
-    <disable_collisions link1="arm1/upperarm" link2="arm2/elbow" reason="Never"/>
-    <disable_collisions link1="arm1/upperarm" link2="arm2/shoulder" reason="Never"/>
-    <disable_collisions link1="arm1/upperarm" link2="arm2/upperarm" reason="Never"/>
-    <disable_collisions link1="arm1/wrist_1" link2="arm1/wrist_2" reason="Adjacent"/>
-    <disable_collisions link1="arm2/base" link2="arm2/elbow" reason="Never"/>
-    <disable_collisions link1="arm2/base" link2="arm2/shoulder" reason="Adjacent"/>
-    <disable_collisions link1="arm2/base" link2="table" reason="Adjacent"/>
-    <disable_collisions link1="arm2/elbow" link2="arm2/forearm" reason="Adjacent"/>
-    <disable_collisions link1="arm2/elbow" link2="arm2/shoulder" reason="Never"/>
-    <disable_collisions link1="arm2/elbow" link2="arm2/upperarm" reason="Adjacent"/>
-    <disable_collisions link1="arm2/elbow" link2="arm2/wrist_1" reason="Never"/>
-    <disable_collisions link1="arm2/elbow" link2="arm2/wrist_2" reason="Never"/>
-    <disable_collisions link1="arm2/forearm" link2="arm2/wrist_1" reason="Adjacent"/>
-    <disable_collisions link1="arm2/forearm" link2="arm2/wrist_2" reason="Never"/>
-    <disable_collisions link1="arm2/shoulder" link2="arm2/upperarm" reason="Adjacent"/>
-    <disable_collisions link1="arm2/shoulder" link2="table" reason="Never"/>
-    <disable_collisions link1="arm2/wrist_1" link2="arm2/wrist_2" reason="Adjacent"/>
+    <disable_collisions link1="arm_left/base" link2="arm_left/elbow" reason="Never"/>
+    <disable_collisions link1="arm_left/base" link2="arm_left/shoulder" reason="Adjacent"/>
+    <disable_collisions link1="arm_left/base" link2="arm_right/base" reason="Never"/>
+    <disable_collisions link1="arm_left/base" link2="arm_right/elbow" reason="Never"/>
+    <disable_collisions link1="arm_left/base" link2="arm_right/forearm" reason="Never"/>
+    <disable_collisions link1="arm_left/base" link2="arm_right/shoulder" reason="Never"/>
+    <disable_collisions link1="arm_left/base" link2="arm_right/upperarm" reason="Never"/>
+    <disable_collisions link1="arm_left/base" link2="table" reason="Adjacent"/>
+    <disable_collisions link1="arm_left/elbow" link2="arm_left/forearm" reason="Adjacent"/>
+    <disable_collisions link1="arm_left/elbow" link2="arm_left/shoulder" reason="Never"/>
+    <disable_collisions link1="arm_left/elbow" link2="arm_left/upperarm" reason="Adjacent"/>
+    <disable_collisions link1="arm_left/elbow" link2="arm_left/wrist_1" reason="Never"/>
+    <disable_collisions link1="arm_left/elbow" link2="arm_left/wrist_2" reason="Never"/>
+    <disable_collisions link1="arm_left/elbow" link2="arm_right/base" reason="Never"/>
+    <disable_collisions link1="arm_left/elbow" link2="arm_right/shoulder" reason="Never"/>
+    <disable_collisions link1="arm_left/elbow" link2="arm_right/upperarm" reason="Never"/>
+    <disable_collisions link1="arm_left/forearm" link2="arm_left/wrist_1" reason="Adjacent"/>
+    <disable_collisions link1="arm_left/forearm" link2="arm_left/wrist_2" reason="Never"/>
+    <disable_collisions link1="arm_left/forearm" link2="arm_right/base" reason="Never"/>
+    <disable_collisions link1="arm_left/shoulder" link2="arm_left/upperarm" reason="Adjacent"/>
+    <disable_collisions link1="arm_left/shoulder" link2="arm_right/base" reason="Never"/>
+    <disable_collisions link1="arm_left/shoulder" link2="arm_right/elbow" reason="Never"/>
+    <disable_collisions link1="arm_left/shoulder" link2="arm_right/shoulder" reason="Never"/>
+    <disable_collisions link1="arm_left/shoulder" link2="arm_right/upperarm" reason="Never"/>
+    <disable_collisions link1="arm_left/shoulder" link2="table" reason="Never"/>
+    <disable_collisions link1="arm_left/upperarm" link2="arm_right/base" reason="Never"/>
+    <disable_collisions link1="arm_left/upperarm" link2="arm_right/elbow" reason="Never"/>
+    <disable_collisions link1="arm_left/upperarm" link2="arm_right/shoulder" reason="Never"/>
+    <disable_collisions link1="arm_left/upperarm" link2="arm_right/upperarm" reason="Never"/>
+    <disable_collisions link1="arm_left/wrist_1" link2="arm_left/wrist_2" reason="Adjacent"/>
+    <disable_collisions link1="arm_right/base" link2="arm_right/elbow" reason="Never"/>
+    <disable_collisions link1="arm_right/base" link2="arm_right/shoulder" reason="Adjacent"/>
+    <disable_collisions link1="arm_right/base" link2="table" reason="Adjacent"/>
+    <disable_collisions link1="arm_right/elbow" link2="arm_right/forearm" reason="Adjacent"/>
+    <disable_collisions link1="arm_right/elbow" link2="arm_right/shoulder" reason="Never"/>
+    <disable_collisions link1="arm_right/elbow" link2="arm_right/upperarm" reason="Adjacent"/>
+    <disable_collisions link1="arm_right/elbow" link2="arm_right/wrist_1" reason="Never"/>
+    <disable_collisions link1="arm_right/elbow" link2="arm_right/wrist_2" reason="Never"/>
+    <disable_collisions link1="arm_right/forearm" link2="arm_right/wrist_1" reason="Adjacent"/>
+    <disable_collisions link1="arm_right/forearm" link2="arm_right/wrist_2" reason="Never"/>
+    <disable_collisions link1="arm_right/shoulder" link2="arm_right/upperarm" reason="Adjacent"/>
+    <disable_collisions link1="arm_right/shoulder" link2="table" reason="Never"/>
+    <disable_collisions link1="arm_right/wrist_1" link2="arm_right/wrist_2" reason="Adjacent"/>
 </robot>

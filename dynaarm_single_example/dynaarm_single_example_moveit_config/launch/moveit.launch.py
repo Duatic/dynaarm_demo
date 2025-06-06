@@ -36,7 +36,7 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 from moveit_configs_utils import MoveItConfigsBuilder
-
+from launch_param_builder import ParameterBuilder
 
 def launch_setup(context, *args, **kwargs):
 
@@ -99,6 +99,32 @@ def launch_setup(context, *args, **kwargs):
         output="screen",
         parameters=[moveit_config.to_dict()],
         arguments=["--ros-args", "--log-level", "info"],
+    )
+    acceleration_filter_update_period = {"update_period": 0.01}
+    planning_group_name = {"planning_group_name": "dynaarm"}
+
+
+    # Get parameters for the Servo node
+    servo_params = {
+        "moveit_servo": ParameterBuilder("dynaarm_single_example_moveit_config")
+        .yaml("config/dynaarm_servo_config.yaml")
+        .to_dict()
+    }
+
+    moveit_servo_node = Node(
+        package="moveit_servo",
+        executable="servo_node",
+        output="screen",
+        parameters=[
+            servo_params,
+            acceleration_filter_update_period,
+            planning_group_name,
+            moveit_config.robot_description,
+            moveit_config.robot_description_semantic,
+            moveit_config.robot_description_kinematics,
+            moveit_config.joint_limits,
+
+        ]
     )
 
     # Publish TF
@@ -164,6 +190,7 @@ def launch_setup(context, *args, **kwargs):
         joint_trajectory_controller_spawner,
         delay_rviz_after_joint_state_broadcaster_spawner,
         move_group_node,
+        moveit_servo_node
     ]
 
     return nodes_to_start

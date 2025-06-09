@@ -104,7 +104,7 @@ def launch_setup(context, *args, **kwargs):
     planning_group_name = {"planning_group_name": "dynaarm"}
 
 
-    # Get parameters for the Servo node
+    # Get parameters for the Servo node    
     servo_params = {
         "moveit_servo": ParameterBuilder("dynaarm_single_example_moveit_config")
         .yaml("config/dynaarm_servo_config.yaml")
@@ -122,8 +122,7 @@ def launch_setup(context, *args, **kwargs):
             moveit_config.robot_description,
             moveit_config.robot_description_semantic,
             moveit_config.robot_description_kinematics,
-            moveit_config.joint_limits,
-
+            moveit_config.joint_limits            
         ]
     )
 
@@ -172,25 +171,26 @@ def launch_setup(context, *args, **kwargs):
             moveit_config.planning_pipelines,
             moveit_config.robot_description_kinematics,
         ],
-    )
-
-    # Delay rviz start after `joint_state_broadcaster`
-    delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[rviz_node],
-        ),
         condition=IfCondition(start_rviz),
     )
 
+    delay_after_joint_state_broadcaster_spawner = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=joint_state_broadcaster_spawner,
+            on_exit=[
+                moveit_servo_node,
+            ],
+        )        
+    )
+
     nodes_to_start = [
+        rviz_node,
         control_node,
-        robot_state_publisher,
         joint_state_broadcaster_spawner,
+        robot_state_publisher,        
         joint_trajectory_controller_spawner,
-        delay_rviz_after_joint_state_broadcaster_spawner,
-        move_group_node,
-        moveit_servo_node
+        delay_after_joint_state_broadcaster_spawner,        
+        move_group_node
     ]
 
     return nodes_to_start
@@ -232,7 +232,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "ethercat_bus",
-            default_value="enp0s31f6",
+            default_value="enx70886b8adda2",
             description="The ethercat bus id or name.",
         )
     )

@@ -1,0 +1,22 @@
+teleop_twist_joy_node:
+  ros__parameters:
+    frame: 'flange'
+    axis_linear:
+      x: 0
+      y: 6
+      z: 1            
+    scale_linear:
+      x: 0.7
+      y: 0.7
+      z: 0.7
+
+    axis_angular:
+      roll: 3
+      pitch: 4
+      yaw: 7
+    scale_angular:      
+      pitch: 0.4
+      roll: 0.4
+      yaw: 0.4
+
+    enable_button: 5

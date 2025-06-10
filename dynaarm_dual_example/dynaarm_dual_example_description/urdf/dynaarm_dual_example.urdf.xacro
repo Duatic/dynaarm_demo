@@ -59,23 +59,25 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” 
 
 
   <!-- create an instance of the dynaarm xacro macro and fix its base, move it up such that it doesn't intersect with the ground -->
-  <xacro:dynaarm tf_prefix="$(arg tf_prefix)arm1/"
+  <xacro:dynaarm tf_prefix="$(arg tf_prefix)arm_left/"
                 parent_link="table"
                 dof="$(arg dof)"
                 mode="$(arg mode)"
                 ethercat_bus="$(arg ethercat_bus_1)"
                 covers="$(arg covers)"
+                controller_path="$(find dynaarm_dual_example)/config/controllers.yaml"
                 version="$(arg version_1)">
     <origin xyz="-0.5 0 0.085" rpy="0.0 0.0 0.0" />
   </xacro:dynaarm>
 
 
-  <xacro:dynaarm tf_prefix="$(arg tf_prefix)arm2/"
+  <xacro:dynaarm tf_prefix="$(arg tf_prefix)arm_right/"
                 parent_link="table"
                 dof="$(arg dof)"
                 mode="$(arg mode)"
                 ethercat_bus="$(arg ethercat_bus_2)"
                 covers="$(arg covers)"
+                controller_path="$(find dynaarm_dual_example)/config/controllers.yaml"
                 version="$(arg version_2)">
     <origin xyz="0.5 0 0.085" rpy="0.0 0.0 0.0" />
   </xacro:dynaarm>

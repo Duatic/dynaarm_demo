@@ -41,6 +41,7 @@ from launch_param_builder import ParameterBuilder
 def launch_setup(context, *args, **kwargs):
 
     start_rviz = LaunchConfiguration("start_rviz")
+    start_joy = LaunchConfiguration("start_joy")
     dof = LaunchConfiguration("dof")
     covers = LaunchConfiguration("covers")
     version = LaunchConfiguration("version")
@@ -183,14 +184,31 @@ def launch_setup(context, *args, **kwargs):
         )        
     )
 
+    joy_node = Node(
+        package="joy",
+        executable="game_controller_node",
+        output="screen",
+        parameters=[{"autorepeat_rate": 100.0}],  # Set autorepeat to 100 Hz
+        condition=IfCondition(start_joy),
+    )
+
+    moveit_servo_init = Node(
+        package='dynaarm_single_example_moveit_config',
+        executable='move_servo_init.py',
+        output='both',
+        arguments=['0']
+    )
+
     nodes_to_start = [
         rviz_node,
+        joy_node,
         control_node,
         joint_state_broadcaster_spawner,
         robot_state_publisher,        
         joint_trajectory_controller_spawner,
         delay_after_joint_state_broadcaster_spawner,        
-        move_group_node
+        move_group_node,
+        moveit_servo_init
     ]
 
     return nodes_to_start
@@ -199,6 +217,13 @@ def launch_setup(context, *args, **kwargs):
 def generate_launch_description():
 
     declared_arguments = []
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            name="start_joy",
+            default_value="True",
+            description="Start Joy node automatically with this launch file.",
+        )
+    )
     declared_arguments.append(
         DeclareLaunchArgument(
             name="start_rviz",

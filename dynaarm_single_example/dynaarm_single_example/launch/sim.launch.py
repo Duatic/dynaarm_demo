@@ -151,12 +151,6 @@ def launch_setup(context, *args, **kwargs):
         arguments=["cartesian_motion_controller", "--inactive"],
     )
 
-    position_controller_node = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["position_controller", "--inactive"],
-    )
-
     freedrive_controller_node = Node(
         package="controller_manager",
         executable="spawner",
@@ -170,7 +164,6 @@ def launch_setup(context, *args, **kwargs):
             on_exit=[
                 joint_trajectory_controller_node,
                 cartesian_motion_controller_node,
-                position_controller_node,
                 freedrive_controller_node,
             ],
         )

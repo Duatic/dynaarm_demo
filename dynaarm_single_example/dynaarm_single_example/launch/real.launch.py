@@ -172,12 +172,6 @@ def launch_setup(context, *args, **kwargs):
         arguments=["cartesian_motion_controller", "--inactive"],
     )
 
-    position_controller_node = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["position_controller", "--inactive"],
-    )
-
     delay_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner_node,
@@ -189,8 +183,7 @@ def launch_setup(context, *args, **kwargs):
                 joint_trajectory_controller_node,
                 cartesian_motion_controller_node,
                 freedrive_controller_node,
-                pid_tuner_node,
-                position_controller_node,
+                pid_tuner_node                
             ],
         )
     )
@@ -213,7 +206,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             name="ethercat_bus",
-            default_value="enp86s0",
+            default_value="enx70886b8adda2",
             description="The ethercat bus id or name.",
         )
     )

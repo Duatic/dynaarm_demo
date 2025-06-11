@@ -67,7 +67,7 @@ def launch_setup(context, *args, **kwargs):
         package="robot_state_publisher",
         executable="robot_state_publisher",
         output="both",
-       parameters=[robot_description],
+        parameters=[robot_description],
     )
 
     # Launch RViz
@@ -219,7 +219,7 @@ def generate_launch_description():
             default_value="6",
             description="Select the desired degrees of freedom (dof)",
         )
-    )    
+    )
     declared_arguments.append(
         DeclareLaunchArgument(
             name="covers",

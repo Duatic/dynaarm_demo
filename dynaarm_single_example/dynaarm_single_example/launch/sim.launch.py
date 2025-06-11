@@ -100,7 +100,7 @@ def launch_setup(context, *args, **kwargs):
 
     start_gazebo_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(pkg_ros_gz_sim, "launch", "gz_sim.launch.py")),
-            launch_arguments={'gz_args': ['-r -v 4 empty.sdf'], 'on_exit_shutdown': 'true'}.items()
+        launch_arguments={"gz_args": ["-r -v 4 empty.sdf"], "on_exit_shutdown": "true"}.items(),
     )
 
     # Spawn the robot
@@ -118,20 +118,18 @@ def launch_setup(context, *args, **kwargs):
 
     # Bridge for Gazebo topics
     bridge_params = os.path.join(
-        get_package_share_directory('dynaarm_single_example'),
-        'launch',
-        'gz_bridge.yaml'
+        get_package_share_directory("dynaarm_single_example"), "launch", "gz_bridge.yaml"
     )
 
     gz_bridge = Node(
-        package='ros_gz_bridge',
-        executable='parameter_bridge',
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
         arguments=[
-            '--ros-args',
-            '-p',
-            f'config_file:={bridge_params}',
+            "--ros-args",
+            "-p",
+            f"config_file:={bridge_params}",
         ],
-        output='screen',
+        output="screen",
     )
 
     delay_joint_state_broadcaster = RegisterEventHandler(
@@ -144,7 +142,7 @@ def launch_setup(context, *args, **kwargs):
     joint_trajectory_controller_node = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_trajectory_controller", "-c", "/controller_manager"],   
+        arguments=["joint_trajectory_controller", "-c", "/controller_manager"],
     )
 
     cartesian_motion_controller_node = Node(
@@ -173,7 +171,7 @@ def launch_setup(context, *args, **kwargs):
                 joint_trajectory_controller_node,
                 cartesian_motion_controller_node,
                 position_controller_node,
-                freedrive_controller_node
+                freedrive_controller_node,
             ],
         )
     )
@@ -185,7 +183,7 @@ def launch_setup(context, *args, **kwargs):
         rviz_node,
         start_gazebo_ros_spawner_cmd,
         delay_joint_state_broadcaster,
-        delay_startup_controller,     
+        delay_startup_controller,
     ]
 
     return nodes_to_start

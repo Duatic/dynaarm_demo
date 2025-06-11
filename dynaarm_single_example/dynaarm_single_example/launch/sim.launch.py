@@ -98,9 +98,10 @@ def launch_setup(context, *args, **kwargs):
         arguments=["joint_state_broadcaster"],
     )
 
+    world_file = os.path.join(pkg_share_description, "worlds", "custom.sdf")
     start_gazebo_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(pkg_ros_gz_sim, "launch", "gz_sim.launch.py")),
-        launch_arguments={"gz_args": ["-r -v 4 empty.sdf"], "on_exit_shutdown": "true"}.items(),
+        launch_arguments={"gz_args": ["-r -v 2 " + world_file], "on_exit_shutdown": "true"}.items(),
     )
 
     # Spawn the robot
@@ -151,11 +152,11 @@ def launch_setup(context, *args, **kwargs):
         arguments=["cartesian_motion_controller", "--inactive"],
     )
 
-    freedrive_controller_node = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["freedrive_controller", "--inactive"],
-    )
+    # freedrive_controller_node = Node(
+    #     package="controller_manager",
+    #     executable="spawner",
+    #     arguments=["freedrive_controller", "--inactive"],
+    # )
 
     # The controller to start variable
     delay_startup_controller = RegisterEventHandler(
@@ -164,12 +165,21 @@ def launch_setup(context, *args, **kwargs):
             on_exit=[
                 joint_trajectory_controller_node,
                 cartesian_motion_controller_node,
-                freedrive_controller_node,
+                #freedrive_controller_node,
             ],
         )
     )
 
+    # Start the joy node for gamepad input
+    joy_node = Node(
+        package="joy",
+        executable="game_controller_node",
+        output="screen",
+        parameters=[{"autorepeat_rate": 100.0}],  # Set autorepeat to 100 Hz
+    )
+
     nodes_to_start = [
+        joy_node,
         start_gazebo_cmd,
         gz_bridge,
         robot_state_pub_node,

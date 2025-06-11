@@ -10,7 +10,7 @@ find_package(ament_cmake REQUIRED)
 find_package(dynaarm_description REQUIRED)
 
 install(DIRECTORY
-  launch urdf
+  launch urdf worlds
   DESTINATION share/${PROJECT_NAME}/
 )
 

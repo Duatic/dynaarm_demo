@@ -22,6 +22,7 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import os
+from ament_index_python import get_package_share_directory
 import xacro
 from launch import LaunchDescription
 from launch.actions import (
@@ -44,7 +45,6 @@ def launch_setup(context, *args, **kwargs):
     dof = LaunchConfiguration("dof")
     covers = LaunchConfiguration("covers")
     version = LaunchConfiguration("version")
-    use_sim_time = LaunchConfiguration("use_sim_time")
     start_rviz = LaunchConfiguration("start_rviz")
 
     dof_value = dof.perform(context)
@@ -75,7 +75,7 @@ def launch_setup(context, *args, **kwargs):
         package="robot_state_publisher",
         executable="robot_state_publisher",
         output="both",
-        parameters=[{"use_sim_time": use_sim_time}, robot_description],
+        parameters=[{"use_sim_time": True}, robot_description],
     )
 
     # Launch RViz
@@ -100,9 +100,7 @@ def launch_setup(context, *args, **kwargs):
 
     start_gazebo_cmd = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(os.path.join(pkg_ros_gz_sim, "launch", "gz_sim.launch.py")),
-        launch_arguments=[
-            ("gz_args", [" -r -v 4 empty.sdf"]),
-        ],
+        launch_arguments={"gz_args": ["-r -v 4 empty.sdf"], "on_exit_shutdown": "true"}.items(),
     )
 
     # Spawn the robot
@@ -118,6 +116,22 @@ def launch_setup(context, *args, **kwargs):
         output="both",
     )
 
+    # Bridge for Gazebo topics
+    bridge_params = os.path.join(
+        get_package_share_directory("dynaarm_single_example"), "launch", "gz_bridge.yaml"
+    )
+
+    gz_bridge = Node(
+        package="ros_gz_bridge",
+        executable="parameter_bridge",
+        arguments=[
+            "--ros-args",
+            "-p",
+            f"config_file:={bridge_params}",
+        ],
+        output="screen",
+    )
+
     delay_joint_state_broadcaster = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=start_gazebo_ros_spawner_cmd,
@@ -125,22 +139,46 @@ def launch_setup(context, *args, **kwargs):
         )
     )
 
-    startup_controller_node = Node(
+    joint_trajectory_controller_node = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["joint_trajectory_controller", "-c", "/controller_manager"],
+    )
+
+    cartesian_motion_controller_node = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["cartesian_motion_controller", "--inactive"],
+    )
+
+    position_controller_node = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["position_controller", "--inactive"],
+    )
+
+    freedrive_controller_node = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["freedrive_controller", "--inactive"],
     )
 
     # The controller to start variable
     delay_startup_controller = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner_node,
-            on_exit=[startup_controller_node],
+            on_exit=[
+                joint_trajectory_controller_node,
+                cartesian_motion_controller_node,
+                position_controller_node,
+                freedrive_controller_node,
+            ],
         )
     )
 
     nodes_to_start = [
         start_gazebo_cmd,
+        gz_bridge,
         robot_state_pub_node,
         rviz_node,
         start_gazebo_ros_spawner_cmd,
@@ -175,13 +213,6 @@ def generate_launch_description():
             default_value="baracuda12",
             choices=["arowana4", "baracuda12"],
             description="Select the desired version of robot ",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "use_sim_time",
-            default_value="True",
-            description="Use simulated time.",
         )
     )
     declared_arguments.append(

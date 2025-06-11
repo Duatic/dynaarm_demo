@@ -118,7 +118,7 @@ def launch_setup(context, *args, **kwargs):
 
     # Bridge for Gazebo topics
     bridge_params = os.path.join(
-        get_package_share_directory("dynaarm_single_example"), "launch", "gz_bridge.yaml"
+        get_package_share_directory("dynaarm_single_example"), "config", "gz_bridge.yaml"
     )
 
     gz_bridge = Node(

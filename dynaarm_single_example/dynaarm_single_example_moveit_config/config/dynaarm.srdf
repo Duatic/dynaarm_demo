@@ -22,16 +22,38 @@
         <joint name="wrist_rotation" value="0"/>
     </group_state>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->
+    <disable_collisions link1="base" link2="elbow" reason="Never"/>
+    <disable_collisions link1="base" link2="elbow_camera_mount" reason="Never"/>
+    <disable_collisions link1="base" link2="shoulder" reason="Adjacent"/>
+    <disable_collisions link1="base" link2="table" reason="Adjacent"/>
+    <disable_collisions link1="elbow" link2="elbow_camera_mount" reason="Adjacent"/>
+    <disable_collisions link1="elbow" link2="flange" reason="Never"/>
     <disable_collisions link1="elbow" link2="forearm" reason="Adjacent"/>
-    <disable_collisions link1="base" link2="upperarm" reason="Never"/>
     <disable_collisions link1="elbow" link2="shoulder" reason="Never"/>
     <disable_collisions link1="elbow" link2="upperarm" reason="Adjacent"/>
     <disable_collisions link1="elbow" link2="wrist_1" reason="Never"/>
+    <disable_collisions link1="elbow" link2="wrist_1_camera_mount" reason="Never"/>
     <disable_collisions link1="elbow" link2="wrist_2" reason="Never"/>
-    <disable_collisions link1="elbow" link2="base" reason="Never"/>
+    <disable_collisions link1="elbow_camera_mount" link2="flange" reason="Never"/>
+    <disable_collisions link1="elbow_camera_mount" link2="forearm" reason="Default"/>
+    <disable_collisions link1="elbow_camera_mount" link2="shoulder" reason="Never"/>
+    <disable_collisions link1="elbow_camera_mount" link2="upperarm" reason="Never"/>
+    <disable_collisions link1="elbow_camera_mount" link2="wrist_1" reason="Never"/>
+    <disable_collisions link1="elbow_camera_mount" link2="wrist_1_camera_mount" reason="Never"/>
+    <disable_collisions link1="elbow_camera_mount" link2="wrist_2" reason="Never"/>
+    <disable_collisions link1="flange" link2="forearm" reason="Never"/>
+    <disable_collisions link1="flange" link2="wrist_1" reason="Default"/>
+    <disable_collisions link1="flange" link2="wrist_1_camera_mount" reason="Never"/>
+    <disable_collisions link1="flange" link2="wrist_2" reason="Adjacent"/>
+    <disable_collisions link1="forearm" link2="upperarm" reason="Never"/>
     <disable_collisions link1="forearm" link2="wrist_1" reason="Adjacent"/>
+    <disable_collisions link1="forearm" link2="wrist_1_camera_mount" reason="Never"/>
     <disable_collisions link1="forearm" link2="wrist_2" reason="Never"/>
+    <disable_collisions link1="shoulder" link2="table" reason="Never"/>
     <disable_collisions link1="shoulder" link2="upperarm" reason="Adjacent"/>
-    <disable_collisions link1="shoulder" link2="base" reason="Adjacent"/>
+    <disable_collisions link1="table" link2="upperarm" reason="Never"/>
+    <disable_collisions link1="upperarm" link2="wrist_1_camera_mount" reason="Never"/>
+    <disable_collisions link1="wrist_1" link2="wrist_1_camera_mount" reason="Adjacent"/>
     <disable_collisions link1="wrist_1" link2="wrist_2" reason="Adjacent"/>
+    <disable_collisions link1="wrist_1_camera_mount" link2="wrist_2" reason="Never"/>
 </robot>

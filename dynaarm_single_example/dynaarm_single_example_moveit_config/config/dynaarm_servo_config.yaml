@@ -7,12 +7,12 @@
 
 ## Properties of outgoing commands
 publish_period: 0.01  # 1/Nominal publish rate [seconds]
-max_expected_latency: 0.1  # delay between sending a command and the robot executing it [seconds]
+max_expected_latency: 0.5  # delay between sending a command and the robot executing it [seconds]
 
 command_in_type: "speed_units"  # "unitless"> in the range [-1:1], as if from joystick. "speed_units"> cmds are in m/s and rad/s
 scale:
   # Scale parameters are only used if command_in_type=="unitless"
-  linear:  0.2  # Max linear velocity. Unit is [m/s]. Only used for Cartesian commands.
+  linear:  0.5  # Max linear velocity. Unit is [m/s]. Only used for Cartesian commands.
   rotational:  0.8  # Max angular velocity. Unit is [rad/s]. Only used for Cartesian commands.
   # Max joint angular/linear velocity. Only used for joint commands on joint_command_in_topic.
   joint: 1.5
@@ -41,13 +41,13 @@ check_octomap_collisions: false  # Check collision against the octomap (if a 3D 
 move_group_name: dynaarm  # Often 'manipulator' or 'arm'
 
 ## Configure handling of singularities and joint limits
-lower_singularity_threshold: 10.0  # Start decelerating when the condition number hits this (close to singularity)
-hard_stop_singularity_threshold: 30.0  # Stop when the condition number hits this
+lower_singularity_threshold: 100.0  # Start decelerating when the condition number hits this (close to singularity)
+hard_stop_singularity_threshold: 200.0  # Stop when the condition number hits this
 leaving_singularity_threshold_multiplier: 2.0  # Multiply the hard stop limit by this when leaving singularity (see https://github.com/moveit/moveit2/pull/620)
 # Added as a buffer to joint variable position bounds [in that joint variable's respective units].
 # Can be of size 1, which applies the margin to all joints, or the same size as the number of degrees of freedom of the active joint group.
 # If moving quickly, make these values larger.
-joint_limit_margins: [0.12]
+joint_limit_margins: [0.01]
 
 ## Topic names
 cartesian_command_in_topic: ~/delta_twist_cmds  # Topic for incoming Cartesian twist commands
@@ -59,5 +59,5 @@ command_out_topic: /joint_trajectory_controller/joint_trajectory  # Publish outg
 ## Collision checking for the entire robot body
 check_collisions: true  # Check collisions?
 collision_check_rate: 10.0  # [Hz] Collision-checking can easily bog down a CPU if done too often.
-self_collision_proximity_threshold: 0.01  # Start decelerating when a self-collision is this far [m]
-scene_collision_proximity_threshold: 0.02  # Start decelerating when a scene collision is this far [m]
+self_collision_proximity_threshold: 0.001  # Start decelerating when a self-collision is this far [m]
+scene_collision_proximity_threshold: 0.002  # Start decelerating when a scene collision is this far [m]

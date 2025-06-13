@@ -38,6 +38,7 @@ from launch_ros.substitutions import FindPackageShare
 from moveit_configs_utils import MoveItConfigsBuilder
 from launch_param_builder import ParameterBuilder
 
+
 def launch_setup(context, *args, **kwargs):
 
     start_rviz = LaunchConfiguration("start_rviz")
@@ -104,8 +105,7 @@ def launch_setup(context, *args, **kwargs):
     acceleration_filter_update_period = {"update_period": 0.01}
     planning_group_name = {"planning_group_name": "dynaarm"}
 
-
-    # Get parameters for the Servo node    
+    # Get parameters for the Servo node
     servo_params = {
         "moveit_servo": ParameterBuilder("dynaarm_single_example_moveit_config")
         .yaml("config/dynaarm_servo_config.yaml")
@@ -123,8 +123,8 @@ def launch_setup(context, *args, **kwargs):
             moveit_config.robot_description,
             moveit_config.robot_description_semantic,
             moveit_config.robot_description_kinematics,
-            moveit_config.joint_limits            
-        ]
+            moveit_config.joint_limits,
+        ],
     )
 
     # Publish TF
@@ -181,7 +181,7 @@ def launch_setup(context, *args, **kwargs):
             on_exit=[
                 moveit_servo_node,
             ],
-        )        
+        )
     )
 
     joy_node = Node(
@@ -193,10 +193,10 @@ def launch_setup(context, *args, **kwargs):
     )
 
     moveit_servo_init = Node(
-        package='dynaarm_single_example_moveit_config',
-        executable='move_servo_init.py',
-        output='both',
-        arguments=['0']
+        package="dynaarm_single_example_moveit_config",
+        executable="move_servo_init.py",
+        output="both",
+        arguments=["0"],
     )
 
     nodes_to_start = [
@@ -204,11 +204,11 @@ def launch_setup(context, *args, **kwargs):
         joy_node,
         control_node,
         joint_state_broadcaster_spawner,
-        robot_state_publisher,        
+        robot_state_publisher,
         joint_trajectory_controller_spawner,
-        delay_after_joint_state_broadcaster_spawner,        
+        delay_after_joint_state_broadcaster_spawner,
         move_group_node,
-        moveit_servo_init
+        moveit_servo_init,
     ]
 
     return nodes_to_start

@@ -3,14 +3,19 @@ from rclpy.node import Node
 from sensor_msgs.msg import Joy
 from control_msgs.msg import JointJog
 
+
 class JoystickJointJog(Node):
     def __init__(self):
-        super().__init__('joystick_joint_jog')
-        self.publisher = self.create_publisher(JointJog, '/servo_node/delta_joint_cmds', 10)
-        self.subscription = self.create_subscription(Joy, '/joy', self.joy_callback, 10)
+        super().__init__("joystick_joint_jog")
+        self.publisher = self.create_publisher(JointJog, "/servo_node/delta_joint_cmds", 10)
+        self.subscription = self.create_subscription(Joy, "/joy", self.joy_callback, 10)
         self.joint_names = [
-            'shoulder_rotation', 'shoulder_flexion', 'elbow_flexion',
-            'forearm_rotation', 'wrist_flexion', 'wrist_rotation'
+            "shoulder_rotation",
+            "shoulder_flexion",
+            "elbow_flexion",
+            "forearm_rotation",
+            "wrist_flexion",
+            "wrist_rotation",
         ]
         self.scale = 1.0
         self.button_scale = 1.0
@@ -48,7 +53,7 @@ class JoystickJointJog(Node):
         if is_nonzero:
             joint_jog = JointJog()
             joint_jog.header.stamp = self.get_clock().now().to_msg()
-            joint_jog.header.frame_id = ''
+            joint_jog.header.frame_id = ""
             joint_jog.joint_names = self.joint_names
             joint_jog.velocities = velocities
             joint_jog.displacements = []
@@ -58,14 +63,15 @@ class JoystickJointJog(Node):
             # Send a single zero-velocity command
             joint_jog = JointJog()
             joint_jog.header.stamp = self.get_clock().now().to_msg()
-            joint_jog.header.frame_id = ''
+            joint_jog.header.frame_id = ""
             joint_jog.joint_names = self.joint_names
             joint_jog.velocities = [0.0] * len(self.joint_names)
             joint_jog.displacements = []
             joint_jog.duration = 0.05
             self.publisher.publish(joint_jog)
 
-        self.last_nonzero = is_nonzero      
+        self.last_nonzero = is_nonzero
+
 
 def main(args=None):
     rclpy.init(args=args)
@@ -74,5 +80,6 @@ def main(args=None):
     node.destroy_node()
     rclpy.shutdown()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()

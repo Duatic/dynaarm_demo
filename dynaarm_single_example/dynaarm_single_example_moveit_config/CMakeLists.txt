@@ -13,7 +13,7 @@ install(
   DIRECTORY config
   DESTINATION share/${PROJECT_NAME})
 install(
-  FILES .setup_assistant 
+  FILES .setup_assistant
   DESTINATION share/${PROJECT_NAME})
 install(PROGRAMS
   scripts/move_servo_init.py

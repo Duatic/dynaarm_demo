@@ -34,12 +34,12 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   
     <!-- Inertial Properties -->
     <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="0.5"/>
+      <origin xyz="0.026295 0 0.000104" rpy="0 0 0"/>
+      <mass value="5.217999"/>
       <inertia 
-        ixx="0.001" ixy="0.0"  ixz="0.0"
-        iyy="0.001" iyz="0.0"
-        izz="0.001"/>
+        ixx="0.031114" ixy="0.0"  ixz="0.000015"
+        iyy="0.015956" iyz="0.0"
+        izz=" 0.019591"/>
     </inertial>
 
     <!-- Visual -->

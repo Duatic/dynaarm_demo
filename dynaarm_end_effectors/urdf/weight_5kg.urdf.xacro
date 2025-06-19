@@ -53,14 +53,12 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       </material>
     </visual>
 
-
-    <!-- Collision 
     <collision>
       <origin xyz="0 0 0" rpy="0 0 0"/>
       <geometry>
-        <mesh filename="package://your_package/meshes/end_effector_collision.stl" scale="1 1 1"/>
+      <mesh filename="file://$(find dynaarm_end_effectors)/meshes/weight_mesh.stl" scale="1 1 1"/>
       </geometry>
-    </collision> -->
+    </collision>
 
   </link>
 

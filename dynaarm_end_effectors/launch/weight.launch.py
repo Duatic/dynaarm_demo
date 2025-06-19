@@ -39,7 +39,7 @@ def launch_setup(context, *args, **kwargs):
         "dynaarm_end_effectors"
     )
 
-    doc = xacro.parse(open(os.path.join(pkg_share_description, "urdf/weight.urdf.xacro")))
+    doc = xacro.parse(open(os.path.join(pkg_share_description, "urdf/weight_5kg_standalone.urdf.xacro")))
     xacro.process_doc(doc, mappings={})
     robot_description = {"robot_description": doc.toxml()}
 

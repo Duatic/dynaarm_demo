@@ -35,8 +35,8 @@ from launch_ros.substitutions import FindPackageShare
 def launch_setup(context, *args, **kwargs):
     
     # Load the robot description
-    pkg_share_description = FindPackageShare(package="end_effectors").find(
-        "end_effectors"
+    pkg_share_description = FindPackageShare(package="dynaarm_end_effectors").find(
+        "dynaarm_end_effectors"
     )
 
     doc = xacro.parse(open(os.path.join(pkg_share_description, "urdf/weight.urdf.xacro")))

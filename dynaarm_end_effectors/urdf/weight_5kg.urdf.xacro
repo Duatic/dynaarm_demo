@@ -31,12 +31,12 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <xacro:macro name="weight_5kg" params="tf_prefix parent_link *origin">
 
   <link name="${tf_prefix}weight_5kg_link">
-  
+
     <!-- Inertial Properties -->
     <inertial>
       <origin xyz="0.026295 0 0.000104" rpy="0 0 0"/>
       <mass value="5.217999"/>
-      <inertia 
+      <inertia
         ixx="0.031114" ixy="0.0"  ixz="0.000015"
         iyy="0.015956" iyz="0.0"
         izz=" 0.019591"/>

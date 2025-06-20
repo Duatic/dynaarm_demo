@@ -36,11 +36,13 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 from moveit_configs_utils import MoveItConfigsBuilder
+from launch_param_builder import ParameterBuilder
 
 
 def launch_setup(context, *args, **kwargs):
 
     start_rviz = LaunchConfiguration("start_rviz")
+    start_joy = LaunchConfiguration("start_joy")
     dof = LaunchConfiguration("dof")
     covers = LaunchConfiguration("covers")
     version = LaunchConfiguration("version")
@@ -100,6 +102,30 @@ def launch_setup(context, *args, **kwargs):
         parameters=[moveit_config.to_dict()],
         arguments=["--ros-args", "--log-level", "info"],
     )
+    acceleration_filter_update_period = {"update_period": 0.01}
+    planning_group_name = {"planning_group_name": "dynaarm"}
+
+    # Get parameters for the Servo node
+    servo_params = {
+        "moveit_servo": ParameterBuilder("dynaarm_single_example_moveit_config")
+        .yaml("config/dynaarm_servo_config.yaml")
+        .to_dict()
+    }
+
+    moveit_servo_node = Node(
+        package="moveit_servo",
+        executable="servo_node",
+        output="screen",
+        parameters=[
+            servo_params,
+            acceleration_filter_update_period,
+            planning_group_name,
+            moveit_config.robot_description,
+            moveit_config.robot_description_semantic,
+            moveit_config.robot_description_kinematics,
+            moveit_config.joint_limits,
+        ],
+    )
 
     # Publish TF
     robot_state_publisher = Node(
@@ -146,24 +172,43 @@ def launch_setup(context, *args, **kwargs):
             moveit_config.planning_pipelines,
             moveit_config.robot_description_kinematics,
         ],
-    )
-
-    # Delay rviz start after `joint_state_broadcaster`
-    delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[rviz_node],
-        ),
         condition=IfCondition(start_rviz),
     )
 
+    delay_after_joint_state_broadcaster_spawner = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=joint_state_broadcaster_spawner,
+            on_exit=[
+                moveit_servo_node,
+            ],
+        )
+    )
+
+    joy_node = Node(
+        package="joy",
+        executable="game_controller_node",
+        output="screen",
+        parameters=[{"autorepeat_rate": 100.0}],  # Set autorepeat to 100 Hz
+        condition=IfCondition(start_joy),
+    )
+
+    moveit_servo_init = Node(
+        package="dynaarm_single_example_moveit_config",
+        executable="move_servo_init.py",
+        output="both",
+        arguments=["0"],
+    )
+
     nodes_to_start = [
+        rviz_node,
+        joy_node,
         control_node,
-        robot_state_publisher,
         joint_state_broadcaster_spawner,
+        robot_state_publisher,
         joint_trajectory_controller_spawner,
-        delay_rviz_after_joint_state_broadcaster_spawner,
+        delay_after_joint_state_broadcaster_spawner,
         move_group_node,
+        moveit_servo_init,
     ]
 
     return nodes_to_start
@@ -172,6 +217,13 @@ def launch_setup(context, *args, **kwargs):
 def generate_launch_description():
 
     declared_arguments = []
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            name="start_joy",
+            default_value="True",
+            description="Start Joy node automatically with this launch file.",
+        )
+    )
     declared_arguments.append(
         DeclareLaunchArgument(
             name="start_rviz",
@@ -205,7 +257,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "ethercat_bus",
-            default_value="enp0s31f6",
+            default_value="enx70886b8adda2",
             description="The ethercat bus id or name.",
         )
     )

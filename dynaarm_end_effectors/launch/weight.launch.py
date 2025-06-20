@@ -33,18 +33,20 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def launch_setup(context, *args, **kwargs):
-    
+
     # Load the robot description
     pkg_share_description = FindPackageShare(package="dynaarm_end_effectors").find(
         "dynaarm_end_effectors"
     )
 
-    doc = xacro.parse(open(os.path.join(pkg_share_description, "urdf/weight_5kg_standalone.urdf.xacro")))
+    doc = xacro.parse(
+        open(os.path.join(pkg_share_description, "urdf/weight_5kg_standalone.urdf.xacro"))
+    )
     xacro.process_doc(doc, mappings={})
     robot_description = {"robot_description": doc.toxml()}
 
     # Publish the joint state values for the non-fixed joints in the URDF file.
-    start_joint_state_publisher_node = Node(        
+    start_joint_state_publisher_node = Node(
         package="joint_state_publisher",
         executable="joint_state_publisher",
         name="joint_state_publisher",

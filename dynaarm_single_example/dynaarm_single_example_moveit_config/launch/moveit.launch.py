@@ -36,6 +36,7 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 from moveit_configs_utils import MoveItConfigsBuilder
+from launch_param_builder import ParameterBuilder
 import os
 
 
@@ -161,7 +162,15 @@ def launch_setup(context, *args, **kwargs):
             moveit_config.robot_description_semantic,
             moveit_config.robot_description_kinematics,
             moveit_config.joint_limits,
+            {"use_sim_time": mode_value == "sim"},
         ],
+    )
+
+    moveit_servo_init = Node(
+        package="dynaarm_single_example_moveit_config",
+        executable="move_servo_init.py",
+        output="both",
+        arguments=["0"],
     )
 
     # RViz
@@ -183,12 +192,7 @@ def launch_setup(context, *args, **kwargs):
         condition=IfCondition(start_rviz),
     )
 
-    nodes_to_start.extend(
-        [
-            rviz_node,
-            move_group_node,
-        ]
-    )
+    nodes_to_start.extend([rviz_node, move_group_node, moveit_servo_node, moveit_servo_init])
 
     return nodes_to_start
 

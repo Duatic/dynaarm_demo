@@ -28,43 +28,66 @@ def read_char() -> int:
 def input_task(node: Node, publisher: Publisher):
 
     while not abort_loop:
+        twist = TwistStamped()
+        twist.header.stamp = node.get_clock().now().to_msg()
+        twist.header.frame_id = "wrist_2"
+
         input = read_char()
         print(ord(input))
         if ord(input) == 3:
             raise KeyboardInterrupt()
 
-        twist = TwistStamped()
-        twist.header.stamp = node.get_clock().now().to_msg()
-        twist.header.frame_id = "wrist_2"
-
         step = 0.2
 
         if input == "a":
             twist.twist.linear.x = -step
-            publisher.publish(twist)
-            print(twist)
 
         if input == "d":
             twist.twist.linear.x = +step
-            publisher.publish(twist)
-            print(twist)
+
         if input == "y":
             twist.twist.linear.y = -step
-            publisher.publish(twist)
-            print(twist)
 
         if input == "x":
             twist.twist.linear.y = +step
-            publisher.publish(twist)
-            print(twist)
+
         if input == "w":
             twist.twist.linear.z = +step
-            publisher.publish(twist)
-            print(twist)
+
         if input == "s":
             twist.twist.linear.z = -step
-            publisher.publish(twist)
-            print(twist)
+
+        if input == "k":
+            twist.twist.angular.x = -step * 60
+        if input == "ö":
+            twist.twist.angular.x = step * 60
+
+        if input == "o":
+            twist.twist.angular.z = step * 600
+        if input == "l":
+            twist.twist.angular.z = -step * 60
+
+        print(twist)
+        # Default is an empty twist
+        publisher.publish(twist)
+
+
+from controller_manager_msgs.srv import SwitchController
+
+
+def switch_controller(node, stop_controllers, start_controllers):
+
+    # Service Clients
+    switch_client = node.create_client(SwitchController, "/controller_manager/switch_controller")
+    """Switches between controllers"""
+    req = SwitchController.Request()
+    req.deactivate_controllers = stop_controllers
+    req.activate_controllers = start_controllers
+    req.strictness = SwitchController.Request.STRICT
+    req.activate_asap = True
+
+    future = switch_client.call_async(req)
+    rclpy.spin_until_future_complete(node, future)
 
 
 def main():
@@ -74,6 +97,8 @@ def main():
 
     tf_buffer = Buffer()
     tf_listener = TransformListener(tf_buffer, node)
+
+    switch_controller(node, ["freeze_controller"], ["joint_trajectory_controller"])
 
     pose_publisher = node.create_publisher(TwistStamped, "/servo_node/delta_twist_cmds", 10)
     cmd_type_client = node.create_client(ServoCommandType, "/servo_node/switch_command_type")

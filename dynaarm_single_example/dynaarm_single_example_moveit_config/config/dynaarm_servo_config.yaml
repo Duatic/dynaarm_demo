@@ -9,7 +9,7 @@
 publish_period: 0.01  # 1/Nominal publish rate [seconds]
 max_expected_latency: 0.5  # delay between sending a command and the robot executing it [seconds]
 
-command_in_type: "speed_units"  # "unitless"> in the range [-1:1], as if from joystick. "speed_units"> cmds are in m/s and rad/s
+command_in_type: "unitless"  # "unitless"> in the range [-1:1], as if from joystick. "speed_units"> cmds are in m/s and rad/s
 scale:
   # Scale parameters are only used if command_in_type=="unitless"
   linear:  0.5  # Max linear velocity. Unit is [m/s]. Only used for Cartesian commands.

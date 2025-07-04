@@ -3,12 +3,11 @@ from rclpy.node import Node
 from sensor_msgs.msg import Joy
 from control_msgs.msg import JointJog
 
+
 class JoystickJointJog(Node):
     def __init__(self):
         super().__init__("joystick_joint_jog")
-        self.publisher = self.create_publisher(
-            JointJog, "/servo_node/delta_joint_cmds", 10
-        )
+        self.publisher = self.create_publisher(JointJog, "/servo_node/delta_joint_cmds", 10)
         self.subscription = self.create_subscription(Joy, "/joy", self.joy_callback, 10)
         self.joint_names = [
             "shoulder_rotation",
@@ -55,6 +54,7 @@ class JoystickJointJog(Node):
         joint_jog.displacements = []
         joint_jog.duration = 0.05
         self.publisher.publish(joint_jog)
+
 
 def main(args=None):
     rclpy.init(args=args)

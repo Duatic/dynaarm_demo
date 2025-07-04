@@ -25,22 +25,18 @@
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
-    RegisterEventHandler,
     OpaqueFunction,
     IncludeLaunchDescription,
 )
 from launch.conditions import IfCondition
 from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
-from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 from moveit_configs_utils import MoveItConfigsBuilder
-from ament_index_python import get_package_share_directory
 import os
-import xacro
 
 
 def launch_setup(context, *args, **kwargs):
@@ -67,8 +63,61 @@ def launch_setup(context, *args, **kwargs):
     }
 
     dynaarm_moveit_pkg = "dynaarm_single_example_moveit_config"
-    dynaarm_examples_pkg = "dynaarm_single_example"
 
+    # Depending on the mode we simply start one of the other launch files
+    nodes_to_start = []
+
+    if mode_value == "mock":
+        pkg_demo_mock = FindPackageShare(package="dynaarm_single_example").find(
+            "dynaarm_single_example"
+        )
+
+        start_demo_mock = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(pkg_demo_mock, "launch", "mock.launch.py")),
+            launch_arguments={
+                "dof": dof_value,
+                "gui": "False",
+                "covers": covers_value,
+                "version": version_value,
+            }.items(),
+        )
+
+        nodes_to_start.append(start_demo_mock)
+
+    elif mode_value == "real":
+        pkg_demo_real = FindPackageShare(package="dynaarm_single_example").find(
+            "dynaarm_single_example"
+        )
+
+        start_demo_real = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(pkg_demo_real, "launch", "real.launch.py")),
+            launch_arguments={
+                "dof": dof_value,
+                "gui": "False",
+                "covers": covers_value,
+                "version": version_value,
+                "ethercat_bus": ethercat_bus_value,
+            }.items(),
+        )
+
+        nodes_to_start.append(start_demo_real)
+    elif mode_value == "sim":
+        pkg_demo_sim = FindPackageShare(package="dynaarm_single_example").find(
+            "dynaarm_single_example"
+        )
+
+        start_demo_sim = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(pkg_demo_sim, "launch", "sim.launch.py")),
+            launch_arguments={
+                "dof": dof_value,
+                "gui": "False",
+                "covers": covers_value,
+                "version": version_value,
+            }.items(),
+        )
+        nodes_to_start.append(start_demo_sim)
+
+    # After starting the backend we start a movegroupd node and start the corresponding rviz ui
     moveit_config = (
         MoveItConfigsBuilder("dynaarm", package_name=dynaarm_moveit_pkg)
         .robot_description(mappings=launch_arguments)
@@ -79,128 +128,6 @@ def launch_setup(context, *args, **kwargs):
         .to_moveit_configs()
     )
 
-    robot_controllers = PathJoinSubstitution(
-        [
-            FindPackageShare(dynaarm_examples_pkg),
-            "config",
-            "controllers.yaml",
-        ]
-    )
-
-    nodes_to_start = []
-
-    joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
-            "joint_state_broadcaster",
-            "--controller-manager",
-            "/controller_manager",
-        ],
-    )
-    joint_trajectory_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
-            "joint_trajectory_controller",
-            "--controller-manager",
-            "/controller_manager",
-        ],
-    )
-    if mode_value in ("mock", "real"):
-
-        control_node = Node(
-            package="controller_manager",
-            executable="ros2_control_node",
-            parameters=[moveit_config.robot_description, robot_controllers],
-            output={
-                "stdout": "screen",
-                "stderr": "screen",
-            },
-        )
-
-        nodes_to_start.append(control_node)
-
-        nodes_to_start.append(joint_state_broadcaster_spawner)
-        nodes_to_start.append(joint_trajectory_controller_spawner)
-    else:
-        pkg_share_description = FindPackageShare(package="dynaarm_single_example_description").find(
-            "dynaarm_single_example_description"
-        )
-        pkg_ros_gz_sim = FindPackageShare(package="ros_gz_sim").find("ros_gz_sim")
-        world_file = os.path.join(pkg_share_description, "worlds", "custom.sdf")
-        start_gazebo_cmd = IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(
-                os.path.join(pkg_ros_gz_sim, "launch", "gz_sim.launch.py")
-            ),
-            launch_arguments={
-                "gz_args": ["-r -v 2 " + world_file],
-                "on_exit_shutdown": "true",
-            }.items(),
-        )
-        doc = xacro.parse(
-            open(os.path.join(pkg_share_description, "urdf/dynaarm_single_example.urdf.xacro"))
-        )
-        xacro.process_doc(
-            doc,
-            mappings={
-                "dof": dof_value,
-                "covers": covers_value,
-                "version": version_value,
-                "mode": "sim",
-            },
-        )
-        # Spawn the robot
-        start_gazebo_ros_spawner_cmd = Node(
-            package="ros_gz_sim",
-            executable="create",
-            arguments=[
-                "-string",
-                doc.toxml(),
-                "-name",
-                "dynaarm",
-            ],
-            output="both",
-        )
-
-        # Bridge for Gazebo topics
-        bridge_params = os.path.join(
-            get_package_share_directory("dynaarm_single_example"), "config", "gz_bridge.yaml"
-        )
-
-        gz_bridge = Node(
-            package="ros_gz_bridge",
-            executable="parameter_bridge",
-            arguments=[
-                "--ros-args",
-                "-p",
-                f"config_file:={bridge_params}",
-            ],
-            output="screen",
-        )
-        nodes_to_start.extend([start_gazebo_cmd, start_gazebo_ros_spawner_cmd, gz_bridge])
-
-        delay_joint_state_broadcaster = RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=start_gazebo_ros_spawner_cmd,
-                on_exit=[joint_state_broadcaster_spawner],
-            )
-        )
-
-        nodes_to_start.append(delay_joint_state_broadcaster)
-
-        # The controller to start variable
-        delay_startup_controller = RegisterEventHandler(
-            event_handler=OnProcessExit(
-                target_action=joint_state_broadcaster_spawner,
-                on_exit=[
-                    joint_trajectory_controller_spawner,
-                    # freedrive_controller_node,
-                ],
-            )
-        )
-        nodes_to_start.append(delay_startup_controller)
-
     moveit_config_dict = moveit_config.to_dict()
     moveit_config_dict["use_sim_time"] = mode_value == "sim"
     # Start the actual move_group node/action server
@@ -210,15 +137,6 @@ def launch_setup(context, *args, **kwargs):
         output="screen",
         parameters=[moveit_config_dict],
         arguments=["--ros-args", "--log-level", "info"],
-    )
-
-    # Publish TF
-    robot_state_publisher = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        name="robot_state_publisher",
-        output="both",
-        parameters=[{"use_sim_time": mode_value == "sim"}, moveit_config.robot_description],
     )
 
     # RViz
@@ -237,21 +155,12 @@ def launch_setup(context, *args, **kwargs):
             moveit_config.planning_pipelines,
             moveit_config.robot_description_kinematics,
         ],
-    )
-
-    # Delay rviz start after `joint_state_broadcaster`
-    delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[rviz_node],
-        ),
         condition=IfCondition(start_rviz),
     )
 
     nodes_to_start.extend(
         [
-            robot_state_publisher,
-            delay_rviz_after_joint_state_broadcaster_spawner,
+            rviz_node,
             move_group_node,
         ]
     )

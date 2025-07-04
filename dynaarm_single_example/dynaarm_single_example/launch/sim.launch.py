@@ -45,7 +45,7 @@ def launch_setup(context, *args, **kwargs):
     dof = LaunchConfiguration("dof")
     covers = LaunchConfiguration("covers")
     version = LaunchConfiguration("version")
-    start_rviz = LaunchConfiguration("start_rviz")
+    gui = LaunchConfiguration("gui")
 
     dof_value = dof.perform(context)
     covers_value = covers.perform(context)
@@ -89,7 +89,7 @@ def launch_setup(context, *args, **kwargs):
         name="rviz2",
         output="screen",
         arguments=["-d", rviz_config_file],
-        condition=IfCondition(start_rviz),
+        condition=IfCondition(gui),
     )
 
     joint_state_broadcaster_spawner_node = Node(
@@ -220,7 +220,7 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "start_rviz",
+            "gui",
             default_value="False",
             description="Start RViz2 automatically with this launch file.",
         )

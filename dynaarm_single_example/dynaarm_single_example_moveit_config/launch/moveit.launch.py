@@ -25,18 +25,18 @@
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
-    RegisterEventHandler,
     OpaqueFunction,
+    IncludeLaunchDescription,
 )
 from launch.conditions import IfCondition
 from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
-from launch.event_handlers import OnProcessExit
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 from moveit_configs_utils import MoveItConfigsBuilder
-from launch_param_builder import ParameterBuilder
+import os
 
 
 def launch_setup(context, *args, **kwargs):
@@ -64,8 +64,61 @@ def launch_setup(context, *args, **kwargs):
     }
 
     dynaarm_moveit_pkg = "dynaarm_single_example_moveit_config"
-    dynaarm_examples_pkg = "dynaarm_single_example"
 
+    # Depending on the mode we simply start one of the other launch files
+    nodes_to_start = []
+
+    if mode_value == "mock":
+        pkg_demo_mock = FindPackageShare(package="dynaarm_single_example").find(
+            "dynaarm_single_example"
+        )
+
+        start_demo_mock = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(pkg_demo_mock, "launch", "mock.launch.py")),
+            launch_arguments={
+                "dof": dof_value,
+                "gui": "False",
+                "covers": covers_value,
+                "version": version_value,
+            }.items(),
+        )
+
+        nodes_to_start.append(start_demo_mock)
+
+    elif mode_value == "real":
+        pkg_demo_real = FindPackageShare(package="dynaarm_single_example").find(
+            "dynaarm_single_example"
+        )
+
+        start_demo_real = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(pkg_demo_real, "launch", "real.launch.py")),
+            launch_arguments={
+                "dof": dof_value,
+                "gui": "False",
+                "covers": covers_value,
+                "version": version_value,
+                "ethercat_bus": ethercat_bus_value,
+            }.items(),
+        )
+
+        nodes_to_start.append(start_demo_real)
+    elif mode_value == "sim":
+        pkg_demo_sim = FindPackageShare(package="dynaarm_single_example").find(
+            "dynaarm_single_example"
+        )
+
+        start_demo_sim = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(os.path.join(pkg_demo_sim, "launch", "sim.launch.py")),
+            launch_arguments={
+                "dof": dof_value,
+                "gui": "False",
+                "covers": covers_value,
+                "version": version_value,
+            }.items(),
+        )
+        nodes_to_start.append(start_demo_sim)
+
+    # After starting the backend we start a movegroupd node and start the corresponding rviz ui
     moveit_config = (
         MoveItConfigsBuilder("dynaarm", package_name=dynaarm_moveit_pkg)
         .robot_description(mappings=launch_arguments)
@@ -76,30 +129,14 @@ def launch_setup(context, *args, **kwargs):
         .to_moveit_configs()
     )
 
-    robot_controllers = PathJoinSubstitution(
-        [
-            FindPackageShare(dynaarm_examples_pkg),
-            "config",
-            "controllers.yaml",
-        ]
-    )
-
-    control_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[moveit_config.robot_description, robot_controllers],
-        output={
-            "stdout": "screen",
-            "stderr": "screen",
-        },
-    )
-
+    moveit_config_dict = moveit_config.to_dict()
+    moveit_config_dict["use_sim_time"] = mode_value == "sim"
     # Start the actual move_group node/action server
     move_group_node = Node(
         package="moveit_ros_move_group",
         executable="move_group",
         output="screen",
-        parameters=[moveit_config.to_dict()],
+        parameters=[moveit_config_dict],
         arguments=["--ros-args", "--log-level", "info"],
     )
     acceleration_filter_update_period = {"update_period": 0.01}
@@ -127,35 +164,6 @@ def launch_setup(context, *args, **kwargs):
         ],
     )
 
-    # Publish TF
-    robot_state_publisher = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        name="robot_state_publisher",
-        output="both",
-        parameters=[moveit_config.robot_description],
-    )
-
-    joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
-            "joint_state_broadcaster",
-            "--controller-manager",
-            "/controller_manager",
-        ],
-    )
-
-    joint_trajectory_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
-            "joint_trajectory_controller",
-            "--controller-manager",
-            "/controller_manager",
-        ],
-    )
-
     # RViz
     rviz_config_file = PathJoinSubstitution(
         [FindPackageShare(dynaarm_moveit_pkg), "config", "moveit.rviz"]
@@ -175,41 +183,12 @@ def launch_setup(context, *args, **kwargs):
         condition=IfCondition(start_rviz),
     )
 
-    delay_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[
-                moveit_servo_node,
-            ],
-        )
+    nodes_to_start.extend(
+        [
+            rviz_node,
+            move_group_node,
+        ]
     )
-
-    joy_node = Node(
-        package="joy",
-        executable="game_controller_node",
-        output="screen",
-        parameters=[{"autorepeat_rate": 100.0}],  # Set autorepeat to 100 Hz
-        condition=IfCondition(start_joy),
-    )
-
-    moveit_servo_init = Node(
-        package="dynaarm_single_example_moveit_config",
-        executable="move_servo_init.py",
-        output="both",
-        arguments=["0"],
-    )
-
-    nodes_to_start = [
-        rviz_node,
-        joy_node,
-        control_node,
-        joint_state_broadcaster_spawner,
-        robot_state_publisher,
-        joint_trajectory_controller_spawner,
-        delay_after_joint_state_broadcaster_spawner,
-        move_group_node,
-        moveit_servo_init,
-    ]
 
     return nodes_to_start
 

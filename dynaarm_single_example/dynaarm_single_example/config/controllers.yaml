@@ -11,9 +11,6 @@ controller_manager:
     freedrive_controller:
       type: dynaarm_controllers/FreeDriveController
 
-    position_controller:
-      type: forward_command_controller/ForwardCommandController
-
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
@@ -34,6 +31,17 @@ controller_manager:
 
     pid_tuner:
       type: dynaarm_controllers/PIDTuner
+
+joint_state_broadcaster:
+  ros__parameters:
+    use_urdf_to_filter: false
+    joints:
+      - shoulder_rotation
+      - shoulder_flexion
+      - elbow_flexion
+      - forearm_rotation
+      - wrist_flexion
+      - wrist_rotation
 
 pid_tuner:
   ros__parameters:
@@ -119,17 +127,6 @@ joint_trajectory_controller:
       forearm_rotation: { trajectory: 0.5, goal: 0.05 }
       wrist_flexion: { trajectory: 0.5, goal: 0.05 }
       wrist_rotation: { trajectory: 0.5, goal: 0.05 }
-
-position_controller:
-  ros__parameters:
-    joints:
-      - shoulder_rotation
-      - shoulder_flexion
-      - elbow_flexion
-      - forearm_rotation
-      - wrist_flexion
-      - wrist_rotation
-    interface_name: position
 
 effort_controller:
   ros__parameters:

@@ -20,7 +20,6 @@ controller_manager:
     freeze_controller_arm_1:
       type: dynaarm_controllers/FreezeController
 
-
     dynaarm_status_broadcaster_arm_2:
       type: dynaarm_controllers/StatusBroadcaster
 
@@ -47,22 +46,22 @@ freeze_controller_arm_2:
 dynaarm_status_broadcaster_arm_1:
   ros__parameters:
     joints:
-      - arm1/shoulder_rotation
-      - arm1/shoulder_flexion
-      - arm1/elbow_flexion
-      - arm1/forearm_rotation
-      - arm1/wrist_flexion
-      - arm1/wrist_rotation
+      - arm_left/shoulder_rotation
+      - arm_left/shoulder_flexion
+      - arm_left/elbow_flexion
+      - arm_left/forearm_rotation
+      - arm_left/wrist_flexion
+      - arm_left/wrist_rotation
 
 joint_trajectory_controller_arm_1:
   ros__parameters:
     joints:
-      - arm1/shoulder_rotation
-      - arm1/shoulder_flexion
-      - arm1/elbow_flexion
-      - arm1/forearm_rotation
-      - arm1/wrist_flexion
-      - arm1/wrist_rotation
+      - arm_left/shoulder_rotation
+      - arm_left/shoulder_flexion
+      - arm_left/elbow_flexion
+      - arm_left/forearm_rotation
+      - arm_left/wrist_flexion
+      - arm_left/wrist_rotation
     command_interfaces:
       - position
       - velocity
@@ -75,33 +74,33 @@ joint_trajectory_controller_arm_1:
       stopped_velocity_tolerance: 0.5
       goal_time: 0.05
       # Tolerances for each joint
-      arm1/shoulder_rotation: { trajectory: 0.5, goal: 0.05 }
-      arm1/shoulder_flexion: { trajectory: 0.5, goal: 0.05 }
-      arm1/elbow_flexion: { trajectory: 0.5, goal: 0.05 }
-      arm1/forearm_rotation: { trajectory: 0.5, goal: 0.05 }
-      arm1/wrist_flexion: { trajectory: 0.5, goal: 0.05 }
-      arm1/wrist_rotation: { trajectory: 0.5, goal: 0.05 }
+      arm_left/shoulder_rotation: { trajectory: 0.5, goal: 0.05 }
+      arm_left/shoulder_flexion: { trajectory: 0.5, goal: 0.05 }
+      arm_left/elbow_flexion: { trajectory: 0.5, goal: 0.05 }
+      arm_left/forearm_rotation: { trajectory: 0.5, goal: 0.05 }
+      arm_left/wrist_flexion: { trajectory: 0.5, goal: 0.05 }
+      arm_left/wrist_rotation: { trajectory: 0.5, goal: 0.05 }
 
 
 gravity_compensation_controller_arm_1:
   ros__parameters:
     joints:
-      - arm1/shoulder_rotation
-      - arm1/shoulder_flexion
-      - arm1/elbow_flexion
-      - arm1/forearm_rotation
-      - arm1/wrist_flexion
-      - arm1/wrist_rotation
+      - arm_left/shoulder_rotation
+      - arm_left/shoulder_flexion
+      - arm_left/elbow_flexion
+      - arm_left/forearm_rotation
+      - arm_left/wrist_flexion
+      - arm_left/wrist_rotation
 
 freedrive_controller_arm_1:
   ros__parameters:
     joints:
-      - arm1/shoulder_rotation
-      - arm1/shoulder_flexion
-      - arm1/elbow_flexion
-      - arm1/forearm_rotation
-      - arm1/wrist_flexion
-      - arm1/wrist_rotation
+      - arm_left/shoulder_rotation
+      - arm_left/shoulder_flexion
+      - arm_left/elbow_flexion
+      - arm_left/forearm_rotation
+      - arm_left/wrist_flexion
+      - arm_left/wrist_rotation
 
 
 
@@ -109,22 +108,22 @@ freedrive_controller_arm_1:
 dynaarm_status_broadcaster_arm_2:
   ros__parameters:
     joints:
-      - arm2/shoulder_rotation
-      - arm2/shoulder_flexion
-      - arm2/elbow_flexion
-      - arm2/forearm_rotation
-      - arm2/wrist_flexion
-      - arm2/wrist_rotation
+      - arm_right/shoulder_rotation
+      - arm_right/shoulder_flexion
+      - arm_right/elbow_flexion
+      - arm_right/forearm_rotation
+      - arm_right/wrist_flexion
+      - arm_right/wrist_rotation
 
 joint_trajectory_controller_arm_2:
   ros__parameters:
     joints:
-      - arm2/shoulder_rotation
-      - arm2/shoulder_flexion
-      - arm2/elbow_flexion
-      - arm2/forearm_rotation
-      - arm2/wrist_flexion
-      - arm2/wrist_rotation
+      - arm_right/shoulder_rotation
+      - arm_right/shoulder_flexion
+      - arm_right/elbow_flexion
+      - arm_right/forearm_rotation
+      - arm_right/wrist_flexion
+      - arm_right/wrist_rotation
     command_interfaces:
       - position
       - velocity
@@ -137,30 +136,30 @@ joint_trajectory_controller_arm_2:
       stopped_velocity_tolerance: 0.5
       goal_time: 0.05
       # Tolerances for each joint
-      arm2/shoulder_rotation: { trajectory: 0.5, goal: 0.05 }
-      arm2/shoulder_flexion: { trajectory: 0.5, goal: 0.05 }
-      arm2/elbow_flexion: { trajectory: 0.5, goal: 0.05 }
-      arm2/forearm_rotation: { trajectory: 0.5, goal: 0.05 }
-      arm2/wrist_flexion: { trajectory: 0.5, goal: 0.05 }
-      arm2/wrist_rotation: { trajectory: 0.5, goal: 0.05 }
+      arm_right/shoulder_rotation: { trajectory: 0.5, goal: 0.05 }
+      arm_right/shoulder_flexion: { trajectory: 0.5, goal: 0.05 }
+      arm_right/elbow_flexion: { trajectory: 0.5, goal: 0.05 }
+      arm_right/forearm_rotation: { trajectory: 0.5, goal: 0.05 }
+      arm_right/wrist_flexion: { trajectory: 0.5, goal: 0.05 }
+      arm_right/wrist_rotation: { trajectory: 0.5, goal: 0.05 }
 
 
 gravity_compensation_controller_arm_2:
   ros__parameters:
     joints:
-      - arm2/shoulder_rotation
-      - arm2/shoulder_flexion
-      - arm2/elbow_flexion
-      - arm2/forearm_rotation
-      - arm2/wrist_flexion
-      - arm2/wrist_rotation
+      - arm_right/shoulder_rotation
+      - arm_right/shoulder_flexion
+      - arm_right/elbow_flexion
+      - arm_right/forearm_rotation
+      - arm_right/wrist_flexion
+      - arm_right/wrist_rotation
 
 freedrive_controller_arm_2:
   ros__parameters:
     joints:
-      - arm2/shoulder_rotation
-      - arm2/shoulder_flexion
-      - arm2/elbow_flexion
-      - arm2/forearm_rotation
-      - arm2/wrist_flexion
-      - arm2/wrist_rotation
+      - arm_right/shoulder_rotation
+      - arm_right/shoulder_flexion
+      - arm_right/elbow_flexion
+      - arm_right/forearm_rotation
+      - arm_right/wrist_flexion
+      - arm_right/wrist_rotation

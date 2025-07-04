@@ -1,16 +1,19 @@
 from textual.app import App, ComposeResult
-from textual.containers import Vertical
+from textual.containers import Vertical, Horizontal
 from textual.widgets import Input, Label
 import subprocess
 
 
-class PIDTunerApp(App):
-    """Modern UI for tuning PID values via ROS 2 parameters."""
+class PIDTunerPanel(Vertical):
+    """A panel for tuning PID values for a single joint."""
 
     def __init__(self, joint_name):
         super().__init__()
         self.joint_name = joint_name
         self.node_name = "/pid_tuner"
+        self.p_gain_input = None
+        self.i_gain_input = None
+        self.d_gain_input = None
 
     def get_current_param(self, param):
         """Retrieve the current parameter value from ROS 2."""
@@ -32,9 +35,7 @@ class PIDTunerApp(App):
             print(f"Invalid float value: {value}")
 
     def compose(self) -> ComposeResult:
-        yield Label(f"PID Tuner for {self.joint_name}", classes="title")
-        yield Label("Enter new values and press Enter to update.")
-        yield Label("Press ESC to leave.")
+        yield Label(f"[blue]{self.joint_name}[/blue]", classes="title")
 
         self.p_gain_input = Input(
             value=self.get_current_param(f"{self.joint_name}/p_gain"), name="P Gain"
@@ -55,11 +56,6 @@ class PIDTunerApp(App):
             self.d_gain_input,
         )
 
-    def on_key(self, event) -> None:
-        """Close the app when Escape is pressed."""
-        if event.key == "escape":
-            self.exit()
-
     def on_input_submitted(self, event: Input.Submitted) -> None:
         """Handle value submission (Enter key)."""
         param_map = {
@@ -74,6 +70,35 @@ class PIDTunerApp(App):
             event.input.refresh()
 
 
+class PIDTunerApp(App):
+    """Main application containing panels for multiple joints."""
+
+    def compose(self) -> ComposeResult:
+        yield Label("A panel for tuning PID values for a single joint.", classes="header")
+        yield Label("Enter new values and press [green]Enter[/green] to update.")
+        yield Label(" ", classes="header")
+        yield Vertical(
+            # Shoulder Actuators
+            Horizontal(
+                PIDTunerPanel("shoulder_rotation"),
+                PIDTunerPanel("shoulder_flexion"),
+                PIDTunerPanel("elbow_flexion"),
+            ),
+            # Wrist Actuators
+            Horizontal(
+                PIDTunerPanel("forearm_rotation"),
+                PIDTunerPanel("wrist_flexion"),
+                PIDTunerPanel("wrist_rotation"),
+            ),
+        )
+        yield Label("Press [red]ESC[/red] to leave.", classes="footer")
+
+    def on_key(self, event) -> None:
+        """Close the app when Escape is pressed."""
+        if event.key == "escape":
+            self.exit()
+
+
 if __name__ == "__main__":
-    app = PIDTunerApp("elbow_flexion")
+    app = PIDTunerApp()
     app.run()

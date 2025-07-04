@@ -27,15 +27,20 @@ from launch.actions import (
     DeclareLaunchArgument,
     RegisterEventHandler,
     OpaqueFunction,
+    IncludeLaunchDescription,
 )
 from launch.conditions import IfCondition
 from launch.substitutions import PathJoinSubstitution, LaunchConfiguration
 from launch.event_handlers import OnProcessExit
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 from moveit_configs_utils import MoveItConfigsBuilder
+from ament_index_python import get_package_share_directory
+import os
+import xacro
 
 
 def launch_setup(context, *args, **kwargs):
@@ -82,15 +87,78 @@ def launch_setup(context, *args, **kwargs):
         ]
     )
 
-    control_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[moveit_config.robot_description, robot_controllers],
-        output={
-            "stdout": "screen",
-            "stderr": "screen",
-        },
-    )
+    nodes_to_start = []
+
+    if mode_value in ("mock", "real"):
+
+        control_node = Node(
+            package="controller_manager",
+            executable="ros2_control_node",
+            parameters=[moveit_config.robot_description, robot_controllers],
+            output={
+                "stdout": "screen",
+                "stderr": "screen",
+            },
+        )
+
+        nodes_to_start.append(control_node)
+    else:
+        pkg_share_description = FindPackageShare(package="dynaarm_single_example_description").find(
+            "dynaarm_single_example_description"
+        )
+        pkg_ros_gz_sim = FindPackageShare(package="ros_gz_sim").find("ros_gz_sim")
+        world_file = os.path.join(pkg_share_description, "worlds", "custom.sdf")
+        start_gazebo_cmd = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                os.path.join(pkg_ros_gz_sim, "launch", "gz_sim.launch.py")
+            ),
+            launch_arguments={
+                "gz_args": ["-r -v 2 " + world_file],
+                "on_exit_shutdown": "true",
+            }.items(),
+        )
+        doc = xacro.parse(
+            open(os.path.join(pkg_share_description, "urdf/dynaarm_single_example.urdf.xacro"))
+        )
+        xacro.process_doc(
+            doc,
+            mappings={
+                "dof": dof_value,
+                "covers": covers_value,
+                "version": version_value,
+                "mode": "sim",
+            },
+        )
+        # Spawn the robot
+        start_gazebo_ros_spawner_cmd = Node(
+            package="ros_gz_sim",
+            executable="create",
+            arguments=[
+                "-string",
+                doc.toxml(),
+                "-name",
+                "dynaarm",
+            ],
+            output="both",
+        )
+
+        # Bridge for Gazebo topics
+        bridge_params = os.path.join(
+            get_package_share_directory("dynaarm_single_example"), "config", "gz_bridge.yaml"
+        )
+
+        gz_bridge = Node(
+            package="ros_gz_bridge",
+            executable="parameter_bridge",
+            arguments=[
+                "--ros-args",
+                "-p",
+                f"config_file:={bridge_params}",
+            ],
+            output="screen",
+        )
+
+        nodes_to_start.extend([start_gazebo_cmd, start_gazebo_ros_spawner_cmd, gz_bridge])
 
     # Start the actual move_group node/action server
     move_group_node = Node(
@@ -157,14 +225,15 @@ def launch_setup(context, *args, **kwargs):
         condition=IfCondition(start_rviz),
     )
 
-    nodes_to_start = [
-        control_node,
-        robot_state_publisher,
-        joint_state_broadcaster_spawner,
-        joint_trajectory_controller_spawner,
-        delay_rviz_after_joint_state_broadcaster_spawner,
-        move_group_node,
-    ]
+    nodes_to_start.extend(
+        [
+            robot_state_publisher,
+            joint_state_broadcaster_spawner,
+            joint_trajectory_controller_spawner,
+            delay_rviz_after_joint_state_broadcaster_spawner,
+            move_group_node,
+        ]
+    )
 
     return nodes_to_start
 

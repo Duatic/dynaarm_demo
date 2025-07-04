@@ -89,6 +89,24 @@ def launch_setup(context, *args, **kwargs):
 
     nodes_to_start = []
 
+    joint_state_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=[
+            "joint_state_broadcaster",
+            "--controller-manager",
+            "/controller_manager",
+        ],
+    )
+    joint_trajectory_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=[
+            "joint_trajectory_controller",
+            "--controller-manager",
+            "/controller_manager",
+        ],
+    )
     if mode_value in ("mock", "real"):
 
         control_node = Node(
@@ -102,6 +120,9 @@ def launch_setup(context, *args, **kwargs):
         )
 
         nodes_to_start.append(control_node)
+
+        nodes_to_start.append(joint_state_broadcaster_spawner)
+        nodes_to_start.append(joint_trajectory_controller_spawner)
     else:
         pkg_share_description = FindPackageShare(package="dynaarm_single_example_description").find(
             "dynaarm_single_example_description"
@@ -157,15 +178,37 @@ def launch_setup(context, *args, **kwargs):
             ],
             output="screen",
         )
-
         nodes_to_start.extend([start_gazebo_cmd, start_gazebo_ros_spawner_cmd, gz_bridge])
 
+        delay_joint_state_broadcaster = RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=start_gazebo_ros_spawner_cmd,
+                on_exit=[joint_state_broadcaster_spawner],
+            )
+        )
+
+        nodes_to_start.append(delay_joint_state_broadcaster)
+
+        # The controller to start variable
+        delay_startup_controller = RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=joint_state_broadcaster_spawner,
+                on_exit=[
+                    joint_trajectory_controller_spawner,
+                    # freedrive_controller_node,
+                ],
+            )
+        )
+        nodes_to_start.append(delay_startup_controller)
+
+    moveit_config_dict = moveit_config.to_dict()
+    moveit_config_dict["use_sim_time"] = mode_value == "sim"
     # Start the actual move_group node/action server
     move_group_node = Node(
         package="moveit_ros_move_group",
         executable="move_group",
         output="screen",
-        parameters=[moveit_config.to_dict()],
+        parameters=[moveit_config_dict],
         arguments=["--ros-args", "--log-level", "info"],
     )
 
@@ -175,27 +218,7 @@ def launch_setup(context, *args, **kwargs):
         executable="robot_state_publisher",
         name="robot_state_publisher",
         output="both",
-        parameters=[moveit_config.robot_description],
-    )
-
-    joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
-            "joint_state_broadcaster",
-            "--controller-manager",
-            "/controller_manager",
-        ],
-    )
-
-    joint_trajectory_controller_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=[
-            "joint_trajectory_controller",
-            "--controller-manager",
-            "/controller_manager",
-        ],
+        parameters=[{"use_sim_time": mode_value == "sim"}, moveit_config.robot_description],
     )
 
     # RViz
@@ -228,8 +251,6 @@ def launch_setup(context, *args, **kwargs):
     nodes_to_start.extend(
         [
             robot_state_publisher,
-            joint_state_broadcaster_spawner,
-            joint_trajectory_controller_spawner,
             delay_rviz_after_joint_state_broadcaster_spawner,
             move_group_node,
         ]

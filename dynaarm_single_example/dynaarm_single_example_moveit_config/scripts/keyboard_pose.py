@@ -1,19 +1,20 @@
+import sys
+import tty
+import termios
+from threading import Thread
+
 import rclpy
 from rclpy.node import Node
 from rclpy.publisher import Publisher
-from tf2_ros.transform_listener import TransformListener
-from tf2_ros.buffer import Buffer
 
 from geometry_msgs.msg import TwistStamped
-from threading import Thread
-
 from moveit_msgs.srv import ServoCommandType
+from controller_manager_msgs.srv import SwitchController
 
 abort_loop: bool = False
 
 
 def read_char() -> int:
-    import sys, tty, termios
 
     fd = sys.stdin.fileno()
     old_settings = termios.tcgetattr(fd)
@@ -72,9 +73,6 @@ def input_task(node: Node, publisher: Publisher):
         publisher.publish(twist)
 
 
-from controller_manager_msgs.srv import SwitchController
-
-
 def switch_controller(node, stop_controllers, start_controllers):
 
     # Service Clients
@@ -95,9 +93,6 @@ def main():
 
     node = Node("keypose_pose")
 
-    tf_buffer = Buffer()
-    tf_listener = TransformListener(tf_buffer, node)
-
     switch_controller(node, ["freeze_controller"], ["joint_trajectory_controller"])
 
     pose_publisher = node.create_publisher(TwistStamped, "/servo_node/delta_twist_cmds", 10)
@@ -115,7 +110,7 @@ def main():
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
-        abort_loop = True
+        # abort_loop = True
         input_thread.join()
 
 

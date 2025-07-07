@@ -15,7 +15,4 @@ install(
 install(
   FILES .setup_assistant
   DESTINATION share/${PROJECT_NAME})
-install(PROGRAMS
-  scripts/move_servo_init.py
-  DESTINATION lib/${PROJECT_NAME}
-)
+

@@ -61,37 +61,17 @@ class JoystickJointJog(Node):
         self.get_logger().info("JoystickJointJog initialized")
         self.get_logger().info("Timer running at 100Hz for service calls")    
 
-    def stop_servo(self):
-        """Stop the servo by sending zero velocities for both joint and twist"""        
-        # Send empty joint jog message
-        joint_jog = JointJog()
-        joint_jog.header.stamp = self.get_clock().now().to_msg()
-        joint_jog.header.frame_id = ""
-        joint_jog.joint_names = self.joint_names
-        joint_jog.velocities = [0.0] * len(self.joint_names)
-        joint_jog.displacements = []
-        joint_jog.duration = 0.05
-        self.joint_publisher.publish(joint_jog)
-        
-        # Send empty twist jog message
-        twist = TwistStamped()
-        twist.header.stamp = self.get_clock().now().to_msg()
-        twist.header.frame_id = self.twist_frame
-        # All velocities are 0.0 by default (linear.x, linear.y, linear.z, angular.x, angular.y, angular.z)
-        self.twist_publisher.publish(twist)   
-
     def timer_callback(self):
         """Timer callback running at 100Hz to handle service calls"""
         # Handle pending switch command
 
         if self.toggle_start_stop_button_pressed:
             self.toggle_start_stop_button_pressed = False   
-            if self.servo_active:                       
-                #self.stop_servo()
+            if self.servo_active:
                 self.switch_servo_mode_async(2)
                 self.get_logger().info("Servo stopped")
             else:      
-                self.is_joint_mode = True                          
+                self.is_joint_mode = True
                 self.switch_servo_mode_async(0)
                 self.get_logger().info("Servo activated")
             self.servo_active = not self.servo_active
@@ -100,7 +80,7 @@ class JoystickJointJog(Node):
             self.switch_button_pressed = False
             if self.pending_switch_future is None:
                 self.is_joint_mode = not self.is_joint_mode
-                self.switch_servo_mode_async(self.is_joint_mode)
+                self.switch_servo_mode_async(0 if self.is_joint_mode else 1)
                 self.get_logger().info("Switching servo mode...")
         
         # Check if pending switch is complete
@@ -133,14 +113,6 @@ class JoystickJointJog(Node):
         axes = msg.axes
         buttons = msg.buttons
         
-        # Handle mode switching - just set the flag, don't call service directly
-        if len(buttons) > self.switch_button:
-            current_switch_state = buttons[self.switch_button]
-            if current_switch_state and not self.last_switch_button_state:
-                # Button pressed (rising edge) - set flag for timer to handle
-                self.switch_button_pressed = True
-            self.last_switch_button_state = current_switch_state
-        
         if len(buttons) > self.toggle_start_stop_button:
             current_stop_state = buttons[self.toggle_start_stop_button]
             if current_stop_state and not self.last_start_stop_button_state:
@@ -150,6 +122,14 @@ class JoystickJointJog(Node):
 
         if not self.servo_active:
             return
+
+        # Handle mode switching - just set the flag, don't call service directly
+        if len(buttons) > self.switch_button:
+            current_switch_state = buttons[self.switch_button]
+            if current_switch_state and not self.last_switch_button_state:
+                # Button pressed (rising edge) - set flag for timer to handle
+                self.switch_button_pressed = True
+            self.last_switch_button_state = current_switch_state
 
         # Process commands based on current mode
         if self.is_joint_mode:  # Joint Jog mode

@@ -166,13 +166,6 @@ def launch_setup(context, *args, **kwargs):
         ],
     )
 
-    moveit_servo_init = Node(
-        package="dynaarm_single_example_moveit_config",
-        executable="move_servo_init.py",
-        output="both",
-        arguments=["0"],
-    )
-
     # RViz
     rviz_config_file = PathJoinSubstitution(
         [FindPackageShare(dynaarm_moveit_pkg), "config", "moveit.rviz"]
@@ -192,7 +185,7 @@ def launch_setup(context, *args, **kwargs):
         condition=IfCondition(start_rviz),
     )
 
-    nodes_to_start.extend([rviz_node, move_group_node, moveit_servo_node, moveit_servo_init])
+    nodes_to_start.extend([rviz_node, move_group_node, moveit_servo_node])
 
     return nodes_to_start
 

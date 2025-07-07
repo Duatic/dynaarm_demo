@@ -36,6 +36,7 @@ from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
 
 from moveit_configs_utils import MoveItConfigsBuilder
+from launch_param_builder import ParameterBuilder
 import os
 
 
@@ -138,6 +139,31 @@ def launch_setup(context, *args, **kwargs):
         parameters=[moveit_config_dict],
         arguments=["--ros-args", "--log-level", "info"],
     )
+    acceleration_filter_update_period = {"update_period": 0.01}
+    planning_group_name = {"planning_group_name": "dynaarm"}
+
+    # Get parameters for the Servo node
+    servo_params = {
+        "moveit_servo": ParameterBuilder("dynaarm_single_example_moveit_config")
+        .yaml("config/dynaarm_servo_config.yaml")
+        .to_dict()
+    }
+
+    moveit_servo_node = Node(
+        package="moveit_servo",
+        executable="servo_node",
+        output="screen",
+        parameters=[
+            servo_params,
+            acceleration_filter_update_period,
+            planning_group_name,
+            moveit_config.robot_description,
+            moveit_config.robot_description_semantic,
+            moveit_config.robot_description_kinematics,
+            moveit_config.joint_limits,
+            {"use_sim_time": mode_value == "sim"},
+        ],
+    )
 
     # RViz
     rviz_config_file = PathJoinSubstitution(
@@ -158,12 +184,7 @@ def launch_setup(context, *args, **kwargs):
         condition=IfCondition(start_rviz),
     )
 
-    nodes_to_start.extend(
-        [
-            rviz_node,
-            move_group_node,
-        ]
-    )
+    nodes_to_start.extend([rviz_node, move_group_node, moveit_servo_node])
 
     return nodes_to_start
 
@@ -204,7 +225,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             "ethercat_bus",
-            default_value="enp0s31f6",
+            default_value="enx70886b8adda2",
             description="The ethercat bus id or name.",
         )
     )

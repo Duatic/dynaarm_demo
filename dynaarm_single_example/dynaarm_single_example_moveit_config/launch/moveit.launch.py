@@ -43,7 +43,6 @@ import os
 def launch_setup(context, *args, **kwargs):
 
     start_rviz = LaunchConfiguration("start_rviz")
-    start_joy = LaunchConfiguration("start_joy")
     dof = LaunchConfiguration("dof")
     covers = LaunchConfiguration("covers")
     version = LaunchConfiguration("version")
@@ -193,13 +192,6 @@ def launch_setup(context, *args, **kwargs):
 def generate_launch_description():
 
     declared_arguments = []
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            name="start_joy",
-            default_value="True",
-            description="Start Joy node automatically with this launch file.",
-        )
-    )
     declared_arguments.append(
         DeclareLaunchArgument(
             name="start_rviz",

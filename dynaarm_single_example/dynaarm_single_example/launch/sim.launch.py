@@ -178,6 +178,14 @@ def launch_setup(context, *args, **kwargs):
         parameters=[{"autorepeat_rate": 100.0}],  # Set autorepeat to 100 Hz
     )
 
+    move_to_predefined_position_node = Node(
+        package="dynaarm_extensions",
+        executable="move_to_predefined_position_node",
+        name="move_to_predefined_position_node",
+        output="screen",
+        parameters=[{"robot_configuration": "dynaarm"}],
+    )
+
     nodes_to_start = [
         joy_node,
         start_gazebo_cmd,
@@ -187,6 +195,7 @@ def launch_setup(context, *args, **kwargs):
         start_gazebo_ros_spawner_cmd,
         delay_joint_state_broadcaster,
         delay_startup_controller,
+        move_to_predefined_position_node,
     ]
 
     return nodes_to_start

@@ -1,6 +1,5 @@
 controller_manager:
   ros__parameters:
-    update_rate: 1000
 
     dynaarm_status_broadcaster:
       type: dynaarm_controllers/StatusBroadcaster

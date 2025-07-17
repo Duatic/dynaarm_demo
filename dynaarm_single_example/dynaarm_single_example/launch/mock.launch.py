@@ -113,10 +113,18 @@ def launch_setup(context, *args, **kwargs):
         parameters=[{"emergency_stop_button": 9}],  # Change button index here
     )
 
+    move_to_predefined_position_node = Node(
+        package="dynaarm_extensions",
+        executable="move_to_predefined_position_node",
+        name="move_to_predefined_position_node",
+        output="both",
+        parameters=[{"robot_configuration": "dynaarm"}],
+    )
+
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[robot_description, robot_controllers],
+        parameters=[robot_description, robot_controllers, {"update_rate": 100}],
         output={
             "stdout": "screen",
             "stderr": "screen",
@@ -147,22 +155,10 @@ def launch_setup(context, *args, **kwargs):
         arguments=["freedrive_controller", "--inactive"],
     )
 
-    pid_tuner_node = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["pid_tuner", "--inactive"],
-    )
-
     joint_trajectory_controller_node = Node(
         package="controller_manager",
         executable="spawner",
         arguments=["joint_trajectory_controller", "--inactive"],
-    )
-
-    cartesian_motion_controller_node = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["cartesian_motion_controller", "--inactive"],
     )
 
     delay_after_joint_state_broadcaster_spawner = RegisterEventHandler(
@@ -174,9 +170,7 @@ def launch_setup(context, *args, **kwargs):
                 freeze_controller_node,
                 gravity_compensation_controller_node,
                 joint_trajectory_controller_node,
-                cartesian_motion_controller_node,
                 freedrive_controller_node,
-                pid_tuner_node,
             ],
         )
     )
@@ -188,6 +182,7 @@ def launch_setup(context, *args, **kwargs):
         delay_after_joint_state_broadcaster_spawner,
         joy_node,
         e_stop_node,
+        move_to_predefined_position_node,
     ]
 
     return nodes_to_start

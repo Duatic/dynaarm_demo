@@ -1,6 +1,6 @@
 controller_manager:
   ros__parameters:
-  
+
     dynaarm_status_broadcaster:
       type: dynaarm_controllers/StatusBroadcaster
 

@@ -124,10 +124,7 @@ def launch_setup(context, *args, **kwargs):
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[
-            robot_description,
-            robot_controllers,
-            {"update_rate": 100}],
+        parameters=[robot_description, robot_controllers, {"update_rate": 100}],
         output={
             "stdout": "screen",
             "stderr": "screen",
@@ -156,7 +153,7 @@ def launch_setup(context, *args, **kwargs):
         package="controller_manager",
         executable="spawner",
         arguments=["freedrive_controller", "--inactive"],
-    )    
+    )
 
     joint_trajectory_controller_node = Node(
         package="controller_manager",

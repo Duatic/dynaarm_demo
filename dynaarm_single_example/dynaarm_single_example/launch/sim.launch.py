@@ -45,7 +45,7 @@ def launch_setup(context, *args, **kwargs):
     dof = LaunchConfiguration("dof")
     covers = LaunchConfiguration("covers")
     version = LaunchConfiguration("version")
-    start_rviz = LaunchConfiguration("start_rviz")
+    gui = LaunchConfiguration("gui")
 
     dof_value = dof.perform(context)
     covers_value = covers.perform(context)
@@ -89,7 +89,7 @@ def launch_setup(context, *args, **kwargs):
         name="rviz2",
         output="screen",
         arguments=["-d", rviz_config_file],
-        condition=IfCondition(start_rviz),
+        condition=IfCondition(gui),
     )
 
     joint_state_broadcaster_spawner_node = Node(
@@ -178,6 +178,14 @@ def launch_setup(context, *args, **kwargs):
         parameters=[{"autorepeat_rate": 100.0}],  # Set autorepeat to 100 Hz
     )
 
+    move_to_predefined_position_node = Node(
+        package="dynaarm_extensions",
+        executable="move_to_predefined_position_node",
+        name="move_to_predefined_position_node",
+        output="screen",
+        parameters=[{"robot_configuration": "dynaarm"}],
+    )
+
     nodes_to_start = [
         joy_node,
         start_gazebo_cmd,
@@ -187,6 +195,7 @@ def launch_setup(context, *args, **kwargs):
         start_gazebo_ros_spawner_cmd,
         delay_joint_state_broadcaster,
         delay_startup_controller,
+        move_to_predefined_position_node,
     ]
 
     return nodes_to_start
@@ -220,7 +229,7 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "start_rviz",
+            "gui",
             default_value="False",
             description="Start RViz2 automatically with this launch file.",
         )

@@ -43,7 +43,7 @@ def launch_setup(context, *args, **kwargs):
     dof = LaunchConfiguration("dof")
     covers = LaunchConfiguration("covers")
     version = LaunchConfiguration("version")
-    start_rviz = LaunchConfiguration("start_rviz")
+    gui = LaunchConfiguration("gui")
 
     ethercat_bus_value = ethercat_bus.perform(context)
     dof_value = dof.perform(context)
@@ -88,7 +88,7 @@ def launch_setup(context, *args, **kwargs):
         name="rviz2",
         output="screen",
         arguments=["-d", rviz_config_file],
-        condition=IfCondition(start_rviz),
+        condition=IfCondition(gui),
     )
 
     joint_state_broadcaster_spawner_node = Node(
@@ -120,10 +120,18 @@ def launch_setup(context, *args, **kwargs):
         parameters=[{"emergency_stop_button": 9}],  # Change button index here
     )
 
+    move_to_predefined_position_node = Node(
+        package="dynaarm_extensions",
+        executable="move_to_predefined_position_node",
+        name="move_to_predefined_position_node",
+        output="screen",
+        parameters=[{"robot_configuration": "dynaarm"}],
+    )
+
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[robot_description, robot_controllers],
+        parameters=[robot_description, robot_controllers, {"update_rate": 1000}],
         output={
             "stdout": "screen",
             "stderr": "screen",
@@ -195,6 +203,7 @@ def launch_setup(context, *args, **kwargs):
         delay_after_joint_state_broadcaster_spawner,
         joy_node,
         e_stop_node,
+        move_to_predefined_position_node,
     ]
 
     return nodes_to_start
@@ -235,7 +244,7 @@ def generate_launch_description():
     )
     declared_arguments.append(
         DeclareLaunchArgument(
-            "start_rviz",
+            "gui",
             default_value="True",
             description="Start RViz2 automatically with this launch file.",
         )

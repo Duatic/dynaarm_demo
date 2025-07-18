@@ -1,0 +1,14 @@
+moveit_servo:
+  move_group_name: dynaarm
+  planning_frame: base
+  ee_frame_name: flange
+  robot_state_topic: "/joint_states"
+  publish_period: 0.01
+  incoming_command_timeout: 0.1
+  command_out_topic: "/servo_server/command"
+  cartesian_command_in_topic: "/servo_server/delta_twist_cmds"
+  joint_command_in_topic: "/servo_server/delta_joint_cmds"
+  publish_joint_positions: true
+  publish_joint_velocities: false
+  publish_joint_accelerations: false
+  low_latency_mode: true

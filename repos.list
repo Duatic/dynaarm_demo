@@ -1,11 +1,11 @@
 repositories:
-  dynaarm_description:
-    type: git
-    url: https://github.com/Duatic/dynaarm_description.git
-    version: main
   dynaarm_driver:
     type: git
     url: https://github.com/Duatic/dynaarm_driver.git
+    version: main
+  dynaarm_description:
+    type: git
+    url: https://github.com/Duatic/dynaarm_description.git
     version: main
   ethercat_sdk_master:
     type: git
@@ -17,9 +17,13 @@ repositories:
     version: ros2
   rsl_drive_sdk:
     type: git
-    url: https://github.com/leggedrobotics/rsl_drive_sdk.git
+    url: https://github.com/Duatic/rsl_drive_sdk.git
     version: main
   soem_interface:
     type: git
     url: https://github.com/Duatic/soem_interface.git
     version: master
+  soem_vendor:
+    type: git
+    url: https://github.com/Duatic/soem_vendor.git
+    version: main

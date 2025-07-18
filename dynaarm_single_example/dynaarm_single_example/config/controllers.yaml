@@ -30,6 +30,9 @@ controller_manager:
 
     pid_tuner:
       type: dynaarm_controllers/PIDTuner
+    
+    collision_avoidance_controller:
+      type: dynaarm_controllers/CollisionAvoidanceController
 
 joint_state_broadcaster:
   ros__parameters:
@@ -108,6 +111,13 @@ joint_trajectory_controller:
       - forearm_rotation
       - wrist_flexion
       - wrist_rotation
+    command_joints:
+      - collision_avoidance_controller/shoulder_rotation
+      - collision_avoidance_controller/shoulder_flexion
+      - collision_avoidance_controller/elbow_flexion
+      - collision_avoidance_controller/forearm_rotation
+      - collision_avoidance_controller/wrist_flexion
+      - collision_avoidance_controller/wrist_rotation
     command_interfaces:
       - position
       - velocity
@@ -157,3 +167,17 @@ freedrive_controller:
       - forearm_rotation
       - wrist_flexion
       - wrist_rotation
+
+
+collision_avoidance_controller:
+  ros__parameters:
+    joints:
+      - shoulder_rotation
+      - shoulder_flexion
+      - elbow_flexion
+      - forearm_rotation
+      - wrist_flexion
+      - wrist_rotation
+    command_interfaces:
+      - position
+      - velocity

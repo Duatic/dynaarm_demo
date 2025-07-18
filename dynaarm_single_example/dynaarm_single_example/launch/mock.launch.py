@@ -121,10 +121,30 @@ def launch_setup(context, *args, **kwargs):
         parameters=[{"robot_configuration": "dynaarm"}],
     )
 
+    srdf_path = os.path.join(
+        
+            FindPackageShare("dynaarm_single_example_moveit_config").find("dynaarm_single_example_moveit_config"),
+            "config",
+            "dynaarm.srdf",
+        
+    )
+    srdf_doc = xacro.parse(
+        open(os.path.join(pkg_share_description, srdf_path))
+    )
+    xacro.process_doc(
+        srdf_doc,
+        mappings={
+            "dof": dof_value,
+            "covers": covers_value,
+            "version": version_value,
+            "mode": "mock",
+        },
+    )
+
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[robot_description, robot_controllers, {"update_rate": 100}],
+        parameters=[robot_description, robot_controllers, {"update_rate": 100},  {"srdf": srdf_doc.toxml()}],
         output={
             "stdout": "screen",
             "stderr": "screen",
@@ -161,6 +181,13 @@ def launch_setup(context, *args, **kwargs):
         arguments=["joint_trajectory_controller", "--inactive"],
     )
 
+    collision_avoidance_controller_node = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["collision_avoidance_controller", "--inactive"],
+    )
+
+
     delay_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner_node,
@@ -171,6 +198,7 @@ def launch_setup(context, *args, **kwargs):
                 gravity_compensation_controller_node,
                 joint_trajectory_controller_node,
                 freedrive_controller_node,
+                collision_avoidance_controller_node
             ],
         )
     )

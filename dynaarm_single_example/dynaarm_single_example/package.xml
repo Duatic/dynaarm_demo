@@ -25,7 +25,8 @@
   <exec_depend>rqt_joint_trajectory_controller</exec_depend>
   <exec_depend>rqt_controller_manager</exec_depend>
   <exec_depend>effort_controllers</exec_depend>
-
+  <exec_depend>dynaadrive_description</exec_depend>
+  <exec_depend>dynadrive_driver</exec_depend>
   <exec_depend>dynaarm_single_example_description</exec_depend>
   <exec_depend>dynaarm_driver</exec_depend>
   <exec_depend>dynaarm_single_example_moveit_config</exec_depend>

@@ -31,8 +31,8 @@ class WorkspaceExplorer(Node):
         self.timeout_duration = Duration(seconds=2.0)
 
         # Grid definition
-        self.x_range = np.linspace(-0.6, 0.6, 8)
-        self.y_range = np.linspace(-0.6, 0.6, 8)
+        self.x_range = np.linspace(-0.6, 0.6, 6)
+        self.y_range = np.linspace(-0.6, 0.6, 6)
         self.z_range = np.linspace(0.0, 1.0, 5)
 
         self.grid_positions = [
@@ -42,11 +42,6 @@ class WorkspaceExplorer(Node):
             for z in self.z_range
         ]
         self.grid_index = 0
-
-        # Reset pose
-        self.reset_position = np.array([0.0, 0.0, 1.0])
-        self.send_reset_first = False
-        self.pending_target_pose = None
 
         # State
         self.sampled_poses = []
@@ -77,59 +72,14 @@ class WorkspaceExplorer(Node):
             return
 
         if self.state == 'IDLE':
-            if self.send_reset_first:
-                # Move to reset pose first
-                x, y, z = self.reset_position
-                pose = PoseStamped()
-                pose.header.frame_id = 'base'
-                pose.header.stamp = self.get_clock().now().to_msg()
-                pose.pose.position.x = x
-                pose.pose.position.y = y
-                pose.pose.position.z = z
-
-                direction = np.array([0.0, 0.0, 1.0])  # look down
-                qx, qy, qz, qw = quaternion_look_at(direction)
-                pose.pose.orientation.x = qx
-                pose.pose.orientation.y = qy
-                pose.pose.orientation.z = qz
-                pose.pose.orientation.w = qw
-
-                self.target_pose = pose
-                self.pose_pub.publish(pose)
-                self.command_sent_time = self.get_clock().now()
-                self.get_logger().info('🟡 Moving to reset pose before next target...')
-                self.send_reset_first = False
-                self.state = 'MOVING'
-                return
-
-            if self.pending_target_pose is not None:
-                x, y, z = self.pending_target_pose
-                self.pending_target_pose = None
-            elif self.grid_index < len(self.grid_positions):
-                x, y, z = self.grid_positions[self.grid_index]
-                self.grid_index += 1
-            else:
+            if self.grid_index >= len(self.grid_positions):
                 self.get_logger().info('✅ Finished scanning workspace grid.')
                 self.state = 'DONE'
                 return
 
-            current_target = np.array([x, y, z])
-            use_reset = False
-            if self.last_pose_position is not None:
-                delta = np.linalg.norm(current_target - self.last_pose_position)
-                sign_change = np.any(np.sign(current_target) != np.sign(self.last_pose_position))
-                if delta > 0.5 or sign_change:
-                    # Only insert reset if not already at the reset pose
-                    if not np.allclose(self.last_pose_position, self.reset_position, atol=1e-3):
-                        use_reset = True
+            x, y, z = self.grid_positions[self.grid_index]
+            self.grid_index += 1
 
-            if use_reset:
-                self.send_reset_first = True
-                self.pending_target_pose = current_target
-                self.state = 'IDLE'
-                return
-
-            # Proceed to target normally
             pose = PoseStamped()
             pose.header.frame_id = 'base'
             pose.header.stamp = self.get_clock().now().to_msg()
@@ -163,17 +113,11 @@ class WorkspaceExplorer(Node):
             if dist < self.position_tolerance:
                 self.get_logger().info(f'✅ Reached pose. Error: {dist:.3f} m')
                 self.sampled_poses.append((self.target_pose.pose, 'green'))
-
-                pos_array = np.array([
+                self.last_pose_position = np.array([
                     self.target_pose.pose.position.x,
                     self.target_pose.pose.position.y,
                     self.target_pose.pose.position.z
                 ])
-                self.last_pose_position = pos_array
-
-                if np.allclose(pos_array, self.reset_position, atol=1e-3):
-                    self.get_logger().info('🔄 Reached reset pose, updating last_pose_position.')
-
                 self.publish_marker()
                 self.state = 'IDLE'
 

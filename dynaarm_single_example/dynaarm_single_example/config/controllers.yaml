@@ -22,22 +22,12 @@ controller_manager:
     freeze_controller:
       type: dynaarm_controllers/FreezeController
 
-    pid_tuner:
-      type: dynaarm_controllers/PIDTuner
+    dynaarm_pose_controller:
+      type: dynaarm_controllers/DynaArmPoseController
 
 joint_state_broadcaster:
   ros__parameters:
     use_urdf_to_filter: false
-    joints:
-      - shoulder_rotation
-      - shoulder_flexion
-      - elbow_flexion
-      - forearm_rotation
-      - wrist_flexion
-      - wrist_rotation
-
-pid_tuner:
-  ros__parameters:
     joints:
       - shoulder_rotation
       - shoulder_flexion

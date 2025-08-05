@@ -118,11 +118,11 @@ freedrive_controller:
       - wrist_rotation
 
 dynaarm_pose_controller:
-  ros__parameters:      
+  ros__parameters:
     joints:
       - shoulder_rotation
       - shoulder_flexion
       - elbow_flexion
       - forearm_rotation
       - wrist_flexion
-      - wrist_rotation    
+      - wrist_rotation

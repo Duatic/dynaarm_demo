@@ -117,7 +117,7 @@ def launch_setup(context, *args, **kwargs):
         package="dynaarm_extensions",
         executable="pose_controller_node",
         name="pose_controller_node",
-        output="screen"
+        output="screen",
     )
 
     move_to_predefined_position_node = Node(
@@ -184,7 +184,7 @@ def launch_setup(context, *args, **kwargs):
                 gravity_compensation_controller_node,
                 joint_trajectory_controller_node,
                 freedrive_controller_node,
-                dynaarm_pose_controller_node
+                dynaarm_pose_controller_node,
             ],
         )
     )

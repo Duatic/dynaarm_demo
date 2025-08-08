@@ -181,10 +181,10 @@ def launch_setup(context, *args, **kwargs):
         arguments=["joint_trajectory_controller", "--inactive"],
     )
 
-    collision_avoidance_controller_node = Node(
+    cartesian_pose_controller = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["collision_avoidance_controller", "--inactive"],
+        arguments=["cartesian_pose_controller", "--inactive"],
     )
 
 
@@ -198,7 +198,7 @@ def launch_setup(context, *args, **kwargs):
                 gravity_compensation_controller_node,
                 joint_trajectory_controller_node,
                 freedrive_controller_node,
-                collision_avoidance_controller_node
+                cartesian_pose_controller
             ],
         )
     )

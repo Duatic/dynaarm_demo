@@ -197,7 +197,7 @@ def launch_setup(context, *args, **kwargs):
         joy_node,
         e_stop_node,
         pose_controller_node,
-        #move_to_predefined_position_node,
+        move_to_predefined_position_node,
     ]
 
     return nodes_to_start

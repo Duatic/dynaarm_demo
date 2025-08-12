@@ -113,6 +113,13 @@ def launch_setup(context, *args, **kwargs):
         parameters=[{"emergency_stop_button": 9}],  # Change button index here
     )
 
+    pose_controller_node = Node(
+        package="dynaarm_extensions",
+        executable="pose_controller_node",
+        name="pose_controller_node",
+        output="screen",
+    )
+
     move_to_predefined_position_node = Node(
         package="dynaarm_extensions",
         executable="move_to_predefined_position_node",
@@ -161,6 +168,12 @@ def launch_setup(context, *args, **kwargs):
         arguments=["joint_trajectory_controller", "--inactive"],
     )
 
+    dynaarm_pose_controller_node = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["dynaarm_pose_controller", "--inactive"],
+    )
+
     delay_after_joint_state_broadcaster_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner_node,
@@ -171,6 +184,7 @@ def launch_setup(context, *args, **kwargs):
                 gravity_compensation_controller_node,
                 joint_trajectory_controller_node,
                 freedrive_controller_node,
+                dynaarm_pose_controller_node,
             ],
         )
     )
@@ -182,6 +196,7 @@ def launch_setup(context, *args, **kwargs):
         delay_after_joint_state_broadcaster_spawner,
         joy_node,
         e_stop_node,
+        pose_controller_node,
         move_to_predefined_position_node,
     ]
 

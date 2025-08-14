@@ -103,7 +103,7 @@ class JoystickJointJog(Node):
                     self.pending_switch_future = None
 
     def switch_servo_mode_async(self, command_type: int):
-        """Switch between Joint Jog (0), Twist Jog (1) and Stop (3) modes asynchronously"""
+        """Switch between Joint Jog (0), Twist Jog (1) and Stop (2) modes asynchronously"""
         if not self.cmd_type_client.wait_for_service(timeout_sec=0.1):
             self.get_logger().warn("Servo command type service not available")
             return

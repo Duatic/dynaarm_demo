@@ -49,18 +49,6 @@ dynaarm_status_broadcaster:
       - wrist_flexion
       - wrist_rotation
 
-motion_control_handle:
-  ros__parameters:
-    end_effector_link: "flange"
-    robot_base_link: "base"
-    joints:
-      - shoulder_rotation
-      - shoulder_flexion
-      - elbow_flexion
-      - forearm_rotation
-      - wrist_flexion
-      - wrist_rotation
-
 joint_trajectory_controller:
   ros__parameters:
     joints:
@@ -70,13 +58,6 @@ joint_trajectory_controller:
       - forearm_rotation
       - wrist_flexion
       - wrist_rotation
-    command_joints:
-      - collision_avoidance_controller/shoulder_rotation
-      - collision_avoidance_controller/shoulder_flexion
-      - collision_avoidance_controller/elbow_flexion
-      - collision_avoidance_controller/forearm_rotation
-      - collision_avoidance_controller/wrist_flexion
-      - collision_avoidance_controller/wrist_rotation
     command_interfaces:
       - position
       - velocity
@@ -126,7 +107,6 @@ freedrive_controller:
       - forearm_rotation
       - wrist_flexion
       - wrist_rotation
-
 
 cartesian_pose_controller:
   ros__parameters:

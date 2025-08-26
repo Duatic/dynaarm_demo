@@ -28,7 +28,7 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <robot name="shovel" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- Link Definition -->
-<xacro:macro name="shovel" params="tf_prefix parent_link *origin">
+<xacro:macro name="shovel" params="tf_prefix parent *origin">
 
   <link name="${tf_prefix}shovel_link">
 
@@ -64,7 +64,7 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   <!-- Fixed Joint to parent link -->
   <joint name="${tf_prefix}shovel_joint" type="fixed">
-    <parent link="${parent_link}"/>
+    <parent link="${parent}"/>
     <child link="${tf_prefix}shovel_link"/>
     <xacro:insert_block name="origin" />
   </joint>

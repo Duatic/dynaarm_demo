@@ -8,7 +8,7 @@
 
   <!-- Add platform to world -->
   <xacro:shovel tf_prefix="$(arg tf_prefix)"
-              parent_link="world">
+              parent="world">
     <origin xyz="0 0 0.0" rpy="0 0 0" />
   </xacro:shovel>
 

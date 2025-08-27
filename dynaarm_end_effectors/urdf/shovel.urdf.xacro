@@ -35,7 +35,7 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <!-- Inertial Properties -->
     <inertial>
       <origin xyz="0.004832 -0.001237 0.033429" rpy="0 0 0"/>
-      <mass value="5.417999"/>
+      <mass value="0.551"/>
       <inertia
         ixx="0.001677" ixy="0.0"  ixz="-0.000509"
         iyy="0.001510" iyz="0.0"

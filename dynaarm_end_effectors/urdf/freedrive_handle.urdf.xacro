@@ -28,7 +28,7 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <robot name="freedrive_handle" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- Link Definition -->
-<xacro:macro name="freedrive_handle" params="tf_prefix parent_link *origin">
+<xacro:macro name="freedrive_handle" params="tf_prefix parent *origin">
 
   <link name="${tf_prefix}freedrive_handle_link">
 
@@ -64,7 +64,7 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
   <!-- Fixed Joint to parent link -->
   <joint name="${tf_prefix}freedrive_handle_joint" type="fixed">
-    <parent link="${parent_link}"/>
+    <parent link="${parent}"/>
     <child link="${tf_prefix}freedrive_handle_link"/>
     <xacro:insert_block name="origin" />
   </joint>

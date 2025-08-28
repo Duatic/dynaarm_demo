@@ -27,12 +27,16 @@ import xacro
 from ament_index_python import get_package_share_directory
 
 from launch import LaunchDescription
-from launch.actions import OpaqueFunction
+from launch.actions import OpaqueFunction, DeclareLaunchArgument
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+from launch.substitutions import LaunchConfiguration
 
 
 def launch_setup(context, *args, **kwargs):
+
+    extension = LaunchConfiguration("extension")
+    extension_value = extension.perform(context)
 
     # Load the robot description
     pkg_share_description = FindPackageShare(package="dynaarm_end_effectors").find(
@@ -40,7 +44,7 @@ def launch_setup(context, *args, **kwargs):
     )
 
     doc = xacro.parse(
-        open(os.path.join(pkg_share_description, "urdf/freedrive_handle_standalone.urdf.xacro"))
+        open(os.path.join(pkg_share_description, f"urdf/{extension_value}_standalone.urdf.xacro"))
     )
     xacro.process_doc(doc, mappings={})
     robot_description = {"robot_description": doc.toxml()}
@@ -90,4 +94,12 @@ def generate_launch_description():
 
     # Declare the launch arguments
     declared_arguments = []
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            name="extension",
+            default_value="shovel",
+            choices=["freedrive_handle", "shovel", "weight"],
+            description="Type of end effector extension.",
+        )
+    )
     return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])

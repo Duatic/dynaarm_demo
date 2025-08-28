@@ -1,0 +1,15 @@
+<robot name="shovel_on_world" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+  <xacro:arg name="tf_prefix" default="" />
+
+  <xacro:include filename="$(find dynaarm_end_effectors)/urdf/shovel.urdf.xacro" />
+
+  <link name="world" />
+
+  <!-- Add platform to world -->
+  <xacro:shovel tf_prefix="$(arg tf_prefix)"
+              parent="world">
+    <origin xyz="0 0 0.0" rpy="0 0 0" />
+  </xacro:shovel>
+
+</robot>

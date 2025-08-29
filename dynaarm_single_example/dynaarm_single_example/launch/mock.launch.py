@@ -214,11 +214,11 @@ def launch_setup(context, *args, **kwargs):
     nodes_to_start = [
         control_node,
         robot_state_pub_node,
-        joint_state_broadcaster_spawner_node,
-        delay_after_joint_state_broadcaster_spawner,
-        delay_after_joint_trajectory_controller_spawner,
+        joint_state_broadcaster_spawner_node,        
         joy_node,
         e_stop_node,
+        delay_after_joint_state_broadcaster_spawner,
+        delay_after_joint_trajectory_controller_spawner,
     ]
 
     return nodes_to_start

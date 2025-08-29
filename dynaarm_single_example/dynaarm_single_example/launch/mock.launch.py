@@ -113,13 +113,6 @@ def launch_setup(context, *args, **kwargs):
         parameters=[{"emergency_stop_button": 9}],  # Change button index here
     )
 
-    pose_controller_node = Node(
-        package="dynaarm_extensions",
-        executable="pose_controller_node",
-        name="pose_controller_node",
-        output="screen",
-    )
-
     move_to_predefined_position_node = Node(
         package="dynaarm_extensions",
         executable="move_to_predefined_position_node",
@@ -128,10 +121,33 @@ def launch_setup(context, *args, **kwargs):
         parameters=[{"robot_configuration": "dynaarm"}],
     )
 
+    srdf_path = os.path.join(
+        FindPackageShare("dynaarm_single_example_moveit_config").find(
+            "dynaarm_single_example_moveit_config"
+        ),
+        "config",
+        "dynaarm.srdf",
+    )
+    srdf_doc = xacro.parse(open(os.path.join(pkg_share_description, srdf_path)))
+    xacro.process_doc(
+        srdf_doc,
+        mappings={
+            "dof": dof_value,
+            "covers": covers_value,
+            "version": version_value,
+            "mode": "mock",
+        },
+    )
+
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[robot_description, robot_controllers, {"update_rate": 100}],
+        parameters=[
+            robot_description,
+            robot_controllers,
+            {"update_rate": 100},
+            {"srdf": srdf_doc.toxml()},
+        ],
         output={
             "stdout": "screen",
             "stderr": "screen",
@@ -168,10 +184,10 @@ def launch_setup(context, *args, **kwargs):
         arguments=["joint_trajectory_controller", "--inactive"],
     )
 
-    dynaarm_pose_controller_node = Node(
+    cartesian_pose_controller = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["dynaarm_pose_controller", "--inactive"],
+        arguments=["cartesian_pose_controller", "--inactive"],
     )
 
     delay_after_joint_state_broadcaster_spawner = RegisterEventHandler(
@@ -184,8 +200,15 @@ def launch_setup(context, *args, **kwargs):
                 gravity_compensation_controller_node,
                 joint_trajectory_controller_node,
                 freedrive_controller_node,
-                dynaarm_pose_controller_node,
+                cartesian_pose_controller,
             ],
+        )
+    )
+
+    delay_after_joint_trajectory_controller_spawner = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=joint_trajectory_controller_node,
+            on_exit=[move_to_predefined_position_node],
         )
     )
 
@@ -193,11 +216,10 @@ def launch_setup(context, *args, **kwargs):
         control_node,
         robot_state_pub_node,
         joint_state_broadcaster_spawner_node,
-        delay_after_joint_state_broadcaster_spawner,
         joy_node,
         e_stop_node,
-        pose_controller_node,
-        move_to_predefined_position_node,
+        delay_after_joint_state_broadcaster_spawner,
+        delay_after_joint_trajectory_controller_spawner,
     ]
 
     return nodes_to_start

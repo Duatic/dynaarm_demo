@@ -140,36 +140,6 @@ def launch_setup(context, *args, **kwargs):
         )
     )
 
-    joint_trajectory_controller_node = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_trajectory_controller", "-c", "/controller_manager"],
-    )
-
-    cartesian_motion_controller_node = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["cartesian_motion_controller", "--inactive"],
-    )
-
-    # freedrive_controller_node = Node(
-    #     package="controller_manager",
-    #     executable="spawner",
-    #     arguments=["freedrive_controller", "--inactive"],
-    # )
-
-    # The controller to start variable
-    delay_startup_controller = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner_node,
-            on_exit=[
-                joint_trajectory_controller_node,
-                cartesian_motion_controller_node,
-                # freedrive_controller_node,
-            ],
-        )
-    )
-
     # Start the joy node for gamepad input
     joy_node = Node(
         package="joy",
@@ -186,6 +156,29 @@ def launch_setup(context, *args, **kwargs):
         parameters=[{"robot_configuration": "dynaarm"}],
     )
 
+    joint_trajectory_controller_node = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_trajectory_controller", "-c", "/controller_manager"],
+    )
+
+    # The controller to start variable
+    delay_after_joint_state_broadcaster_spawner = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=joint_state_broadcaster_spawner_node,
+            on_exit=[
+                joint_trajectory_controller_node,
+            ],
+        )
+    )
+
+    delay_after_joint_trajectory_controller_spawner = RegisterEventHandler(
+        event_handler=OnProcessExit(
+            target_action=joint_trajectory_controller_node,
+            on_exit=[move_to_predefined_position_node],
+        )
+    )
+
     nodes_to_start = [
         joy_node,
         start_gazebo_cmd,
@@ -194,8 +187,8 @@ def launch_setup(context, *args, **kwargs):
         rviz_node,
         start_gazebo_ros_spawner_cmd,
         delay_joint_state_broadcaster,
-        delay_startup_controller,
-        move_to_predefined_position_node,
+        delay_after_joint_state_broadcaster_spawner,
+        delay_after_joint_trajectory_controller_spawner,
     ]
 
     return nodes_to_start

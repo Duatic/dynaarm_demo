@@ -22,8 +22,11 @@ controller_manager:
     freeze_controller:
       type: dynaarm_controllers/FreezeController
 
-    dynaarm_pose_controller:
-      type: dynaarm_controllers/DynaArmPoseController
+    pid_tuner:
+      type: dynaarm_controllers/PIDTuner
+
+    cartesian_pose_controller:
+      type: dynaarm_controllers/CartesianPoseController
 
 joint_state_broadcaster:
   ros__parameters:
@@ -38,18 +41,6 @@ joint_state_broadcaster:
 
 dynaarm_status_broadcaster:
   ros__parameters:
-    joints:
-      - shoulder_rotation
-      - shoulder_flexion
-      - elbow_flexion
-      - forearm_rotation
-      - wrist_flexion
-      - wrist_rotation
-
-motion_control_handle:
-  ros__parameters:
-    end_effector_link: "flange"
-    robot_base_link: "base"
     joints:
       - shoulder_rotation
       - shoulder_flexion
@@ -117,7 +108,7 @@ freedrive_controller:
       - wrist_flexion
       - wrist_rotation
 
-dynaarm_pose_controller:
+cartesian_pose_controller:
   ros__parameters:
     joints:
       - shoulder_rotation
@@ -126,3 +117,6 @@ dynaarm_pose_controller:
       - forearm_rotation
       - wrist_flexion
       - wrist_rotation
+    command_interfaces:
+      - position
+      - velocity

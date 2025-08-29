@@ -182,7 +182,7 @@ def launch_setup(context, *args, **kwargs):
                 status_broadcaster_node,
                 freeze_controller_node,
                 gravity_compensation_controller_node,
-                joint_trajectory_controller_node,                
+                joint_trajectory_controller_node,
                 freedrive_controller_node,
                 cartesian_pose_controller,
             ],
@@ -192,21 +192,18 @@ def launch_setup(context, *args, **kwargs):
     delay_after_joint_trajectory_controller_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_trajectory_controller_node,
-            on_exit=[
-                move_to_predefined_position_node
-            ],
+            on_exit=[move_to_predefined_position_node],
         )
     )
-
 
     nodes_to_start = [
         control_node,
         robot_state_pub_node,
         joint_state_broadcaster_spawner_node,
         joy_node,
-        e_stop_node,        
+        e_stop_node,
         delay_after_joint_state_broadcaster_spawner,
-        delay_after_joint_trajectory_controller_spawner
+        delay_after_joint_trajectory_controller_spawner,
     ]
 
     return nodes_to_start

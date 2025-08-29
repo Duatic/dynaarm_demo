@@ -155,7 +155,7 @@ def launch_setup(context, *args, **kwargs):
         output="screen",
         parameters=[{"robot_configuration": "dynaarm"}],
     )
-    
+
     joint_trajectory_controller_node = Node(
         package="controller_manager",
         executable="spawner",
@@ -167,17 +167,15 @@ def launch_setup(context, *args, **kwargs):
         event_handler=OnProcessExit(
             target_action=joint_state_broadcaster_spawner_node,
             on_exit=[
-                joint_trajectory_controller_node,                                
+                joint_trajectory_controller_node,
             ],
         )
     )
-    
+
     delay_after_joint_trajectory_controller_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_trajectory_controller_node,
-            on_exit=[
-                move_to_predefined_position_node
-            ],
+            on_exit=[move_to_predefined_position_node],
         )
     )
 

@@ -122,15 +122,13 @@ def launch_setup(context, *args, **kwargs):
     )
 
     srdf_path = os.path.join(
-        
-            FindPackageShare("dynaarm_single_example_moveit_config").find("dynaarm_single_example_moveit_config"),
-            "config",
-            "dynaarm.srdf",
-        
+        FindPackageShare("dynaarm_single_example_moveit_config").find(
+            "dynaarm_single_example_moveit_config"
+        ),
+        "config",
+        "dynaarm.srdf",
     )
-    srdf_doc = xacro.parse(
-        open(os.path.join(pkg_share_description, srdf_path))
-    )
+    srdf_doc = xacro.parse(open(os.path.join(pkg_share_description, srdf_path)))
     xacro.process_doc(
         srdf_doc,
         mappings={
@@ -144,7 +142,12 @@ def launch_setup(context, *args, **kwargs):
     control_node = Node(
         package="controller_manager",
         executable="ros2_control_node",
-        parameters=[robot_description, robot_controllers, {"update_rate": 100},  {"srdf": srdf_doc.toxml()}],
+        parameters=[
+            robot_description,
+            robot_controllers,
+            {"update_rate": 100},
+            {"srdf": srdf_doc.toxml()},
+        ],
         output={
             "stdout": "screen",
             "stderr": "screen",
@@ -197,7 +200,7 @@ def launch_setup(context, *args, **kwargs):
                 gravity_compensation_controller_node,
                 joint_trajectory_controller_node,
                 freedrive_controller_node,
-                cartesian_pose_controller
+                cartesian_pose_controller,
             ],
         )
     )
@@ -205,16 +208,14 @@ def launch_setup(context, *args, **kwargs):
     delay_after_joint_trajectory_controller_spawner = RegisterEventHandler(
         event_handler=OnProcessExit(
             target_action=joint_trajectory_controller_node,
-            on_exit=[
-                move_to_predefined_position_node
-            ],
+            on_exit=[move_to_predefined_position_node],
         )
     )
 
     nodes_to_start = [
         control_node,
         robot_state_pub_node,
-        joint_state_broadcaster_spawner_node,        
+        joint_state_broadcaster_spawner_node,
         joy_node,
         e_stop_node,
         delay_after_joint_state_broadcaster_spawner,

@@ -2,14 +2,21 @@
 
   <xacro:arg name="tf_prefix" default="" />
 
-  <xacro:include filename="$(find dynaarm_end_effectors)/urdf/shovel_gripper.urdf.xacro" />
+  <xacro:include filename="$(find dynaarm_end_effectors)/urdf/shovel_gripper_right.urdf.xacro" />
+  <xacro:include filename="$(find dynaarm_end_effectors)/urdf/shovel_gripper_left.urdf.xacro" />
 
   <link name="world" />
 
   <!-- Add platform to world -->
-  <xacro:shovel_gripper tf_prefix="$(arg tf_prefix)"
+  <xacro:shovel_gripper_left tf_prefix="$(arg tf_prefix)_right"
               parent="world">
-    <origin xyz="0 0 0.0" rpy="0 0 0" />
-  </xacro:shovel_gripper>
+    <origin xyz="0 -0.2 0.0" rpy="0 0 0" />
+  </xacro:shovel_gripper_left>
+
+  <!-- Add platform to world -->
+  <xacro:shovel_gripper_right tf_prefix="$(arg tf_prefix)_left"
+              parent="world">
+    <origin xyz="0 0.2 0.0" rpy="0 0 0" />
+  </xacro:shovel_gripper_right>
 
 </robot>

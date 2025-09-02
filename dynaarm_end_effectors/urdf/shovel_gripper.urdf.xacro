@@ -33,7 +33,7 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   <link name="${tf_prefix}shovel_link">
 
     <!-- Inertial Properties -->
-    <inertial>    
+    <inertial>
       <origin xyz="0.007887 -0.015220 0.059359" rpy="0 0 0"/>
       <mass value="0.580724"/>
       <inertia

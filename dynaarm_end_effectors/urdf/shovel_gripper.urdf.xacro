@@ -27,6 +27,8 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <robot name="shovel_gripper" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+<xacro:include filename="$(find dynaarm_description)/urdf/common/dynaarm_common.urdf.xacro" />
+
   <!-- Link Definition -->
 <xacro:macro name="shovel_gripper" params="tf_prefix parent *origin">
 
@@ -102,6 +104,7 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   </link>
 
   <!-- Revolute Joint between shovel_link and shovel_hook_link -->
+  <!--
   <joint name="${tf_prefix}shovel_hook_joint" type="revolute">
     <parent link="${tf_prefix}shovel_link"/>
     <child link="${tf_prefix}shovel_hook_link"/>
@@ -109,6 +112,19 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <axis xyz="0 0 1"/>
     <limit lower="0" upper="1.57" effort="10" velocity="1"/>
   </joint>
+  -->
+
+  <xacro:dynaarm_revolute_joint joint_name="${tf_prefix}shovel_hook_joint"
+    parent="${tf_prefix}shovel_link"
+    child="${tf_prefix}shovel_hook_link"
+    joint_axis_xyz="0 0 1"
+    joint_lower_limit="0"
+    joint_upper_limit="1.57"
+    joint_limit_vel="1"
+    joint_limit_effort="10"
+    joint_type="revolute">
+    <origin xyz="0.0412 -0.0042426 0.053276" rpy="2.3562 0 0" />
+  </xacro:dynaarm_revolute_joint>
 
 </xacro:macro>
 

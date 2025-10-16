@@ -25,17 +25,17 @@ IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISI
 OF
 THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
-<robot name="weightlifting_hook" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="hook" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- Link Definition -->
-<xacro:macro name="weightlifting_hook" params="tf_prefix parent *origin">
+<xacro:macro name="hook" params="tf_prefix parent *origin">
 
   <link name="${tf_prefix}hook_link">
 
     <!-- Inertial Properties -->
     <inertial>
       <origin xyz="0.004832 -0.001237 0.033429" rpy="0 0 0"/>
-      <mass value="0.150"/>
+      <mass value="0.157"/>
       <inertia
         ixx="0.001677" ixy="0.0"  ixz="-0.000509"
         iyy="0.001510" iyz="0.0"

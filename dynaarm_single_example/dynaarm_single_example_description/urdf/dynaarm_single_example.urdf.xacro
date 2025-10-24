@@ -67,9 +67,17 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” 
                 mode="$(arg mode)"
                 ethercat_bus="$(arg ethercat_bus)"
                 covers="$(arg covers)"
-                controller_path="$(find dynaarm_single_example)/config/controllers.yaml"
                 version="$(arg version)">
     <origin xyz="0 0 0.085" rpy="0.0 0.0 0.0" />
   </xacro:dynaarm>
+
+  <!-- DynaArm Gazebo Ros2 Control-->
+  <gazebo>
+    <plugin filename="libgz_ros2_control-system.so"
+      name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>$(find dynaarm_single_example)/config/controllers.yaml</parameters>
+      <update_rate>100</update_rate>
+    </plugin>
+  </gazebo>
 
 </robot>

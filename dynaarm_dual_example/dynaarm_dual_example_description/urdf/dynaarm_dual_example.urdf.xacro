@@ -33,64 +33,61 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” 
 
   <xacro:include filename="$(find dynaarm_description)/urdf/dynaarm.urdf.xacro" />
 
-  <link name="world" />
-
+  <link name="base_link" />
 
   <link name="table">
-       <visual>
-         <origin xyz="0 0 -0.025" rpy="0 0 0" />
-        <geometry>
-           <box size="2.0 1.0 0.05"/>
-        </geometry>
-        <material name="Wood">
-          <color rgba="0.9 0.83 0.733 1.0"/>
-        </material>
-      </visual>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+          <box size="2.0 1.0 0.05"/>
+      </geometry>
+      <material name="Wood">
+        <color rgba="0.9 0.83 0.733 1.0"/>
+      </material>
+    </visual>
 
-      <collision>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        <geometry>
-           <box size="1.0 1.0 0.05"/>
-        </geometry>
-      </collision>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+          <box size="1.0 1.0 0.05"/>
+      </geometry>
+    </collision>
   </link>
+
   <joint name="table_joint" type="fixed">
-        <parent link="world"/>
-        <child link="table"/>
+    <parent link="base_link"/>
+    <child link="table"/>
   </joint>
 
 
   <!-- create an instance of the dynaarm xacro macro and fix its base, move it up such that it doesn't intersect with the ground -->
   <xacro:dynaarm tf_prefix="$(arg tf_prefix)arm_left/"
-                parent_link="table"
+                parent_link="base_link"
                 dof="$(arg dof)"
                 collision="$(arg collision)"
                 mode="$(arg mode)"
                 ethercat_bus="$(arg ethercat_bus_1)"
                 covers="$(arg covers)"
                 version="$(arg version_1)">
-    <origin xyz="-0.5 0 0.085" rpy="0.0 0.0 0.0" />
+    <origin xyz="-0.5 0 0.025" rpy="0.0 0.0 0.0" />
   </xacro:dynaarm>
 
 
   <xacro:dynaarm tf_prefix="$(arg tf_prefix)arm_right/"
-                parent_link="table"
+                parent_link="base_link"
                 dof="$(arg dof)"
                 collision="$(arg collision)"
                 mode="$(arg mode)"
                 ethercat_bus="$(arg ethercat_bus_2)"
                 covers="$(arg covers)"
                 version="$(arg version_2)">
-    <origin xyz="0.5 0 0.085" rpy="0.0 0.0 0.0" />
+    <origin xyz="0.5 0 0.025" rpy="0.0 0.0 0.0" />
   </xacro:dynaarm>
 
-  <!-- DynaArm Gazebo Ros2 Control-->
-  <gazebo>
-    <plugin filename="libgz_ros2_control-system.so"
-      name="gz_ros2_control::GazeboSimROS2ControlPlugin">
-      <parameters>$(find dynaarm_dual_example)/config/controllers.yaml</parameters>
-      <update_rate>100</update_rate>
-    </plugin>
-  </gazebo>
+  <!-- Gazebo Ros2 Control -->
+  <xacro:include filename="$(find duatic_control)/urdf/plugins.urdf.xacro" />
+  <xacro:control namespace="$(arg namespace)">
+    <remapping>cmd_vel:=cmd_vel</remapping> <!-- TODO: This line only exists, because otherwise the xacro doesn't compile -->
+  </xacro:control>
 
 </robot>

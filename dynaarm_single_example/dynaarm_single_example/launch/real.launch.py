@@ -21,16 +21,15 @@
 # NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-import os
-import xacro
 from launch import LaunchDescription
 from launch.actions import (
     DeclareLaunchArgument,
-    RegisterEventHandler,
+    IncludeLaunchDescription,
+    TimerAction,
     OpaqueFunction,
 )
-from launch.conditions import IfCondition
-from launch.event_handlers import OnProcessExit
+
+from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.substitutions import FindPackageShare
@@ -38,172 +37,74 @@ from launch_ros.actions import Node
 
 
 def launch_setup(context, *args, **kwargs):
+    # Package Directories
+    pkg_duatic_visualization = FindPackageShare("duatic_visualization")
+    pkg_dynaarm_bringup = FindPackageShare("dynaarm_bringup")
+    pkg_dynaarm_description = FindPackageShare("dynaarm_description")
 
-    ethercat_bus = LaunchConfiguration("ethercat_bus")
-    dof = LaunchConfiguration("dof")
-    covers = LaunchConfiguration("covers")
-    version = LaunchConfiguration("version")
-    gui = LaunchConfiguration("gui")
-
-    ethercat_bus_value = ethercat_bus.perform(context)
-    dof_value = dof.perform(context)
-    covers_value = covers.perform(context)
-    version_value = version.perform(context)
-
-    # Load the robot description
-    pkg_share_description = FindPackageShare(package="dynaarm_single_example_description").find(
-        "dynaarm_single_example_description"
-    )
-    doc = xacro.parse(
-        open(os.path.join(pkg_share_description, "urdf/dynaarm_single_example.urdf.xacro"))
-    )
-    xacro.process_doc(
-        doc,
-        mappings={
-            "ethercat_bus": ethercat_bus_value,
-            "dof": dof_value,
-            "covers": covers_value,
-            "version": version_value,
-            "mode": "real",
-        },
-    )
-    robot_description = {"robot_description": doc.toxml()}
-
-    # Subscribe to the joint states of the robot, and publish the 3D pose of each link.
-    robot_state_pub_node = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        output="both",
-        parameters=[robot_description],
+    # Dynaarm Bringup
+    dynaarm_bringup = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([pkg_dynaarm_bringup, "launch", "real.launch.py"])
+        ),
+        launch_arguments={
+            "namespace": LaunchConfiguration("namespace"),
+        }.items(),
     )
 
-    # Launch RViz
-    pkg_share_description_base = FindPackageShare(package="dynaarm_description").find(
-        "dynaarm_description"
-    )
-    rviz_config_file = PathJoinSubstitution([pkg_share_description_base, "config/config.rviz"])
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="screen",
-        arguments=["-d", rviz_config_file],
-        condition=IfCondition(gui),
+    # Show RVIZ
+    rviz = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(
+            PathJoinSubstitution([pkg_duatic_visualization, "launch", "rviz.launch.py"])
+        ),
+        launch_arguments={
+            "namespace": LaunchConfiguration("namespace"),
+            "use_sim_time": "true",
+            "rviz_config": PathJoinSubstitution([pkg_dynaarm_description, "config", "config.rviz"]),
+        }.items(),
     )
 
-    joint_state_broadcaster_spawner_node = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_state_broadcaster"],
-    )
-
-    robot_controllers = PathJoinSubstitution(
-        [
-            FindPackageShare("dynaarm_single_example"),
-            "config",
-            "controllers.yaml",
-        ]
-    )
-
-    joy_node = Node(
-        package="joy",
-        executable="game_controller_node",
-        output="screen",
-        parameters=[{"autorepeat_rate": 100.0}],  # Set autorepeat to 100 Hz
-    )
-
+    # Emergency Stop Node
     e_stop_node = Node(
         package="dynaarm_extensions",
         executable="e_stop_node",
         name="e_stop_node",
+        namespace=LaunchConfiguration("namespace"),
         output="screen",
         parameters=[{"emergency_stop_button": 9}],  # Change button index here
     )
 
-    move_to_predefined_position_node = Node(
-        package="dynaarm_extensions",
-        executable="move_to_predefined_position_node",
-        name="move_to_predefined_position_node",
+    # Gamepad input
+    joy_node = Node(
+        package="joy",
+        namespace=LaunchConfiguration("namespace"),
+        executable="game_controller_node",
         output="screen",
-        parameters=[{"robot_configuration": "dynaarm"}],
+        parameters=[{"autorepeat_rate": 100.0}],
     )
 
-    control_node = Node(
-        package="controller_manager",
-        executable="ros2_control_node",
-        parameters=[robot_description, robot_controllers, {"update_rate": 1000}],
-        output={
-            "stdout": "screen",
-            "stderr": "screen",
-        },
-    )
-
-    status_broadcaster_node = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["dynaarm_status_broadcaster"],
-    )
-
-    freeze_controller_node = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["freeze_controller"],
-    )
-
-    gravity_compensation_controller_node = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["gravity_compensation_controller"],
-    )
-
-    freedrive_controller_node = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["freedrive_controller", "--inactive"],
-    )
-
-    joint_trajectory_controller_node = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_trajectory_controller", "--inactive"],
-    )
-
-    cartesian_pose_controller = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["cartesian_pose_controller", "--inactive"],
-    )
-
-    delay_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner_node,
-            on_exit=[
-                rviz_node,
-                status_broadcaster_node,
-                freeze_controller_node,
-                gravity_compensation_controller_node,
-                joint_trajectory_controller_node,
-                freedrive_controller_node,
-                cartesian_pose_controller,
-            ],
-        )
-    )
-
-    delay_after_joint_trajectory_controller_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_trajectory_controller_node,
-            on_exit=[move_to_predefined_position_node],
-        )
+    # Move Arms to Start Position
+    # TODO: Find a better way to delay this node start until controllers are ready
+    move_to_predefined_position_node = TimerAction(
+        period=10.0,
+        actions=[
+            Node(
+                package="dynaarm_extensions",
+                executable="move_to_predefined_position_node",
+                namespace=LaunchConfiguration("namespace"),
+                name="move_to_predefined_position_node",
+                output="screen",
+                parameters=[{"robot_configuration": "dynaarm"}],
+            )
+        ],
     )
 
     nodes_to_start = [
-        control_node,
-        robot_state_pub_node,
-        joint_state_broadcaster_spawner_node,
+        dynaarm_bringup,
+        rviz,
+        move_to_predefined_position_node,
         joy_node,
         e_stop_node,
-        delay_after_joint_state_broadcaster_spawner,
-        delay_after_joint_trajectory_controller_spawner,
     ]
 
     return nodes_to_start
@@ -211,43 +112,11 @@ def launch_setup(context, *args, **kwargs):
 
 def generate_launch_description():
 
-    declared_arguments = []
-    declared_arguments.append(
+    declared_arguments = [
         DeclareLaunchArgument(
-            name="ethercat_bus",
-            default_value="enx70886b8adda2",
-            description="The ethercat bus id or name.",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            name="dof",
-            choices=["1", "2", "3", "4", "5", "6"],
-            default_value="6",
-            description="Select the desired degrees of freedom (dof)",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            name="covers",
-            default_value="False",
-            description="Show or hide the covers of the robot",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            name="version",
-            default_value="baracuda12",
-            choices=["arowana4", "baracuda12"],
-            description="Select the desired version of robot ",
-        )
-    )
-    declared_arguments.append(
-        DeclareLaunchArgument(
-            "gui",
-            default_value="True",
-            description="Start RViz2 automatically with this launch file.",
-        )
-    )
+            name="namespace",
+            default_value="dynaarm1",
+        ),
+    ]
 
     return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])

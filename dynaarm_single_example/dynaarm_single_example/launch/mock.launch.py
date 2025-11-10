@@ -37,7 +37,6 @@ from launch_ros.actions import Node
 
 def launch_setup(context, *args, **kwargs):
     # Package Directories
-    pkg_duatic_visualization = FindPackageShare("duatic_visualization")
     pkg_dynaarm_bringup = FindPackageShare("dynaarm_bringup")
     pkg_dynaarm_description = FindPackageShare("dynaarm_description")
 
@@ -52,15 +51,15 @@ def launch_setup(context, *args, **kwargs):
     )
 
     # Show RVIZ
-    rviz = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            PathJoinSubstitution([pkg_duatic_visualization, "launch", "rviz.launch.py"])
-        ),
-        launch_arguments={
-            "namespace": LaunchConfiguration("namespace"),
-            "use_sim_time": "true",
-            "rviz_config": PathJoinSubstitution([pkg_dynaarm_description, "config", "config.rviz"]),
-        }.items(),
+    rviz = Node(
+        package="rviz2",
+        executable="rviz2",
+        name="rviz2",
+        namespace=LaunchConfiguration("namespace"),
+        arguments=["-d", PathJoinSubstitution([pkg_dynaarm_description, "config", "config.rviz"])],
+        parameters=[{"use_sim_time": True}],
+        output="screen",
+        remappings=[("/tf", "tf"), ("/tf_static", "tf_static")],
     )
 
     # Gamepad input

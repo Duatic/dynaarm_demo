@@ -61,6 +61,7 @@ def launch_setup(context, *args, **kwargs):
         "ethercat_bus": ethercat_bus_value,
         "covers": covers_value,
         "version": version_value,
+        "namespace": LaunchConfiguration("namespace"),
     }
 
     dynaarm_moveit_pkg = "dynaarm_single_example_moveit_config"
@@ -80,6 +81,7 @@ def launch_setup(context, *args, **kwargs):
                 "gui": "False",
                 "covers": covers_value,
                 "version": version_value,
+                "namespace": LaunchConfiguration("namespace"),
             }.items(),
         )
 
@@ -98,6 +100,7 @@ def launch_setup(context, *args, **kwargs):
                 "covers": covers_value,
                 "version": version_value,
                 "ethercat_bus": ethercat_bus_value,
+                "namespace": LaunchConfiguration("namespace"),
             }.items(),
         )
 
@@ -114,6 +117,7 @@ def launch_setup(context, *args, **kwargs):
                 "gui": "False",
                 "covers": covers_value,
                 "version": version_value,
+                "namespace": LaunchConfiguration("namespace"),
             }.items(),
         )
         nodes_to_start.append(start_demo_sim)
@@ -136,6 +140,7 @@ def launch_setup(context, *args, **kwargs):
         package="moveit_ros_move_group",
         executable="move_group",
         output="screen",
+        namespace=LaunchConfiguration("namespace"),
         parameters=[moveit_config_dict],
         arguments=["--ros-args", "--log-level", "info"],
     )
@@ -153,6 +158,7 @@ def launch_setup(context, *args, **kwargs):
         package="moveit_servo",
         executable="servo_node",
         output="screen",
+        namespace=LaunchConfiguration("namespace"),
         parameters=[
             servo_params,
             acceleration_filter_update_period,
@@ -173,6 +179,7 @@ def launch_setup(context, *args, **kwargs):
         package="rviz2",
         executable="rviz2",
         name="rviz2",
+        namespace=LaunchConfiguration("namespace"),
         output="log",
         arguments=["-d", rviz_config_file],
         parameters=[
@@ -235,6 +242,13 @@ def generate_launch_description():
             default_value="mock",
             choices=["real", "mock", "sim"],
             description="Set the desired hardware mode.",
+        )
+    )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            name="namespace",
+            default_value="moveit_demo",
+            description="Namespace for all launched nodes.",
         )
     )
 

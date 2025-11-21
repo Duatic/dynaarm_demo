@@ -57,8 +57,7 @@ def launch_setup(context, *args, **kwargs):
         name="rviz2",
         namespace=LaunchConfiguration("namespace"),
         arguments=["-d", PathJoinSubstitution([pkg_dynaarm_description, "config", "config.rviz"])],
-        parameters=[{"use_sim_time": True}],
-        output="screen",
+        output={"both": "log"},
         remappings=[("/tf", "tf"), ("/tf_static", "tf_static")],
     )
 

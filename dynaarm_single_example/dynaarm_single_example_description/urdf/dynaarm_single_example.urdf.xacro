@@ -30,6 +30,8 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS “AS IS” 
   <!-- v1, v2, ... -->
   <xacro:arg name="version" default="baracuda12" />
 
+  <xacro:arg name="namespace" default="dynaarm1" />
+ 
   <xacro:include filename="$(find dynaarm_description)/urdf/dynaarm.urdf.xacro" />
 
   <link name="base_link" />

@@ -97,7 +97,7 @@ def generate_launch_description():
     declared_arguments = [
         DeclareLaunchArgument(
             name="namespace",
-            default_value="dynaarm1",
+            default_value="",
         ),
     ]
 

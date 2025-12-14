@@ -48,6 +48,7 @@ def launch_setup(context, *args, **kwargs):
         ),
         launch_arguments={
             "namespace": LaunchConfiguration("namespace"),
+            "ethercat_bus": LaunchConfiguration("ethercat_bus"),
         }.items(),
     )
 
@@ -103,6 +104,11 @@ def generate_launch_description():
         DeclareLaunchArgument(
             name="namespace",
             default_value="",
+        ),
+        DeclareLaunchArgument(
+            name="ethercat_bus",
+            default_value="enx0c3796d6fae3",
+            description="The ethercat bus id or name of the robot.",
         ),
     ]
 

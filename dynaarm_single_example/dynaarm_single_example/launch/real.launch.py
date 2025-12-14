@@ -62,16 +62,6 @@ def launch_setup(context, *args, **kwargs):
         remappings=[("/tf", "tf"), ("/tf_static", "tf_static")],
     )
 
-    # Emergency Stop Node
-    e_stop_node = Node(
-        package="dynaarm_extensions",
-        executable="e_stop_node",
-        name="e_stop_node",
-        namespace=LaunchConfiguration("namespace"),
-        output="screen",
-        parameters=[{"emergency_stop_button": 9}],  # Change button index here
-    )
-
     # Gamepad input
     joy_node = Node(
         package="joy",
@@ -102,7 +92,6 @@ def launch_setup(context, *args, **kwargs):
         rviz,
         move_to_predefined_position_node,
         joy_node,
-        e_stop_node,
     ]
 
     return nodes_to_start

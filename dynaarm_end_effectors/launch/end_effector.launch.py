@@ -24,7 +24,7 @@
 import os
 import xacro
 
-from ament_index_python import get_package_share_directory
+from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import OpaqueFunction, DeclareLaunchArgument
@@ -97,7 +97,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             name="extension",
-            default_value="shovel_gripper",
+            default_value="shovel",
             choices=["freedrive_handle", "shovel", "shovel_gripper", "weight", "hook"],
             description="Type of end effector extension.",
         )

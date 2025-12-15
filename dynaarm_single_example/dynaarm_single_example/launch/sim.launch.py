@@ -110,7 +110,7 @@ def generate_launch_description():
             name="namespace",
             default_value="",
         ),
-        DeclareLaunchArgument("world", default_value="duatic_empty", description="World name"),
+        DeclareLaunchArgument(name="world", default_value="duatic_empty", description="World name"),
     ]
 
     return LaunchDescription(declared_arguments + [OpaqueFunction(function=launch_setup)])

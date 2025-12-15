@@ -5,17 +5,17 @@
   <xacro:include filename="$(find dynaarm_end_effectors)/urdf/shovel_gripper_right.urdf.xacro" />
   <xacro:include filename="$(find dynaarm_end_effectors)/urdf/shovel_gripper_left.urdf.xacro" />
 
-  <link name="world" />
+  <link name="base_link" />
 
-  <!-- Add platform to world -->
+  <!-- Add platform to base_link -->
   <xacro:shovel_gripper_left tf_prefix="$(arg tf_prefix)_right"
-              parent="world">
+              parent="base_link">
     <origin xyz="0 -0.2 0.0" rpy="0 0 0" />
   </xacro:shovel_gripper_left>
 
-  <!-- Add platform to world -->
+  <!-- Add platform to base_link -->
   <xacro:shovel_gripper_right tf_prefix="$(arg tf_prefix)_left"
-              parent="world">
+              parent="base_link">
     <origin xyz="0 0.2 0.0" rpy="0 0 0" />
   </xacro:shovel_gripper_right>
 

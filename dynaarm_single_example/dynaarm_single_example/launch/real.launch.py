@@ -48,6 +48,7 @@ def launch_setup(context, *args, **kwargs):
         ),
         launch_arguments={
             "namespace": LaunchConfiguration("namespace"),
+            "ethercat_bus": LaunchConfiguration("ethercat_bus"),
         }.items(),
     )
 
@@ -60,16 +61,6 @@ def launch_setup(context, *args, **kwargs):
         arguments=["-d", PathJoinSubstitution([pkg_dynaarm_description, "config", "config.rviz"])],
         output={"both": "log"},
         remappings=[("/tf", "tf"), ("/tf_static", "tf_static")],
-    )
-
-    # Emergency Stop Node
-    e_stop_node = Node(
-        package="dynaarm_extensions",
-        executable="e_stop_node",
-        name="e_stop_node",
-        namespace=LaunchConfiguration("namespace"),
-        output="screen",
-        parameters=[{"emergency_stop_button": 9}],  # Change button index here
     )
 
     # Gamepad input
@@ -102,7 +93,6 @@ def launch_setup(context, *args, **kwargs):
         rviz,
         move_to_predefined_position_node,
         joy_node,
-        e_stop_node,
     ]
 
     return nodes_to_start
@@ -114,6 +104,11 @@ def generate_launch_description():
         DeclareLaunchArgument(
             name="namespace",
             default_value="",
+        ),
+        DeclareLaunchArgument(
+            name="ethercat_bus",
+            default_value="enx0c3796d6fae3",
+            description="The ethercat bus id or name of the robot.",
         ),
     ]
 

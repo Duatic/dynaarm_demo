@@ -4,11 +4,11 @@
 
   <xacro:include filename="$(find dynaarm_end_effectors)/urdf/hook.urdf.xacro" />
 
-  <link name="world" />
+  <link name="base_link" />
 
   <!-- Add platform to world -->
   <xacro:hook tf_prefix="$(arg tf_prefix)"
-              parent="world">
+              parent="base_link">
     <origin xyz="0 0 0.0" rpy="0 0 0" />
   </xacro:hook>
 

@@ -97,7 +97,7 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument(
             name="extension",
-            default_value="shovel_gripper",
+            default_value="shovel",
             choices=["freedrive_handle", "shovel", "shovel_gripper", "weight", "hook"],
             description="Type of end effector extension.",
         )
